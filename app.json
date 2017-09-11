@@ -1,5 +1,15 @@
 {
   "expo": {
-    "sdkVersion": "20.0.0"
+    "name": "YoPa",
+    "icon": "./yopa.png",
+    "version": "1.0.0",
+    "slug": "yopa",
+    "sdkVersion": "20.0.0",
+    "ios": {
+      "bundleIdentifier": "io.yopa.yopa"
+    },
+    "android": {
+      "package": "io.yopa.yopa"
+    }
   }
 }
