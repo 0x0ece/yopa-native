@@ -1,16 +1,31 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import CryptoJS from 'crypto-js';
+import { StyleSheet, Text, View, TextInput } from 'react-native';
+import {YoPass, getPassword} from './src/YoPa';
 
 export default class App extends React.Component {
+  componentWillMount() {
+    this.setState({"password": "", "site": "", "counter": ""});
+  }
   render() {
-    const secret = CryptoJS.SHA256("mypassword:yopa.io:0").toString(CryptoJS.enc.Base64).substring(0, 16);
-
     return (
       <View style={styles.container}>
         <Text>YoPa!</Text>
-        <Text>secret("mypassword:yopa.io:0") =</Text>
-        <Text>{secret}</Text>
+        <TextInput
+          placeholder="Password"
+          onChangeText={(text) => this.setState({"password": text})} />
+
+        <TextInput
+          placeholder="Site"
+          onChangeText={(text) => this.setState({"site": text})} />
+
+        <TextInput
+          placeholder="Counter"
+          onChangeText={(text) => this.setState({"counter": text})} />
+
+
+        <YoPass pass={this.state.password}
+                site={this.state.site}
+                counter={this.state.counter} />
       </View>
     );
   }
