@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+import { Text, TextInput } from 'react-native';
 import CryptoJS from 'crypto-js';
+import {styles} from '../styles/Main';
+
 
 export function getPassword(pass, site, counter) {
   const clear = pass + ":" + site + ":" + counter;
@@ -13,7 +15,7 @@ export class YoPass extends Component {
     const secret = getPassword(this.props.pass, this.props.site, this.props.counter);
 
     return (
-      <Text>{secret}</Text>
+      <Text style={styles.yopa}>{secret}</Text>
     );
   }
 };
