@@ -14,6 +14,9 @@ export const styles = StyleSheet.create({
     color: 'red',
     fontWeight: 'bold',
   },
+  body: {
+    flex: 4,
+  },
   inputBar: {
     flex: 2,
   },

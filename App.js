@@ -12,7 +12,7 @@ export default class App extends React.Component {
     this.setState(state)
   }
   componentWillMount() {
-    this.updateState({"password": "", "site": "", "counter": ""});
+    this.updateState({"password": "", "site": "", "counter": "", "selectedTab": "List"});
   }
   render() {
     return (
