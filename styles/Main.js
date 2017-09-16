@@ -23,6 +23,11 @@ const styles = StyleSheet.create({
   yopa: {
     flex: 5,
   },
+
+  headerIcon: {
+    color: '#007aff',
+    padding: 10,
+  },
 });
 
 export default styles;
