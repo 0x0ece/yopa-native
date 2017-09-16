@@ -2,32 +2,29 @@
  * action types
  */
 
-export const ADD_TODO = 'ADD_TODO';
-export const TOGGLE_TODO = 'TOGGLE_TODO';
-export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER';
+export const ADD_SERVICE = 'ADD_SERVICE';
+export const DEL_SERVICE = 'DEL_SERVICE';
 
-/*
- * other constants
- */
+export const UNLOCK_GROUP = 'UNLOCK_GROUP';
 
-export const VisibilityFilters = {
-  SHOW_ALL: 'SHOW_ALL',
-  SHOW_COMPLETED: 'SHOW_COMPLETED',
-  SHOW_ACTIVE: 'SHOW_ACTIVE',
-};
+export const RELOAD_ALL = 'RELOAD_ALL';
 
 /*
  * action creators
  */
 
-export function addTodo(text) {
-  return { type: ADD_TODO, text };
+export function addService(service) {
+  return { type: ADD_SERVICE, service };
 }
 
-export function toggleTodo(index) {
-  return { type: TOGGLE_TODO, index };
+export function delService(service) {
+  return { type: DEL_SERVICE, service };
 }
 
-export function setVisibilityFilter(filter) {
-  return { type: SET_VISIBILITY_FILTER, filter };
+export function unlockGroup(group) {
+  return { type: UNLOCK_GROUP, group };
+}
+
+export function reloadAll(state) {
+  return { type: RELOAD_ALL, state };
 }

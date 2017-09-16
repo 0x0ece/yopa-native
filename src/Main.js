@@ -3,7 +3,7 @@ import { StackNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 
 import AddServiceScreen from './screens/AddServiceScreen';
-import FolderScreen from './screens/FolderScreen';
+import GroupScreen from './screens/GroupScreen';
 import HomeScreen from './screens/HomeScreen';
 import ServiceScreen from './screens/ServiceScreen';
 import SettingsScreen from './screens/SettingsScreen';
@@ -39,11 +39,11 @@ const StackNav = StackNavigator({
       title: `${navigation.state.params.service}`,
     }),
   },
-  Folder: {
-    screen: FolderScreen,
-    path: 'folder/:folder',
+  Group: {
+    screen: GroupScreen,
+    path: 'group/:group',
     navigationOptions: ({ navigation }) => ({
-      title: `${navigation.state.params.folder}`,
+      title: `${navigation.state.params.group}`,
     }),
   },
 });

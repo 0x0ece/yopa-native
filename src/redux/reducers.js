@@ -1,49 +1,56 @@
 import { combineReducers } from 'redux';
 import {
-  ADD_TODO,
-  TOGGLE_TODO,
-  SET_VISIBILITY_FILTER,
-  VisibilityFilters,
+  ADD_SERVICE,
+  DEL_SERVICE,
+  UNLOCK_GROUPS,
+  RELOAD_ALL,
 } from './actions';
 
-const { SHOW_ALL } = VisibilityFilters;
-
-function visibilityFilter(state = SHOW_ALL, action) {
+function secrets(state = {}, action) {
   switch (action.type) {
-    case SET_VISIBILITY_FILTER:
-      return action.filter;
-    default:
-      return state;
-  }
-}
+    case ADD_SERVICE:
+      return {
+        ...state,
+        services: [
+          ...state.services,
+          action.service,
+        ]
+      };
+    case DEL_SERVICE:
+      return {
+        ...state,
+        services: state.services.filter(s => s.id != action.service.id),
+      };
 
-function todos(state = [], action) {
-  switch (action.type) {
-    case ADD_TODO:
+    case UNLOCK_GROUPS:
+      return {
+        ...state,
+        groups: state.groups.map( (g, i) => {
+          if (g.id == action.group.id) {
+            return {
+              ...g,
+              ...action.group,
+            };
+          } else {
+            return g;
+          }
+        })
+      };
+
+    case RELOAD_ALL:
       return [
         ...state,
-        {
-          text: action.text,
-          completed: false,
-        },
+        ...action.state,
       ];
-    case TOGGLE_TODO:
-      return state.map((todo, index) => {
-        if (index === action.index) {
-          return Object.assign({}, todo, {
-            completed: !todo.completed,
-          });
-        }
-        return todo;
-      });
+
     default:
       return state;
   }
 }
 
-const todoApp = combineReducers({
-  visibilityFilter,
-  todos,
+
+const secretApp = combineReducers({
+  secrets,
 });
 
-export default todoApp;
+export default secretApp;

@@ -5,17 +5,12 @@ import { connect } from 'react-redux';
 import SecretList from '../components/SecretList';
 
 
-const HomeScreen = ({ navigation, services, groups, dispatch }) => {
-  navigate = (page, options) => {
-    navigation.navigate(page, options);
-  };
-
+const GroupScreen = ({ navigation, services, groups, dispatch }) => {
   return (
     <SecretList
       navigate={navigation.navigate}
       services={services}
-      groups={groups}
-      showGroups={true}
+      filter={navigation.state.params.group}
     />
   );
 };
@@ -27,4 +22,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(HomeScreen)
+export default connect(mapStateToProps)(GroupScreen)
