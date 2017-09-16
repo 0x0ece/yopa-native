@@ -1,25 +1,32 @@
 import React from 'react';
-import {Main} from './src/Main';
-import {styles} from './styles/Main';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 
+import secretApp from './src/redux/reducers';
+import Main from './src/Main';
+
+
+const store = createStore(secretApp);
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-    this.updateState = this.updateState.bind(this);
+    this.state = {
+      password: '',
+      site: '',
+      counter: '',
+      selectedTab: 'List',
+    };
   }
-  updateState(state) {
-    this.setState(state)
-  }
-  componentWillMount() {
-    this.updateState({"password": "", "site": "", "counter": "", "selectedTab": "List"});
-  }
+
   render() {
     return (
-      <Main updateState={this.updateState}
-            state={this.state} />
-    )
+      <Provider store={store}>
+        <Main
+          updateState={this.setState}
+          state={this.state}
+        />
+      </Provider>
+    );
   }
 }
-
-

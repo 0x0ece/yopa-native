@@ -1,6 +1,6 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     height: 100,
@@ -22,5 +22,7 @@ export const styles = StyleSheet.create({
   },
   yopa: {
     flex: 5,
-  }
+  },
 });
+
+export default styles;

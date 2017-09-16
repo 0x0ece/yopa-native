@@ -1,24 +1,28 @@
-import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput } from 'react-native';
-import {styles} from '../styles/Main';
+import React from 'react';
+import { View, TextInput } from 'react-native';
+
+import styles from '../styles/Main';
 
 
-export class InputBar extends React.Component {
+export default class InputBar extends React.PureComponent {
   render() {
-    return(
+    return (
       <View style={styles.inputBar}>
         <TextInput
           placeholder="Password"
-          onChangeText={(text) => this.props.updateState({"password": text})} />
+          onChangeText={text => this.props.updateState({ password: text })}
+        />
 
         <TextInput
           placeholder="Site"
-          onChangeText={(text) => this.props.updateState({"site": text})} />
+          onChangeText={text => this.props.updateState({ site: text })}
+        />
 
         <TextInput
           placeholder="Counter"
-          onChangeText={(text) => this.props.updateState({"counter": text})} />
+          onChangeText={text => this.props.updateState({ counter: text })}
+        />
       </View>
-    )
+    );
   }
 }
