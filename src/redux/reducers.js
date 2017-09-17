@@ -6,6 +6,7 @@ import {
   RELOAD_ALL,
 } from './actions';
 
+
 function secrets(state = {}, action) {
   switch (action.type) {
     case ADD_SERVICE:
@@ -14,34 +15,33 @@ function secrets(state = {}, action) {
         services: [
           ...state.services,
           action.service,
-        ]
+        ],
       };
     case DEL_SERVICE:
       return {
         ...state,
-        services: state.services.filter(s => s.id != action.service.id),
+        services: state.services.filter(s => s.id !== action.service.id),
       };
 
     case UNLOCK_GROUPS:
       return {
         ...state,
-        groups: state.groups.map( (g, i) => {
-          if (g.id == action.group.id) {
+        groups: state.groups.map((g) => {
+          if (g.id === action.group.id) {
             return {
               ...g,
               ...action.group,
             };
-          } else {
-            return g;
           }
-        })
+          return g;
+        }),
       };
 
     case RELOAD_ALL:
-      return [
+      return {
         ...state,
-        ...action.state,
-      ];
+        ...action.data,
+      };
 
     default:
       return state;

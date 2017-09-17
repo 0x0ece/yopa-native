@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import SecretList from '../components/SecretList';
@@ -15,16 +14,16 @@ const HomeScreen = ({ navigation, services, groups, dispatch }) => {
       navigate={navigation.navigate}
       services={services}
       groups={groups}
-      showGroups={true}
+      showGroups
     />
   );
 };
 
 function mapStateToProps(state) {
   return {
-    services: state.secrets && state.secrets.services || [],
-    groups: state.secrets && state.secrets.groups || [],
-  }
+    services: (state.secrets && state.secrets.services) || [],
+    groups: (state.secrets && state.secrets.groups) || [],
+  };
 }
 
-export default connect(mapStateToProps)(HomeScreen)
+export default connect(mapStateToProps)(HomeScreen);

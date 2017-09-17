@@ -25,6 +25,6 @@ export function unlockGroup(group) {
   return { type: UNLOCK_GROUP, group };
 }
 
-export function reloadAll(state) {
-  return { type: RELOAD_ALL, state };
+export function reloadAll(data) {
+  return { type: RELOAD_ALL, data };
 }
