@@ -3,6 +3,7 @@ import { Button } from 'react-native';
 import { connect } from 'react-redux';
 
 import Utils from '../Utils';
+import { reloadAll } from '../redux/actions';
 
 
 class SettingsScreen extends React.Component {
@@ -12,10 +13,7 @@ class SettingsScreen extends React.Component {
       .then(result => {
         Utils.loadDataFromStoreAsync()
           .then(data => {
-            this.props.dispatch({
-              type: 'RELOAD_ALL',
-              data: data,
-            });
+            this.props.dispatch(reloadAll(data));
             this.props.navigation.goBack();
           });
       })

@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
 import secretApp from './src/redux/reducers';
+import { reloadAll } from './src/redux/actions';
 import Main from './src/Main';
 import Utils from './src/Utils';
 
@@ -30,10 +31,7 @@ export default class App extends React.Component {
   componentDidMount() {
     Utils.loadDataFromStoreAsync()
       .then(data => {
-        store.dispatch({
-          type: 'RELOAD_ALL',
-          data: data,
-        });
+        store.dispatch(reloadAll(data));
       })
       .catch(error => {
         // ignore error for file not found
