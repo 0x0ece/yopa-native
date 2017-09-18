@@ -1,51 +1,74 @@
-import React, { Component } from 'react';
-import { Text, View, TextInput, TabBarIOS } from 'react-native';
-import { Header } from './Header';
-import { List } from './List';
-import { InputBar } from './InputBar';
-import { YoPass } from './YoPa';
-import { styles } from '../styles/Main';
+import React from 'react';
+import { StackNavigator } from 'react-navigation';
+import { Ionicons } from '@expo/vector-icons';
+
+import AddServiceScreen from './screens/AddServiceScreen';
+import GroupScreen from './screens/GroupScreen';
+import HomeScreen from './screens/HomeScreen';
+import ServiceScreen from './screens/ServiceScreen';
+import SettingsScreen from './screens/SettingsScreen';
+import styles from '../styles/Main';
 
 
-export class Main extends React.Component {
-  render() {
-    return (
-      <TabBarIOS selectedTab={this.props.state.selectedTab}>
-        <TabBarIOS.Item
-          selected={this.props.state.selectedTab === 'List'}
-          title={'List'}
-          onPress={() => {
-              this.props.updateState({
-                  selectedTab: 'List',
-              });
-          }}>
-            <View style={styles.container}>
-              <Header />
-              <List />
-            </View>
-        </TabBarIOS.Item>
-        <TabBarIOS.Item
-          selected={this.props.state.selectedTab === 'Add'}
-          title={'Add'}
-          onPress={() => {
-              this.props.updateState({
-                  selectedTab: 'Add',
-              });
-          }}>
-            <View style={styles.container}>
-              <Header />
+const StackNav = StackNavigator({
+  Home: { screen: HomeScreen,
+    navigationOptions: {
+      title: 'YoPa',
+      headerLeft: (
+        <Ionicons
+          name="ios-settings-outline"
+          size={28}
+          style={styles.headerIcon}
+          onPress={() => this.navigate('Settings')}
+        />
+      ),
+      headerRight: (
+        <Ionicons
+          name="ios-add"
+          size={28}
+          style={styles.headerIcon}
+          onPress={() => this.navigate('AddService')}
+        />
+      ),
+    },
+  },
+  Service: {
+    screen: ServiceScreen,
+    path: 'service/:service',
+    navigationOptions: ({ navigation }) => ({
+      title: `${navigation.state.params.service}`,
+    }),
+  },
+  Group: {
+    screen: GroupScreen,
+    path: 'group/:group',
+    navigationOptions: ({ navigation }) => ({
+      title: `${navigation.state.params.group}`,
+    }),
+  },
+});
 
-              <View style={styles.body}>
-                <InputBar updateState={this.props.updateState} />
+const ModalNav = StackNavigator({
+  Home: {
+    screen: StackNav,
+    navigationOptions: {
+      header: null,
+    },
+  },
+  Settings: {
+    screen: SettingsScreen,
+    navigationOptions: {
+      title: 'Settings',
+    },
+  },
+  AddService: {
+    screen: AddServiceScreen,
+    navigationOptions: {
+      title: 'New',
+    },
+  },
+}, {
+  mode: 'modal',
+});
 
-                <YoPass pass={this.props.state.password}
-                        site={this.props.state.site}
-                        counter={this.props.state.counter} />
-              </View>
-            </View>
-        </TabBarIOS.Item>
-
-      </TabBarIOS>
-    );
-  }
-}
+export default ModalNav;

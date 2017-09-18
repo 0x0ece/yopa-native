@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput } from 'react-native';
-import {styles} from '../styles/Main';
+import React from 'react';
+import { Text, View } from 'react-native';
+
+import styles from '../styles/Main';
 
 
-export class List extends React.Component {
+export default class List extends React.Component {
   render() {
-    return(
+    return (
       <View style={styles.body}>
         <Text>List of passwords</Text>
       </View>
-    )
+    );
   }
 }
