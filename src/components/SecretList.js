@@ -1,6 +1,9 @@
 import React from 'react';
 import { Button, View } from 'react-native';
 
+import Secret from './Secret';
+
+
 export default class SecretList extends React.Component {
   render() {
     const groupsProps = this.props.groups || [];
@@ -19,11 +22,7 @@ export default class SecretList extends React.Component {
           />
         )) : null}
         {services.map(s => (
-          <Button
-            key={s.service}
-            title={`Service: ${s.service}`}
-            onPress={() => this.props.navigate('Service', { service: s.service })}
-          />
+          <Secret key={s.service} service={s} navigate={this.props.navigate} />
         ))}
       </View>
     );

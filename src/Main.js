@@ -36,7 +36,7 @@ const StackNav = StackNavigator({
     screen: ServiceScreen,
     path: 'service/:service',
     navigationOptions: ({ navigation }) => ({
-      title: `${navigation.state.params.service}`,
+      title: `${navigation.state.params.service.service}`,
     }),
   },
   Group: {
