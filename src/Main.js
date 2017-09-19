@@ -1,6 +1,7 @@
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
+import { NavigationActions } from 'react-navigation';
 
 import AddServiceScreen from './screens/AddServiceScreen';
 import GroupScreen from './screens/GroupScreen';
@@ -59,12 +60,30 @@ const ModalNav = StackNavigator({
     screen: SettingsScreen,
     navigationOptions: {
       title: 'Settings',
+      headerLeft: null,
+      headerRight: (
+        <Ionicons
+          name="ios-close"
+          size={28}
+          style={styles.headerIcon}
+          onPress={() => { this.navigate('back'); }}
+        />
+      ),
     },
   },
   AddService: {
     screen: AddServiceScreen,
     navigationOptions: {
       title: 'New',
+      headerLeft: null,
+      headerRight: (
+        <Ionicons
+          name="ios-close"
+          size={28}
+          style={styles.headerIcon}
+          onPress={() => { this.navigate('back'); }}
+        />
+      ),
     },
   },
 }, {

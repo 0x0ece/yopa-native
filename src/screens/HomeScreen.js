@@ -6,7 +6,11 @@ import SecretList from '../components/SecretList';
 
 const HomeScreen = ({ navigation, services, groups, dispatch }) => {
   navigate = (page, options) => {
-    navigation.navigate(page, options);
+    if (page === 'back') {
+      navigation.goBack(null);
+    } else {
+      navigation.navigate(page, options);
+    }
   };
 
   return (

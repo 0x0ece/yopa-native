@@ -14,7 +14,7 @@ class SettingsScreen extends React.Component {
         Utils.loadDataFromStoreAsync()
           .then(data => {
             this.props.dispatch(reloadAll(data));
-            this.props.navigation.goBack();
+            this.props.navigation.goBack(null);
           });
       })
       .catch(error => {
