@@ -5,39 +5,29 @@ export default class Swipeable extends React.Component {
   SWIPE_RELEASE_POINT = 40;
   _panResponder = {};
 
-  constructor(props, context) {
-    super(props, context);
-
-    this.state = {
-      dx: 0,
-    };
-  };
-
-  _handlePanResponderMove = (e, gestureState) => {
-    this.setState({ dx: gestureState.dx });
-  };
-
-  _handlePanResponderEnd = () => {
-    if (this.state.dx > this.SWIPE_RELEASE_POINT) {
-      if (this.props.onSwipeRight) {
-        this.props.onSwipeRight.call();
-        this.setState({ dx: 0 });
-      }
-    } else if (this.state.dx < -this.SWIPE_RELEASE_POINT) {
-      if (this.props.onSwipeLeft) {
-        this.props.onSwipeLeft.call();
-        this.setState({ dx: 0 });
-      }
+  getDirection = ({ moveX, moveY, dx, dy}) => {
+    if (dx < -40) {
+      return -1;
+    } else if (dx > 40) {
+      return 1;
     }
-  };
+    return 0;
+  }
 
   componentWillMount = () => {
     this._panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponder: () => true,
-      onPanResponderMove: this._handlePanResponderMove,
-      onPanResponderRelease: this._handlePanResponderEnd,
-      onPanResponderTerminate: this._handlePanResponderEnd,
+      // this let the normal press pass down to the children
+      onMoveShouldSetPanResponder:(e, gestureState) => !!this.getDirection(gestureState),
+      onPanResponderEnd: (e, gestureState) => {
+        const drag = this.getDirection(gestureState);
+        if (drag < 0 && this.props.onSwipeLeft) {
+          this.props.onSwipeLeft.call(this);
+        }
+        if (drag > 0 && this.props.onSwipeRight) {
+          this.props.onSwipeRight.call(this);
+        }
+      },
+      onPanResponderTerminationRequest: (e, gestureState) => true,
     });
   };
 
