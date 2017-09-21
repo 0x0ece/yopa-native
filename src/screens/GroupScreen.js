@@ -8,7 +8,7 @@ const GroupScreen = ({ navigation, services, groups, dispatch }) => (
   <SecretList
     navigate={navigation.navigate}
     services={services}
-    filter={navigation.state.params.group}
+    group={navigation.state.params.group}
   />
 );
 

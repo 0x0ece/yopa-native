@@ -44,7 +44,7 @@ const StackNav = StackNavigator({
     screen: GroupScreen,
     path: 'group/:group',
     navigationOptions: ({ navigation }) => ({
-      title: `${navigation.state.params.group}`,
+      title: `${navigation.state.params.group.group}`,
     }),
   },
 });
