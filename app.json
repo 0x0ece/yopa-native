@@ -4,7 +4,7 @@
     "icon": "./yopa.png",
     "version": "1.0.0",
     "slug": "yopa",
-    "sdkVersion": "20.0.0",
+    "sdkVersion": "21.0.0",
     "ios": {
       "bundleIdentifier": "io.yopa.yopa"
     },
