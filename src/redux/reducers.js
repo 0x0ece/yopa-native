@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import {
   ADD_SERVICE,
   DEL_SERVICE,
-  UNLOCK_GROUPS,
+  UNLOCK_GROUP,
   RELOAD_ALL,
 } from './actions';
 
@@ -23,11 +23,11 @@ function secrets(state = {}, action) {
         services: state.services.filter(s => s.id !== action.service.id),
       };
 
-    case UNLOCK_GROUPS:
+    case UNLOCK_GROUP:
       return {
         ...state,
         groups: state.groups.map((g) => {
-          if (g.id === action.group.id) {
+          if (g.group === action.group.group) {
             return {
               ...g,
               ...action.group,
