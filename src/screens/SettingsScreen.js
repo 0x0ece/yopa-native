@@ -7,17 +7,16 @@ import { reloadAll } from '../redux/actions';
 
 
 class SettingsScreen extends React.Component {
-
   onImport() {
     Utils.getRemoteDocumentAsync()
-      .then(result => {
+      .then((result) => {
         Utils.loadDataFromStoreAsync()
-          .then(data => {
+          .then((data) => {
             this.props.dispatch(reloadAll(data));
             this.props.navigation.goBack(null);
           });
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
       });
   }

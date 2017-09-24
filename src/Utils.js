@@ -8,32 +8,32 @@ const Utils = {
 
   LOCAL_STORE: 'data.yml',
 
-  loadDataFromStoreAsync: async function() {
+  async loadDataFromStoreAsync() {
     return new Promise((resolve, reject) => {
       file = FileSystem.documentDirectory + Utils.LOCAL_STORE;
       FileSystem.readAsStringAsync(file)
-        .then(txt => {
+        .then((txt) => {
           const data = yaml.safeLoad(txt);
           resolve(data);
         })
-        .catch(error => {
+        .catch((error) => {
           reject(error);
         });
     });
   },
 
-  getRemoteDocumentAsync: async function() {
+  async getRemoteDocumentAsync() {
     return new Promise((resolve, reject) => {
-      DocumentPicker.getDocumentAsync({ 'type': 'text/*' })
-        .then(result => {
+      DocumentPicker.getDocumentAsync({ type: 'text/*' })
+        .then((result) => {
           if (result.type == 'success') {
             const fileSrc = result.uri;
             const fileDst = FileSystem.documentDirectory + Utils.LOCAL_STORE;
             FileSystem.downloadAsync(fileSrc, fileDst)
-              .then(result => {
-                resolve(result)
+              .then((result) => {
+                resolve(result);
               })
-              .catch(error => {
+              .catch((error) => {
                 reject(error);
               });
           }

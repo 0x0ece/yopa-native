@@ -30,12 +30,11 @@ const store = createStore(secretApp, {
 export default class App extends React.Component {
   componentDidMount() {
     Utils.loadDataFromStoreAsync()
-      .then(data => {
+      .then((data) => {
         store.dispatch(reloadAll(data));
       })
-      .catch(error => {
+      .catch(() => {
         // ignore error for file not found
-        // console.error(error);
       });
   }
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
-import { NavigationActions } from 'react-navigation';
 
 import AddServiceScreen from './screens/AddServiceScreen';
 import GroupScreen from './screens/GroupScreen';
