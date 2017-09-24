@@ -1,13 +1,18 @@
 import React from 'react';
-import { Button, Clipboard, Text } from 'react-native';
 import Prompt from 'react-native-prompt';
+import PropTypes from 'prop-types';
 
 import Crypto from '../Crypto';
+import { Group } from '../Models';
 
 
 export default class GroupPassPrompt extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
 
-  handleSubmit = (value) => {
+  handleSubmit(value) {
     if (!this.props.onGroupDidUnlock) {
       return;
     }
@@ -24,9 +29,9 @@ export default class GroupPassPrompt extends React.Component {
       // group without passphrase - always unlock
       this.props.onGroupDidUnlock.call(this, group, value);
     }
-  };
+  }
 
-  render = () => {
+  render() {
     const group = this.props.group;
 
     return (
@@ -41,5 +46,12 @@ export default class GroupPassPrompt extends React.Component {
         onSubmit={this.handleSubmit}
       />
     );
-  };
+  }
 }
+
+GroupPassPrompt.propTypes = {
+  group: PropTypes.instanceOf(Group).isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onGroupDidUnlock: PropTypes.func.isRequired,
+  visible: PropTypes.bool.isRequired,
+};

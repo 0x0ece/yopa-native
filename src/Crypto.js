@@ -28,7 +28,8 @@ const Crypto = {
       // "yef-xIO-ViT-ZhK"
     */
     const base = [username, passphrase, service, counter].join(':');
-    const separator = extra.separator || '-';
+    const params = extra || {};
+    const separator = params.separator || '-';
     return CryptoJS.SHA256(base)
       .toString(CryptoJS.enc.Base64)
       .match(/[a-zA-Z0-9]{3}/g)

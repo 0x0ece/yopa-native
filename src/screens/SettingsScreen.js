@@ -7,9 +7,14 @@ import { reloadAll } from '../redux/actions';
 
 
 class SettingsScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onImport = this.onImport.bind(this);
+  }
+
   onImport() {
     Utils.getRemoteDocumentAsync()
-      .then((result) => {
+      .then(() => {
         Utils.loadDataFromStoreAsync()
           .then((data) => {
             this.props.dispatch(reloadAll(data));
@@ -25,7 +30,7 @@ class SettingsScreen extends React.Component {
     return (
       <Button
         title="Import..."
-        onPress={this.onImport.bind(this)}
+        onPress={this.onImport}
       />
     );
   }

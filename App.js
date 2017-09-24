@@ -2,27 +2,28 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
-import secretApp from './src/redux/reducers';
-import { reloadAll } from './src/redux/actions';
 import Main from './src/Main';
 import Utils from './src/Utils';
+import secretApp from './src/redux/reducers';
+import { reloadAll } from './src/redux/actions';
+import { Group, Service } from './src/Models';
 
 
 const store = createStore(secretApp, {
   // initial store - load a YML file for real data
   secrets: {
     services: [
-      { service: 'Zero', group: 'default' },
-      { service: 'One', group: 'default' },
-      { service: 'Two', group: 'default' },
-      { service: 'WOne', group: 'Work' },
-      { service: 'WTwo', group: 'Work' },
-      { service: 'IOne', group: 'Important' },
-      { service: 'ITwo', group: 'Important' },
+      new Service({ service: 'Zero', group: 'default' }),
+      new Service({ service: 'One', group: 'default' }),
+      new Service({ service: 'Two', group: 'default' }),
+      new Service({ service: 'WOne', group: 'Work' }),
+      new Service({ service: 'WTwo', group: 'Work' }),
+      new Service({ service: 'IOne', group: 'Important' }),
+      new Service({ service: 'ITwo', group: 'Important' }),
     ],
     groups: [
-      { group: 'Work' },
-      { group: 'Important' },
+      new Group({ group: 'default' }),
+      new Group({ group: 'Important' }),
     ],
   },
 });

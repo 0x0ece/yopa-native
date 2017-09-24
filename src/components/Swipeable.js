@@ -1,11 +1,11 @@
 import React from 'react';
 import { PanResponder, View } from 'react-native';
+import PropTypes from 'prop-types';
+
 
 export default class Swipeable extends React.Component {
-  SWIPE_RELEASE_POINT = 40;
-  _panResponder = {};
-
-  getDirection = ({ moveX, moveY, dx, dy}) => {
+  // getDirection({ moveX, moveY, dx, dy }) {
+  static getDirection({ dx }) {
     if (dx < -40) {
       return -1;
     } else if (dx > 40) {
@@ -14,12 +14,18 @@ export default class Swipeable extends React.Component {
     return 0;
   }
 
-  componentWillMount = () => {
-    this._panResponder = PanResponder.create({
+  constructor(props) {
+    super(props);
+    this.SWIPE_RELEASE_POINT = 40;
+    this.panResponder = {};
+  }
+
+  componentWillMount() {
+    this.panResponder = PanResponder.create({
       // this let the normal press pass down to the children
-      onMoveShouldSetPanResponder:(e, gestureState) => !!this.getDirection(gestureState),
+      onMoveShouldSetPanResponder: (e, gestureState) => !!Swipeable.getDirection(gestureState),
       onPanResponderEnd: (e, gestureState) => {
-        const drag = this.getDirection(gestureState);
+        const drag = Swipeable.getDirection(gestureState);
         if (drag < 0 && this.props.onSwipeLeft) {
           this.props.onSwipeLeft.call(this);
         }
@@ -27,17 +33,27 @@ export default class Swipeable extends React.Component {
           this.props.onSwipeRight.call(this);
         }
       },
-      onPanResponderTerminationRequest: (e, gestureState) => true,
+      onPanResponderTerminationRequest: () => true,
     });
-  };
+  }
 
-  render = () => {
+  render() {
     // TODO(ec): animation maybe? e.g.,
     // https://github.com/expo/react-native-swipe-actions/blob/master/SwipeActions.js
     return (
-      <View {...this._panResponder.panHandlers}>
+      <View {...this.panResponder.panHandlers}>
         {this.props.children}
       </View>
     );
   }
 }
+
+Swipeable.propTypes = {
+  onSwipeLeft: PropTypes.func,
+  onSwipeRight: PropTypes.func,
+  children: PropTypes.node.isRequired,
+};
+Swipeable.defaultProps = {
+  onSwipeLeft: null,
+  onSwipeRight: null,
+};

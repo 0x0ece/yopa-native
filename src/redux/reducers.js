@@ -6,6 +6,8 @@ import {
   RELOAD_ALL,
 } from './actions';
 
+import Group from '../models/Group';
+
 
 function secrets(state = {}, action) {
   switch (action.type) {
@@ -27,11 +29,11 @@ function secrets(state = {}, action) {
       return {
         ...state,
         groups: state.groups.map((g) => {
-          if (g.group === action.group.group) {
-            return {
+          if (g.id === action.group.id) {
+            return new Group({
               ...g,
               ...action.group,
-            };
+            });
           }
           return g;
         }),

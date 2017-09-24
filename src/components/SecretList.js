@@ -1,36 +1,40 @@
 import React from 'react';
-import { Button, Text, View } from 'react-native';
+import { Button, View } from 'react-native';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import GroupPassPrompt from './GroupPassPrompt';
 import Secret from './Secret';
+import { Group, Service } from '../Models';
 import { unlockGroup } from '../redux/actions';
 
 
 class SecretList extends React.Component {
-
   constructor(props, context) {
     super(props, context);
     this.state = {
       promptVisible: false,
       didUnlockCallback: null,
     };
+
+    this.handleGroupDidUnlock = this.handleGroupDidUnlock.bind(this);
+    this.handleGroupWillUnlock = this.handleGroupWillUnlock.bind(this);
   }
 
-  handleGroupDidUnlock = (group, value) => {
+  handleGroupDidUnlock(group, inputPassphrase) {
     // hide the passphrase prompt
-    const didUnlockCallback = this.state.didUnlockCallback
+    const didUnlockCallback = this.state.didUnlockCallback;
     this.setState({
       promptVisible: false,
       didUnlockCallback: null,
     });
 
     // dispatch the action
-    const data = {
+    const data = new Group({
       ...group,
-      inputPassphrase: value,
+      inputPassphrase,
       unlocked: true,
-    };
+    });
     this.props.dispatch(unlockGroup(data));
 
     // invoke the callback, if any, with the new data
@@ -39,7 +43,7 @@ class SecretList extends React.Component {
     }
   }
 
-  handleGroupWillUnlock = (callback) => {
+  handleGroupWillUnlock(callback) {
     // show the passphrase prompt
     this.setState({
       promptVisible: true,
@@ -64,9 +68,9 @@ class SecretList extends React.Component {
             onPress={() => this.props.navigate('Group', { group: g })}
           />
         )) : null}
-        {services.map((s, i) => (
+        {services.map(s => (
           <Secret
-            key={i}
+            key={s.id}
             navigate={this.props.navigate}
             service={s}
             group={mainGroup}
@@ -83,5 +87,20 @@ class SecretList extends React.Component {
     );
   }
 }
+
+SecretList.propTypes = {
+  groups: PropTypes.arrayOf(PropTypes.instanceOf(Group)),
+  services: PropTypes.arrayOf(PropTypes.instanceOf(Service)).isRequired,
+  dispatch: PropTypes.func.isRequired,
+  navigate: PropTypes.func.isRequired,
+  group: PropTypes.instanceOf(Group),
+  showGroups: PropTypes.bool,
+};
+
+SecretList.defaultProps = {
+  groups: [],
+  group: null,
+  showGroups: false,
+};
 
 export default connect()(SecretList);
