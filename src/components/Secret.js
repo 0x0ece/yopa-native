@@ -1,9 +1,10 @@
 import React from 'react';
-import { Button, Clipboard } from 'react-native';
+import { Clipboard } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import PropTypes from 'prop-types';
 
 import Crypto from '../Crypto';
+import Style from '../Style';
 import Swipeable from './Swipeable';
 import { Group, Service } from '../Models';
 
@@ -30,7 +31,7 @@ export default class Secret extends React.Component {
   copySecretToClipboard(group) {
     const secret = this.getSecret(group);
     Clipboard.setString(secret);
-    console.log(`copied: ${secret}`);
+    // console.log(`copied: ${secret}`);
   }
 
   handlePress() {
@@ -51,10 +52,10 @@ export default class Secret extends React.Component {
     return (
       <Swipeable onSwipeLeft={this.navigateToServiceScreen}>
         <ListItem
-          containerStyle={{backgroundColor: 'white'}}
+          containerStyle={Style.defaultBg}
           avatar={{ uri: `https://github.com/0x0ece/0x0ece.github.io/raw/master/img/${s.icon}.png` }}
-          roundAvatar={true}
-          hideChevron={true}
+          roundAvatar
+          hideChevron
           title={s.display}
           subtitle={s.username}
           rightTitle={secretShown}

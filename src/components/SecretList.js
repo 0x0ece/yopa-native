@@ -1,12 +1,12 @@
 import React from 'react';
-import { Button, FlatList, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { List, ListItem } from 'react-native-elements';
 
 import GroupPassPrompt from './GroupPassPrompt';
 import Secret from './Secret';
-import Style from '../../styles/Main';
+import Style from '../Style';
 import { Group, Service } from '../Models';
 import { unlockGroup } from '../redux/actions';
 
@@ -55,18 +55,18 @@ class SecretList extends React.Component {
   }
 
   renderHeader() {
-    if (!this.props.showGroups) {
-      return null;
-    }
-
     const groupsProps = this.props.groups || [];
     const groups = groupsProps.filter(g => g.group !== 'default');
+
+    if (!this.props.showGroups || groups.length === 0) {
+      return null;
+    }
 
     return (
       <List containerStyle={Style.groupListContainer}>
         {groups.map(g => (
           <ListItem
-            containerStyle={{backgroundColor: 'white'}}
+            containerStyle={Style.defaultBg}
             key={g.key}
             leftIcon={{ name: g.icon }}
             title={g.group}
@@ -93,10 +93,10 @@ class SecretList extends React.Component {
           onGroupDidUnlock={this.handleGroupDidUnlock}
         />
         <FlatList
-          style={{height: '100%'}}
+          style={{ height: '100%' }}
           data={services}
           ListHeaderComponent={this.renderHeader}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <Secret
               key={item.id}
               navigate={this.props.navigate}

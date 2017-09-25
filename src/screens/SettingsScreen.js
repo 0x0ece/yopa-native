@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'react-native';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import Utils from '../Utils';
 import { reloadAll } from '../redux/actions';
@@ -22,6 +23,7 @@ class SettingsScreen extends React.Component {
           });
       })
       .catch((error) => {
+        /* eslint no-console:off */
         console.error(error);
       });
   }
@@ -37,3 +39,9 @@ class SettingsScreen extends React.Component {
 }
 
 export default connect()(SettingsScreen);
+
+SettingsScreen.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  /* eslint react/forbid-prop-types:off */
+  navigation: PropTypes.object.isRequired,
+};

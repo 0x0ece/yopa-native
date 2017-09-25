@@ -7,7 +7,7 @@ import GroupScreen from './screens/GroupScreen';
 import HomeScreen from './screens/HomeScreen';
 import ServiceScreen from './screens/ServiceScreen';
 import SettingsScreen from './screens/SettingsScreen';
-import styles from '../styles/Main';
+import Style from './Style';
 
 
 const StackNav = StackNavigator({
@@ -18,7 +18,7 @@ const StackNav = StackNavigator({
         <Ionicons
           name="ios-settings-outline"
           size={28}
-          style={styles.headerIcon}
+          style={Style.headerIcon}
           onPress={() => this.navigate('Settings')}
         />
       ),
@@ -26,7 +26,7 @@ const StackNav = StackNavigator({
         <Ionicons
           name="ios-add"
           size={28}
-          style={styles.headerIcon}
+          style={Style.headerIcon}
           onPress={() => this.navigate('AddService')}
         />
       ),
@@ -64,7 +64,7 @@ const ModalNav = StackNavigator({
         <Ionicons
           name="ios-close"
           size={28}
-          style={styles.headerIcon}
+          style={Style.headerIcon}
           onPress={() => { this.navigate('back'); }}
         />
       ),
@@ -79,7 +79,7 @@ const ModalNav = StackNavigator({
         <Ionicons
           name="ios-close"
           size={28}
-          style={styles.headerIcon}
+          style={Style.headerIcon}
           onPress={() => { this.navigate('back'); }}
         />
       ),

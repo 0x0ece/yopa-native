@@ -1,10 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
+import { Service } from '../Models';
 import SecretList from '../components/SecretList';
 
 
-const GroupScreen = ({ navigation, services, groups, dispatch }) => (
+const GroupScreen = ({ navigation, services }) => (
   <SecretList
     navigate={navigation.navigate}
     services={services}
@@ -15,8 +17,13 @@ const GroupScreen = ({ navigation, services, groups, dispatch }) => (
 function mapStateToProps(state) {
   return {
     services: (state.secrets && state.secrets.services) || [],
-    groups: (state.secrets && state.secrets.groups) || [],
   };
 }
+
+GroupScreen.propTypes = {
+  services: PropTypes.arrayOf(PropTypes.instanceOf(Service)).isRequired,
+  /* eslint react/forbid-prop-types:off */
+  navigation: PropTypes.object.isRequired,
+};
 
 export default connect(mapStateToProps)(GroupScreen);

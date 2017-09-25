@@ -44,6 +44,9 @@ const styles = StyleSheet.create({
   // yopa: {
   //   flex: 5,
   // },
+  defaultBg: {
+    backgroundColor: 'white',
+  },
 
   headerIcon: {
     color: '#007aff',
