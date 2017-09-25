@@ -14,10 +14,10 @@ const store = createStore(secretApp, {
   secrets: {
     services: [
       new Service({ service: 'yopa.io', username: 'yopa', group: 'default' }),
-      new Service({ service: 'GitHub', username: 'yopamanager', group: 'default' }),
-      new Service({ service: 'Twitter', username: 'yopamanager', group: 'default' }),
-      new Service({ service: 'Google', username: 'yopa@example.com', group: 'Important' }),
-      new Service({ service: 'Facebook', username: 'yopa@example.com', group: 'Important' }),
+      new Service({ service: 'GitHub', username: 'yopamanager', icon: 'github.com', group: 'default' }),
+      new Service({ service: 'Twitter', username: 'yopamanager', icon: 'twitter.com', group: 'default' }),
+      new Service({ service: 'Google', username: 'yopa@example.com', icon: 'google.com', group: 'Important' }),
+      new Service({ service: 'Facebook', username: 'yopa@example.com', icon: 'facebook.com', group: 'Important' }),
     ],
     groups: [
       new Group({ group: 'default' }),

@@ -53,8 +53,9 @@ export default class Secret extends React.Component {
       <Swipeable onSwipeLeft={this.navigateToServiceScreen}>
         <ListItem
           containerStyle={Style.defaultBg}
-          avatar={{ uri: `https://github.com/0x0ece/0x0ece.github.io/raw/master/img/${s.icon}.png` }}
-          roundAvatar
+          avatar={{ uri: `https://${s.icon}/favicon.ico` }}
+          avatarOverlayContainerStyle={{ backgroundColor: 'transparent' }}
+          avatarStyle={{ width: 16, height: 16, marginBottom: 14 }}
           hideChevron
           title={s.display}
           subtitle={s.username}
