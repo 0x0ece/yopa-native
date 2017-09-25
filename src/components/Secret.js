@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Clipboard, Text } from 'react-native';
+import { Button, Clipboard } from 'react-native';
+import { ListItem } from 'react-native-elements';
 import PropTypes from 'prop-types';
 
 import Crypto from '../Crypto';
@@ -45,15 +46,20 @@ export default class Secret extends React.Component {
   render() {
     const s = this.props.service;
     const group = this.props.group;
-    const secretShown = group.unlocked ? '123-...' : '***-...';
+    const secretShown = group.unlocked ? '123-...' : 'XXX-...';
 
     return (
       <Swipeable onSwipeLeft={this.navigateToServiceScreen}>
-        <Button
-          title={`Service: ${s.service}`}
+        <ListItem
+          containerStyle={{backgroundColor: 'white'}}
+          avatar={{ uri: `https://github.com/0x0ece/0x0ece.github.io/raw/master/img/${s.icon}.png` }}
+          roundAvatar={true}
+          hideChevron={true}
+          title={s.display}
+          subtitle={s.username}
+          rightTitle={secretShown}
           onPress={this.handlePress}
         />
-        <Text>{secretShown}</Text>
       </Swipeable>
     );
   }

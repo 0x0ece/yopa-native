@@ -13,17 +13,18 @@ const store = createStore(secretApp, {
   // initial store - load a YML file for real data
   secrets: {
     services: [
-      new Service({ service: 'Zero', group: 'default' }),
-      new Service({ service: 'One', group: 'default' }),
-      new Service({ service: 'Two', group: 'default' }),
-      new Service({ service: 'WOne', group: 'Work' }),
-      new Service({ service: 'WTwo', group: 'Work' }),
-      new Service({ service: 'IOne', group: 'Important' }),
-      new Service({ service: 'ITwo', group: 'Important' }),
+      new Service({ service: 'yopa.io', username: 'yopa', group: 'default' }),
+      new Service({ service: 'GitHub', username: 'yopamanager', group: 'default' }),
+      new Service({ service: 'Twitter', username: 'yopamanager', group: 'default' }),
+      new Service({ service: 'Google', username: 'yopa@example.com', group: 'Important' }),
+      new Service({ service: 'Facebook', username: 'yopa@example.com', group: 'Important' }),
     ],
     groups: [
       new Group({ group: 'default' }),
-      new Group({ group: 'Important' }),
+      new Group({ group: 'My Folder' }),
+      new Group({ group: 'Important', icon: 'star' }),
+      new Group({ group: 'Work', icon: 'work' }),
+      new Group({ group: 'Banks', icon: 'account-balance' }),
     ],
   },
 });

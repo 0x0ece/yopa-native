@@ -1,10 +1,12 @@
 import React from 'react';
-import { Button, View } from 'react-native';
+import { Button, FlatList, View } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { List, ListItem } from 'react-native-elements';
 
 import GroupPassPrompt from './GroupPassPrompt';
 import Secret from './Secret';
+import Style from '../../styles/Main';
 import { Group, Service } from '../Models';
 import { unlockGroup } from '../redux/actions';
 
@@ -19,6 +21,7 @@ class SecretList extends React.Component {
 
     this.handleGroupDidUnlock = this.handleGroupDidUnlock.bind(this);
     this.handleGroupWillUnlock = this.handleGroupWillUnlock.bind(this);
+    this.renderHeader = this.renderHeader.bind(this);
   }
 
   handleGroupDidUnlock(group, inputPassphrase) {
@@ -51,37 +54,57 @@ class SecretList extends React.Component {
     });
   }
 
+  renderHeader() {
+    if (!this.props.showGroups) {
+      return null;
+    }
+
+    const groupsProps = this.props.groups || [];
+    const groups = groupsProps.filter(g => g.group !== 'default');
+
+    return (
+      <List containerStyle={Style.groupListContainer}>
+        {groups.map(g => (
+          <ListItem
+            containerStyle={{backgroundColor: 'white'}}
+            key={g.key}
+            leftIcon={{ name: g.icon }}
+            title={g.group}
+            onPress={() => this.props.navigate('Group', { group: g })}
+          />
+        ))}
+      </List>
+    );
+  }
+
   render() {
     const groupsProps = this.props.groups || [];
     const servicesProps = this.props.services || [];
     const filter = this.props.group ? this.props.group.group : 'default';
-    const groups = groupsProps.filter(g => g.group !== 'default');
     const services = servicesProps.filter(s => s.group === filter);
     const mainGroup = this.props.group || groupsProps[0];
 
     return (
       <View>
-        {this.props.showGroups ? groups.map(g => (
-          <Button
-            key={g.group}
-            title={`Group: ${g.group}`}
-            onPress={() => this.props.navigate('Group', { group: g })}
-          />
-        )) : null}
-        {services.map(s => (
-          <Secret
-            key={s.id}
-            navigate={this.props.navigate}
-            service={s}
-            group={mainGroup}
-            onGroupWillUnlock={this.handleGroupWillUnlock}
-          />
-        ))}
         <GroupPassPrompt
           group={mainGroup}
           visible={this.state.promptVisible}
           onCancel={() => { this.setState({ promptVisible: false }); }}
           onGroupDidUnlock={this.handleGroupDidUnlock}
+        />
+        <FlatList
+          style={{height: '100%'}}
+          data={services}
+          ListHeaderComponent={this.renderHeader}
+          renderItem={({item}) => (
+            <Secret
+              key={item.id}
+              navigate={this.props.navigate}
+              service={item}
+              group={mainGroup}
+              onGroupWillUnlock={this.handleGroupWillUnlock}
+            />
+          )}
         />
       </View>
     );
