@@ -32,9 +32,9 @@ const Crypto = {
     const separator = params.separator || '-';
     return CryptoJS.SHA256(base)
       .toString(CryptoJS.enc.Base64)
-      .match(/[a-zA-Z0-9]{3}/g)
-      .slice(0, 4)
-      .join(separator);
+      .replace(/[^0-9A-Za-z]/g, '')
+      .substring(0, 12)
+      .match(/.{3}/g).join(separator);
   },
 
 };
