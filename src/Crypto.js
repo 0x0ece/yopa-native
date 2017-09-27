@@ -34,7 +34,8 @@ const Crypto = {
       .toString(CryptoJS.enc.Base64)
       .replace(/[^0-9A-Za-z]/g, '')
       .substring(0, 12)
-      .match(/.{3}/g).join(separator);
+      .match(/.{3}/g)
+      .join(separator);
   },
 
 };
