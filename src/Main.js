@@ -7,7 +7,7 @@ import GroupScreen from './screens/GroupScreen';
 import HomeScreen from './screens/HomeScreen';
 import ServiceScreen from './screens/ServiceScreen';
 import SettingsScreen from './screens/SettingsScreen';
-import styles from '../styles/Main';
+import Style from './Style';
 
 
 const StackNav = StackNavigator({
@@ -18,7 +18,7 @@ const StackNav = StackNavigator({
         <Ionicons
           name="ios-settings-outline"
           size={28}
-          style={styles.headerIcon}
+          style={Style.headerIcon}
           onPress={() => this.navigate('Settings')}
         />
       ),
@@ -26,7 +26,7 @@ const StackNav = StackNavigator({
         <Ionicons
           name="ios-add"
           size={28}
-          style={styles.headerIcon}
+          style={Style.headerIcon}
           onPress={() => this.navigate('AddService')}
         />
       ),
@@ -36,14 +36,14 @@ const StackNav = StackNavigator({
     screen: ServiceScreen,
     path: 'service/:service',
     navigationOptions: ({ navigation }) => ({
-      title: `${navigation.state.params.service}`,
+      title: `${navigation.state.params.service.service}`,
     }),
   },
   Group: {
     screen: GroupScreen,
     path: 'group/:group',
     navigationOptions: ({ navigation }) => ({
-      title: `${navigation.state.params.group}`,
+      title: `${navigation.state.params.group.group}`,
     }),
   },
 });
@@ -59,12 +59,30 @@ const ModalNav = StackNavigator({
     screen: SettingsScreen,
     navigationOptions: {
       title: 'Settings',
+      headerLeft: null,
+      headerRight: (
+        <Ionicons
+          name="ios-close"
+          size={28}
+          style={Style.headerIcon}
+          onPress={() => { this.navigate('back'); }}
+        />
+      ),
     },
   },
   AddService: {
     screen: AddServiceScreen,
     navigationOptions: {
       title: 'New',
+      headerLeft: null,
+      headerRight: (
+        <Ionicons
+          name="ios-close"
+          size={28}
+          style={Style.headerIcon}
+          onPress={() => { this.navigate('back'); }}
+        />
+      ),
     },
   },
 }, {
