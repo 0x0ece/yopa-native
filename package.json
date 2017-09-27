@@ -38,6 +38,7 @@
     "react-native-prompt": "^1.0.0",
     "react-navigation": "^1.0.0-beta.12",
     "react-redux": "^5.0.6",
-    "redux": "^3.7.2"
+    "redux": "^3.7.2",
+    "tcomb-form-native": "^0.6.10"
   }
 }
