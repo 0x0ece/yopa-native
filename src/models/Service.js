@@ -1,5 +1,5 @@
 function Service(service) {
-  this.id = service.service || '';
+  this.id = service.service+service.username || '';
   this.key = this.id;
   this.service = service.service || '';
   this.username = service.username || '';

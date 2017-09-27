@@ -57,7 +57,7 @@ export default class Secret extends React.Component {
           avatarOverlayContainerStyle={{ backgroundColor: 'transparent' }}
           avatarStyle={{ width: 16, height: 16, marginBottom: 14 }}
           hideChevron
-          title={s.display}
+          title={s.service}
           subtitle={s.username}
           rightTitle={secretShown}
           onPress={this.handlePress}

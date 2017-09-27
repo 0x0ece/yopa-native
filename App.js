@@ -14,16 +14,16 @@ const store = createStore(secretApp, {
   secrets: {
     services: [
       new Service({ service: 'yopa.io', username: 'yopa', group: 'default' }),
-      new Service({ service: 'GitHub', username: 'yopamanager', icon: 'github.com', group: 'default' }),
-      new Service({ service: 'Twitter', username: 'yopamanager', icon: 'twitter.com', group: 'default' }),
-      new Service({ service: 'Google', username: 'yopa@example.com', icon: 'google.com', group: 'Important' }),
-      new Service({ service: 'Facebook', username: 'yopa@example.com', icon: 'facebook.com', group: 'Important' }),
+      new Service({ service: 'github.com', username: 'yopamanager', icon: 'github.com', group: 'default' }),
+      new Service({ service: 'twitter.com', username: 'yopamanager', icon: 'twitter.com', group: 'default' }),
+      new Service({ service: 'google.com', username: 'yopa@example.com', icon: 'google.com', group: 'Important' }),
+      new Service({ service: 'google.com', username: 'yopa2@example.com', icon: 'google.com', group: 'Important' }),
+      new Service({ service: 'facebook.com', username: 'yopa@example.com', icon: 'facebook.com', group: 'Important' }),
+      new Service({ service: 'bankofamerica.com', username: 'yopa@example.com', icon: 'bankofamerica.com', group: 'Banks' }),
     ],
     groups: [
       new Group({ group: 'default' }),
-      new Group({ group: 'My Folder' }),
       new Group({ group: 'Important', icon: 'star' }),
-      new Group({ group: 'Work', icon: 'work' }),
       new Group({ group: 'Banks', icon: 'account-balance' }),
     ],
   },
