@@ -23,6 +23,7 @@ const HomeScreen = ({ navigation, services, groups }) => {
       services={services}
       groups={groups}
       showGroups
+      showAddButton={(services.length < 5)}
     />
   );
 };
