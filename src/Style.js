@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   // inputBar: {
   //   flex: 2,
   // },
-  // yopa: {
+  // mempa: {
   //   flex: 5,
   // },
   defaultBg: {

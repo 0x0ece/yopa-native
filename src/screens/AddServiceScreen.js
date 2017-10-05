@@ -64,7 +64,7 @@ class AddServiceScreen extends React.Component {
               },
               username: {
                 label: 'Username or email',
-                placeholder: 'yopa',
+                placeholder: 'mempa',
               },
               group: {
                 nullOption: false,
