@@ -21,13 +21,13 @@ const Crypto = {
     return encValue === encArr[1];
   },
 
-  computeSecret(username, passphrase, service, counter, extra) {
+  computeSecret(username, passphrase, counter, service, extra) {
     /*
-      CryptoJS.SHA256("user:passphrase:example.com:0").toString(CryptoJS.enc.Base64)
+      CryptoJS.SHA256("user:passphrase:0:example.com").toString(CryptoJS.enc.Base64)
         .match(/[a-zA-Z0-9]{3}/g).slice(0,4).join("-")
-      // "yef-xIO-ViT-ZhK"
+      // "uBP-8Pe-5xM-mBe"
     */
-    const base = [username, passphrase, service, counter].join(':');
+    const base = [username, passphrase, counter, service].join(':');
     const params = extra || {};
     const separator = params.separator || '-';
     return CryptoJS.SHA256(base)
