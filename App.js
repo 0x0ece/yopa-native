@@ -13,13 +13,13 @@ const store = createStore(secretApp, {
   // initial store - load a YML file for real data
   secrets: {
     services: [
-      new Service({ service: 'yopa.io', username: 'yopa', group: 'default' }),
-      new Service({ service: 'github.com', username: 'yopamanager', group: 'default' }),
-      new Service({ service: 'twitter.com', username: 'yopamanager', group: 'default' }),
-      new Service({ service: 'google.com', username: 'yopa@example.com', group: 'Important' }),
-      new Service({ service: 'google.com', username: 'yopa2@example.com', group: 'Important' }),
-      new Service({ service: 'facebook.com', username: 'yopa@example.com', group: 'Important' }),
-      new Service({ service: 'bankofamerica.com', username: 'yopa@example.com', group: 'Banks' }),
+      new Service({ service: 'mempa.io', username: 'mempa', group: 'default' }),
+      new Service({ service: 'github.com', username: 'mempamanager', group: 'default' }),
+      new Service({ service: 'twitter.com', username: 'mempamanager', group: 'default' }),
+      new Service({ service: 'google.com', username: 'mempa@example.com', group: 'Important' }),
+      new Service({ service: 'google.com', username: 'mempa2@example.com', group: 'Important' }),
+      new Service({ service: 'facebook.com', username: 'mempa@example.com', group: 'Important' }),
+      new Service({ service: 'bankofamerica.com', username: 'mempa@example.com', group: 'Banks' }),
     ],
     groups: [
       new Group({ group: 'default' }),
