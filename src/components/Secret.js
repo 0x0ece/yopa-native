@@ -21,7 +21,7 @@ export default class Secret extends React.Component {
   getSecret(group) {
     const s = this.props.service;
     const g = group || this.props.group;
-    return Crypto.computeSecret(s.username, g.inputPassphrase, s.service, s.counter, s.extra);
+    return Crypto.computeSecret(s.username, g.inputPassphrase, s.counter, s.service, s.extra);
   }
 
   navigateToServiceScreen() {

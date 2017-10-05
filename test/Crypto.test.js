@@ -4,16 +4,16 @@ import Crypto from '../src/Crypto';
 
 
 it('returns the secret', () => {
-  const secret = Crypto.computeSecret('user', 'passphrase', 'example.com', '0');
-  const expected = 'yef-xIO-WVi-TZh';
+  const secret = Crypto.computeSecret('user', 'passphrase', '0', 'example.com');
+  const expected = 'uBP-8Pe-5xM-mBe';
   expect(secret).toBe(expected);
 });
 
 it('implements the specs', () => {
-  const secret = Crypto.computeSecret('user', 'passphrase', 'example.com', '0');
+  const secret = Crypto.computeSecret('user', 'passphrase', '0', 'example.com');
 
   // sha256
-  const sha256 = CryptoJS.SHA256('user:passphrase:example.com:0');
+  const sha256 = CryptoJS.SHA256('user:passphrase:0:example.com');
   // base64
   const base64 = sha256.toString(CryptoJS.enc.Base64);
   // remove non-alpha
