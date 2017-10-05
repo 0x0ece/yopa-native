@@ -14,8 +14,8 @@ const store = createStore(secretApp, {
   secrets: {
     services: [
       new Service({ service: 'mempa.io', username: 'mempa', group: 'default' }),
-      new Service({ service: 'github.com', username: 'mempamanager', group: 'default' }),
-      new Service({ service: 'twitter.com', username: 'mempamanager', group: 'default' }),
+      new Service({ service: 'github.com', username: 'mempa', group: 'default' }),
+      new Service({ service: 'twitter.com', username: 'mempassword', group: 'default' }),
       new Service({ service: 'google.com', username: 'mempa@example.com', group: 'Important' }),
       new Service({ service: 'google.com', username: 'mempa2@example.com', group: 'Important' }),
       new Service({ service: 'facebook.com', username: 'mempa@example.com', group: 'Important' }),
