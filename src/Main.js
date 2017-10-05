@@ -13,7 +13,7 @@ import Style from './Style';
 const StackNav = StackNavigator({
   Home: { screen: HomeScreen,
     navigationOptions: {
-      title: 'YoPa',
+      title: 'MemPa',
       headerLeft: (
         <Ionicons
           name="ios-settings-outline"

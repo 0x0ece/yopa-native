@@ -1,15 +1,15 @@
 {
   "expo": {
-    "name": "YoPa",
-    "icon": "./yopa.png",
+    "name": "MemPa",
+    "icon": "./mempa.png",
     "version": "1.0.0",
-    "slug": "yopa",
+    "slug": "mempa",
     "sdkVersion": "21.0.0",
     "ios": {
-      "bundleIdentifier": "io.yopa.yopa"
+      "bundleIdentifier": "io.mempa.mempa"
     },
     "android": {
-      "package": "io.yopa.yopa"
+      "package": "io.mempa.mempa"
     }
   }
 }
