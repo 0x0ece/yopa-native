@@ -19,4 +19,7 @@ it('renders correctly', () => {
       onGroupWillUnlock={() => {}}
     />,
   );
+
+  expect(component).toBeTruthy();
+  // TODO: write test here
 });
