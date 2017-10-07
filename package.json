@@ -23,7 +23,10 @@
     "lint": "node node_modules/eslint/bin/eslint.js ."
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|react-clone-referenced-element|expo(nent)?|@expo(nent)?/.*|react-navigation)|tcomb-form-native)"
+    ]
   },
   "dependencies": {
     "@expo/vector-icons": "^5.2.0",
