@@ -32,6 +32,19 @@ const Utils = {
     });
   },
 
+  async deleteDataFromStoreAsync() {
+    return new Promise((resolve, reject) => {
+      const file = FileSystem.documentDirectory + Utils.LOCAL_STORE;
+      FileSystem.deleteAsync(file)
+        .then(() => {
+          resolve();
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+
   async loadDataFromStoreAsync() {
     return new Promise((resolve, reject) => {
       const file = FileSystem.documentDirectory + Utils.LOCAL_STORE;

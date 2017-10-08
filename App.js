@@ -31,6 +31,7 @@ const store = createStore(secretApp, {
 
 export default class App extends React.Component {
   componentDidMount() {
+    // Utils.deleteDataFromStoreAsync()
     Utils.loadDataFromStoreAsync()
       .then((data) => {
         store.dispatch(reloadAll(data));
