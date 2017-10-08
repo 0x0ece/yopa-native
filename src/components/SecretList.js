@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, Switch, View } from 'react-native';
+import { Clipboard, FlatList, Switch, View } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { List, ListItem } from 'react-native-elements';
@@ -15,6 +15,7 @@ class SecretList extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
+      clipboard: '',
       promptVisible: false,
       didUnlockCallback: null,
     };
@@ -22,9 +23,14 @@ class SecretList extends React.Component {
     this.handleEnableGroups = this.handleEnableGroups.bind(this);
     this.handleGroupDidUnlock = this.handleGroupDidUnlock.bind(this);
     this.handleGroupWillUnlock = this.handleGroupWillUnlock.bind(this);
+    this.readFromClipboard = this.readFromClipboard.bind(this);
     this.renderFooter = this.renderFooter.bind(this);
     this.renderHeader = this.renderHeader.bind(this);
     this.renderItem = this.renderItem.bind(this);
+  }
+
+  componentDidMount() {
+    this.readFromClipboard();
   }
 
   handleEnableGroups() {
@@ -59,6 +65,12 @@ class SecretList extends React.Component {
       promptVisible: true,
       didUnlockCallback: callback,
     });
+  }
+
+  readFromClipboard() {
+    Clipboard.getString().then(
+      (clipboard) => { this.setState({ clipboard }); },
+    );
   }
 
   renderFooter() {
@@ -121,17 +133,19 @@ class SecretList extends React.Component {
         <ListItem
           containerStyle={{}}
           key={item}
-          title="Tap to copy secret, swipe to edit service"
+          title="Tap to copy the secret, swipe for more options"
           hideChevron
         />
       );
     }
     return (
       <Secret
+        clipboard={this.state.clipboard}
         navigate={this.props.navigate}
         service={item}
         group={mainGroup}
         onGroupWillUnlock={this.handleGroupWillUnlock}
+        onSecretCopied={this.readFromClipboard}
       />
     );
   }

@@ -37,6 +37,7 @@ export default class Secret extends React.Component {
   handlePress() {
     if (this.props.group.unlocked) {
       this.copySecretToClipboard();
+      this.props.onSecretCopied();
     } else {
       // pass copySecretToClipboard as callback, that will eventually
       // be invoked with the unlocked group as parameter
@@ -47,7 +48,11 @@ export default class Secret extends React.Component {
   render() {
     const s = this.props.service;
     const group = this.props.group;
-    const secretShown = group.unlocked ? '123-...' : 'XXX-...';
+    let secretShown = group.unlocked ? 'XXX-...' : 'xxx-...';
+
+    if (this.props.clipboard && group.unlocked && this.getSecret(group) === this.props.clipboard) {
+      secretShown = 'copied';
+    }
 
     return (
       <Swipeable onSwipeLeft={this.navigateToServiceScreen}>
@@ -68,8 +73,10 @@ export default class Secret extends React.Component {
 }
 
 Secret.propTypes = {
+  clipboard: PropTypes.string.isRequired,
   group: PropTypes.instanceOf(Group).isRequired,
   service: PropTypes.instanceOf(Service).isRequired,
   navigate: PropTypes.func.isRequired,
   onGroupWillUnlock: PropTypes.func.isRequired,
+  onSecretCopied: PropTypes.func.isRequired,
 };
