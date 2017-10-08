@@ -65,7 +65,6 @@ class SecretList extends React.Component {
     if (!this.props.showAddButton) {
       return null;
     }
-
     return (
       <List containerStyle={{}}>
         <ListItem
@@ -86,7 +85,6 @@ class SecretList extends React.Component {
     if (this.props.services.length === 0 || !this.props.showGroups) {
       return null;
     }
-
     return groupsProps.length === 1 ? (
       <List containerStyle={Style.groupListContainer}>
         <ListItem
@@ -130,7 +128,6 @@ class SecretList extends React.Component {
     }
     return (
       <Secret
-        key={item.id}
         navigate={this.props.navigate}
         service={item}
         group={mainGroup}
@@ -164,6 +161,7 @@ class SecretList extends React.Component {
           ListHeaderComponent={this.renderHeader}
           ListFooterComponent={this.renderFooter}
           renderItem={({ item }) => this.renderItem(item, mainGroup)}
+          keyExtractor={(item, index) => index}
         />
       </View>
     );
