@@ -8,7 +8,22 @@ function Group(group) {
   this.icon = group.icon || 'folder';
 }
 
-// Group.prototype.display = function() {
-// };
+Group.prototype.serialize = () => {
+  const ser = {
+    group: this.group,
+  };
+
+  if (this.icon !== 'folder') {
+    ser.icon = this.icon;
+  }
+
+  if (this.passphrase === '') {
+    ser.storePassphrase = false;
+  } else {
+    ser.passphrase = this.passphrase;
+  }
+
+  return ser;
+};
 
 export default Group;

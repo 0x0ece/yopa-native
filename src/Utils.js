@@ -8,6 +8,30 @@ const Utils = {
 
   LOCAL_STORE: 'data.yml',
 
+  serializeStore(store) {
+    const services = store.services || [];
+    const groups = store.groups || [];
+    return yaml.safeDump({
+      version: 1,
+      services: services.map(s => s.serialize()),
+      groups: groups.map(g => g.serialize()),
+    });
+  },
+
+  async saveDataToStoreAsync(store) {
+    return new Promise((resolve, reject) => {
+      const file = FileSystem.documentDirectory + Utils.LOCAL_STORE;
+      const content = Utils.serializeStore(store);
+      FileSystem.writeAsStringAsync(file, content)
+        .then(() => {
+          resolve();
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+
   async loadDataFromStoreAsync() {
     return new Promise((resolve, reject) => {
       const file = FileSystem.documentDirectory + Utils.LOCAL_STORE;
