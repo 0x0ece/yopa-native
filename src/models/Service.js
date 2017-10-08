@@ -9,7 +9,26 @@ function Service(service) {
   this.description = service.description || '';
 }
 
-// Service.prototype.display = function() {
-// };
+Service.prototype.serialize = () => {
+  const ser = {
+    service: this.service,
+    username: this.username,
+    counter: this.counter,
+  };
+
+  if (this.group !== 'default') {
+    ser.group = this.group;
+  }
+
+  if (this.description !== '') {
+    ser.description = this.description;
+  }
+
+  if (this.icon !== '') {
+    ser.icon = this.icon;
+  }
+
+  return ser;
+};
 
 export default Service;

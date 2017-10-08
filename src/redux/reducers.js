@@ -8,33 +8,42 @@ import {
 } from './actions';
 
 import Group from '../models/Group';
+import Utils from '../Utils';
 
+
+function persistAndReturn(state) {
+  Utils.saveDataToStoreAsync(state)
+    .catch(() => {
+      // ignore error for file not found
+    });
+  return state;
+}
 
 function secrets(state = {}, action) {
   switch (action.type) {
     case ADD_SERVICE:
-      return {
+      return persistAndReturn({
         ...state,
         services: [
           ...state.services,
           action.service,
         ],
-      };
+      });
     case DEL_SERVICE:
-      return {
+      return persistAndReturn({
         ...state,
         services: state.services.filter(s => s.id !== action.service.id),
-      };
+      });
 
     case CREATE_DEFAULT_GROUPS:
-      return {
+      return persistAndReturn({
         ...state,
         groups: [
           ...state.groups,
           new Group({ group: 'Important', icon: 'star' }),
           new Group({ group: 'Banks', icon: 'account-balance' }),
         ],
-      };
+      });
 
     case UNLOCK_GROUP:
       return {
