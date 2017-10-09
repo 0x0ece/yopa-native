@@ -3,6 +3,7 @@ import {
   ADD_SERVICE,
   DEL_SERVICE,
   CREATE_DEFAULT_GROUPS,
+  INIT_GROUP,
   UNLOCK_GROUP,
   RELOAD_ALL,
 } from './actions';
@@ -45,6 +46,19 @@ function secrets(state = {}, action) {
         ],
       });
 
+    case INIT_GROUP:
+      return persistAndReturn({
+        ...state,
+        groups: state.groups.map((g) => {
+          if (g.id === action.group.id) {
+            return new Group({
+              ...g,
+              ...action.group,
+            });
+          }
+          return g;
+        }),
+      });
     case UNLOCK_GROUP:
       return {
         ...state,
