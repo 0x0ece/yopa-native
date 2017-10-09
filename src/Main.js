@@ -112,4 +112,15 @@ const ModalNav = StackNavigator({
   mode: 'modal',
 });
 
+const SimplifiedNav = StackNavigator({
+  Home: { screen: HomeScreen,
+    navigationOptions: {
+      title: 'MemPa',
+    },
+  },
+});
+
 export default ModalNav;
+export {
+  SimplifiedNav,
+};
