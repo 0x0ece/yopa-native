@@ -1,15 +1,16 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
+import { AppLoading } from 'expo';
 
-import Main from './src/Main';
+import Main, { SimplifiedNav } from './src/Main';
 import Utils from './src/Utils';
 import secretApp from './src/redux/reducers';
 import { reloadAll } from './src/redux/actions';
 import { Group, Service } from './src/Models';
 
 
-const EXAMPLE_DATA = false;
+const EXAMPLE_DATA = true;
 
 const store = createStore(secretApp, {
   // initial store - load a YML file for real data
@@ -24,7 +25,7 @@ const store = createStore(secretApp, {
       new Service({ service: 'bankofamerica.com', username: 'mempa@example.com', group: 'Banks' }),
     ],
     groups: [
-      new Group({ group: 'default' }),
+      new Group({ group: 'default', storePassphrase: false }),
       new Group({ group: 'Important', icon: 'star' }),
       new Group({ group: 'Banks', icon: 'account-balance' }),
     ],
@@ -36,22 +37,59 @@ const store = createStore(secretApp, {
   },
 });
 
+
 export default class App extends React.Component {
+  static isFirstLaunch() {
+    const state = store.getState();
+    const groups = (state.secrets && state.secrets.groups) || [];
+    return (groups.length === 1) && (!groups[0].isInitialized());
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.startAsync = this.startAsync.bind(this);
+
+    this.state = {
+      isReady: 0,
+    };
+  }
+
   componentDidMount() {
+    // trigger state change, so we re-render (and switch from SimplifiedNav to Main)
+    if (App.isFirstLaunch()) {
+      store.subscribe(() => this.setState({ isReady: 2 }));
+    }
+  }
+
+  async startAsync() {
     // Utils.deleteDataFromStoreAsync()
     Utils.loadDataFromStoreAsync()
       .then((data) => {
         store.dispatch(reloadAll(data));
+        this.setState({ isReady: 1 });
       })
       .catch(() => {
         // ignore error for file not found
+        this.setState({ isReady: 1 });
       });
   }
 
   render() {
+    if (!this.state.isReady) {
+      return (
+        <AppLoading
+          startAsync={this.startAsync}
+          onFinish={() => {}}
+          onError={() => {}}
+        />
+      );
+    }
+
+    const Component = App.isFirstLaunch() ? SimplifiedNav : Main;
     return (
       <Provider store={store}>
-        <Main />
+        <Component />
       </Provider>
     );
   }
