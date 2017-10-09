@@ -15,7 +15,7 @@ class Group {
   }
 
   isInitialized() {
-    return (!!this.passphrase) || (this.storePassphrase !== false);
+    return (!!this.passphrase) || (this.storePassphrase === false);
   }
 
   isUnlocked() {

@@ -2,19 +2,25 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { Group, Service } from '../Models';
+import InitGroupScreen from './InitGroupScreen';
 import SecretList from '../components/SecretList';
+import { Group, Service } from '../Models';
 
 
 class HomeScreen extends React.Component {
   render() {
-    return (
+    const homeGroup = this.props.groups[0];
+    return homeGroup.isInitialized() ? (
       <SecretList
         navigate={this.props.navigation.navigate}
         services={this.props.services}
         groups={this.props.groups}
         showGroups
         showAddButton={(this.props.services.length < 5)}
+      />
+    ) : (
+      <InitGroupScreen
+        group={homeGroup}
       />
     );
   }
