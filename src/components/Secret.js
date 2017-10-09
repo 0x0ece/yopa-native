@@ -35,7 +35,7 @@ export default class Secret extends React.Component {
   }
 
   handlePress() {
-    if (this.props.group.unlocked) {
+    if (this.props.group.isUnlocked()) {
       this.copySecretToClipboard();
       this.props.onSecretCopied();
     } else {
@@ -48,9 +48,10 @@ export default class Secret extends React.Component {
   render() {
     const s = this.props.service;
     const group = this.props.group;
-    let secretShown = group.unlocked ? 'XXX-...' : 'xxx-...';
 
-    if (this.props.clipboard && group.unlocked && this.getSecret(group) === this.props.clipboard) {
+    let secretShown = group.isUnlocked() ? 'XXX-...' : 'xxx-...';
+    if (this.props.clipboard && group.isUnlocked()
+      && this.getSecret(group) === this.props.clipboard) {
       secretShown = 'copied';
     }
 

@@ -6,27 +6,19 @@ import { Group, Service } from '../Models';
 import SecretList from '../components/SecretList';
 
 
-// TODO(ec) not sure how to get navigation working AND linting passing
-const HomeScreen = ({ navigation, services, groups }) => {
-  /* eslint no-undef:off */
-  navigate = (page, options) => {
-    if (page === 'back') {
-      navigation.goBack(null);
-    } else {
-      navigation.navigate(page, options);
-    }
-  };
-
-  return (
-    <SecretList
-      navigate={navigation.navigate}
-      services={services}
-      groups={groups}
-      showGroups
-      showAddButton={(services.length < 5)}
-    />
-  );
-};
+class HomeScreen extends React.Component {
+  render() {
+    return (
+      <SecretList
+        navigate={this.props.navigation.navigate}
+        services={this.props.services}
+        groups={this.props.groups}
+        showGroups
+        showAddButton={(this.props.services.length < 5)}
+      />
+    );
+  }
+}
 
 function mapStateToProps(state) {
   return {

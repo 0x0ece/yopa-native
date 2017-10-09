@@ -49,7 +49,6 @@ class SecretList extends React.Component {
     const data = new Group({
       ...group,
       inputPassphrase,
-      unlocked: true,
     });
     this.props.dispatch(unlockGroup(data));
 

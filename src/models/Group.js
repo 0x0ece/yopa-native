@@ -1,12 +1,25 @@
 class Group {
   constructor(group) {
+    // serialized
+    this.group = group.group || '';
+    this.icon = group.icon || 'folder';
+    this.passphrase = group.passphrase || '';
+    this.storePassphrase = group.storePassphrase;
+
+    // ui
     this.id = group.group || '';
     this.key = this.id;
-    this.group = group.group || '';
-    this.passphrase = group.passphrase || '';
-    this.unlocked = group.unlocked || false;
+
+    // internal state
     this.inputPassphrase = group.inputPassphrase || '';
-    this.icon = group.icon || 'folder';
+  }
+
+  isInitialized() {
+    return (!!this.passphrase) || (this.storePassphrase !== false);
+  }
+
+  isUnlocked() {
+    return (!!this.inputPassphrase);
   }
 
   serialize() {

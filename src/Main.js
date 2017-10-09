@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { StackNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -10,8 +11,30 @@ import SettingsScreen from './screens/SettingsScreen';
 import Style from './Style';
 
 
+// TODO(ec) not sure how to get navigation working AND linting passing
+const MainScreen = ({ navigation, ...props }) => {
+  /* eslint no-undef:off */
+  navigate = (page, options) => {
+    if (page === 'back') {
+      navigation.goBack(null);
+    } else {
+      navigation.navigate(page, options);
+    }
+  };
+
+  return (
+    <HomeScreen navigation={navigation} {...props} />
+  );
+};
+
+MainScreen.propTypes = {
+  /* eslint react/forbid-prop-types:off */
+  navigation: PropTypes.object.isRequired,
+};
+
+
 const StackNav = StackNavigator({
-  Home: { screen: HomeScreen,
+  Home: { screen: MainScreen,
     navigationOptions: {
       title: 'MemPa',
       headerLeft: (
