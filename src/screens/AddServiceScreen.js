@@ -2,7 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import t from 'tcomb-form-native';
-import { ScrollView, TouchableHighlight, Text } from 'react-native';
+import { ScrollView } from 'react-native';
+import { Button } from 'react-native-elements';
+
 
 import Style from '../Style';
 import { Group, Service } from '../Models';
@@ -20,6 +22,7 @@ class AddServiceScreen extends React.Component {
     };
 
     this.onPress = this.onPress.bind(this);
+    this.onChange = this.onChange.bind(this);
 
     // here we are: define your domain model
     this.InputService = t.struct({
@@ -32,6 +35,13 @@ class AddServiceScreen extends React.Component {
 
     // this.onImport = this.onImport.bind(this);
   }
+
+  // TODO: add enable/disable button #30
+  /*
+  onChange() {
+    this.setState({canAddService: true})
+  }
+  */
 
   onPress() {
     // call getValue() to get the values of the form
@@ -50,13 +60,14 @@ class AddServiceScreen extends React.Component {
   render() {
     return (
       <ScrollView
-        style={Style.defaultBg}
+        style={[Style.defaultBg, Style.container]}
         keyboardShouldPersistTaps="always"
       >
 
         <Form
           ref={(c) => { this.form = c; }}
           type={this.InputService}
+          onChange={this.onChange}
           options={{
             fields: {
               service: {
@@ -75,9 +86,17 @@ class AddServiceScreen extends React.Component {
             group: 0,
           }}
         />
-        <TouchableHighlight style={Style.button} onPress={this.onPress} underlayColor="#99d9f4">
-          <Text style={Style.buttonText}>Save</Text>
-        </TouchableHighlight>
+
+        <Button
+          small
+          raised
+          // disabled={this.state.canAddService} // TODO: #30
+          icon={{ name: 'done', size: 32 }}
+          textStyle={{ textAlign: 'center' }}
+          buttonStyle={Style.primaryButton}
+          onPress={this.onPress}
+          title={'Add service'}
+        />
 
       </ScrollView>
     );
