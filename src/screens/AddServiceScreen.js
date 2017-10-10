@@ -42,14 +42,12 @@ class AddServiceScreen extends React.Component {
       canAddService: false,
     });
   }
-  
+
   onChange(value) {
-    console.log(this.state);
-    if (value.service != undefined && value.username != undefined) {
+    if (value.service !== undefined && value.username !== undefined) {
       this.setState({ canAddService: true });
     }
     this.setState({ value });
-    // console.log(this.state);
   }
 
   onPress() {
@@ -89,6 +87,7 @@ class AddServiceScreen extends React.Component {
               },
               group: {
                 nullOption: false,
+                hidden: this.props.groups.length === 1,
               },
             },
           }}
