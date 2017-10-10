@@ -36,12 +36,21 @@ class AddServiceScreen extends React.Component {
     // this.onImport = this.onImport.bind(this);
   }
 
-  // TODO: add enable/disable button #30
-  /*
-  onChange() {
-    this.setState({canAddService: true})
+  componentWillMount() {
+    this.setState({
+      value: { group: 0 },
+      canAddService: false,
+    });
   }
-  */
+  
+  onChange(value) {
+    console.log(this.state);
+    if (value.service != undefined && value.username != undefined) {
+      this.setState({ canAddService: true });
+    }
+    this.setState({ value });
+    // console.log(this.state);
+  }
 
   onPress() {
     // call getValue() to get the values of the form
@@ -67,6 +76,7 @@ class AddServiceScreen extends React.Component {
         <Form
           ref={(c) => { this.form = c; }}
           type={this.InputService}
+          value={this.state.value}
           onChange={this.onChange}
           options={{
             fields: {
@@ -82,15 +92,12 @@ class AddServiceScreen extends React.Component {
               },
             },
           }}
-          value={{
-            group: 0,
-          }}
         />
 
         <Button
           small
           raised
-          // disabled={this.state.canAddService} // TODO: #30
+          disabled={!this.state.canAddService}
           icon={{ name: 'done', size: 32 }}
           textStyle={{ textAlign: 'center' }}
           buttonStyle={Style.primaryButton}
