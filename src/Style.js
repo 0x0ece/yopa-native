@@ -53,6 +53,14 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 
+  container: {
+    padding: 20,
+  },
+
+  primaryButton: {
+    backgroundColor: '#FFC107',
+  },
+
   groupListContainer: {
     backgroundColor: '#e9e9ee',
     marginTop: 0,
