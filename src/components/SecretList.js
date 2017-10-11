@@ -2,7 +2,7 @@ import React from 'react';
 import { Clipboard, FlatList, Switch, View } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { List, ListItem } from 'react-native-elements';
+import { List, ListItem, SearchBar } from 'react-native-elements';
 
 import GroupPassPrompt from './GroupPassPrompt';
 import Secret from './Secret';
@@ -18,6 +18,8 @@ class SecretList extends React.Component {
       clipboard: '',
       promptVisible: false,
       didUnlockCallback: null,
+      searchString: '',
+      searchBarVisible: false,
     };
 
     this.handleEnableGroups = this.handleEnableGroups.bind(this);
@@ -27,6 +29,8 @@ class SecretList extends React.Component {
     this.renderFooter = this.renderFooter.bind(this);
     this.renderHeader = this.renderHeader.bind(this);
     this.renderItem = this.renderItem.bind(this);
+    this.handleSearchChangeText = this.handleSearchChangeText.bind(this);
+    this.handleSecretListScroll = this.handleSecretListScroll.bind(this);
   }
 
   componentDidMount() {
@@ -66,10 +70,36 @@ class SecretList extends React.Component {
     });
   }
 
+
+  handleSearchChangeText(text) {
+    this.setState({ searchString: text });
+  }
+
+
+  handleSecretListScroll(event) {
+    const currentOffset = event.nativeEvent.contentOffset.y;
+    if (currentOffset < 0 || this.offset <= 0) {
+      this.setState({ searchBarVisible: true });
+    } else if (this.state.searchString.length === 0) {
+      this.setState({ searchBarVisible: false });
+    }
+    this.offset = currentOffset;
+  }
+
   readFromClipboard() {
     Clipboard.getString().then(
       (clipboard) => { this.setState({ clipboard }); },
     );
+  }
+
+  filterServices() {
+    const servicesProps = this.props.services || [];
+    if (this.state.searchString.length > 0) {
+      return servicesProps.filter(s => (s.service + s.username + s.description).toLowerCase()
+        .includes(this.state.searchString.toLowerCase()));
+    }
+    const filter = this.props.group ? this.props.group.group : 'default';
+    return servicesProps.filter(s => s.group === filter);
   }
 
   renderFooter() {
@@ -91,7 +121,8 @@ class SecretList extends React.Component {
 
   renderHeader() {
     const groupsProps = this.props.groups || [];
-    const groups = groupsProps.filter(g => g.group !== 'default');
+    const groups = groupsProps.filter(g => g.group !== 'default' &&
+      g.group.toLowerCase().includes(this.state.searchString.toLowerCase()));
 
     if (this.props.services.length === 0 || !this.props.showGroups) {
       return null;
@@ -152,16 +183,29 @@ class SecretList extends React.Component {
   render() {
     const groupsProps = this.props.groups || [];
     const servicesProps = this.props.services || [];
-    const filter = this.props.group ? this.props.group.group : 'default';
-    const services = servicesProps.filter(s => s.group === filter);
     const mainGroup = this.props.group || groupsProps[0];
+    const services = this.filterServices();
 
     if (servicesProps.length === 1 && services.length === 1) {
       services.push('info');
     }
 
+    const searchBarElement = (this.state.searchBarVisible) ? (
+      <SearchBar
+        lightTheme
+        clearIcon
+        ref={(ref) => { this.searchBar = ref; }}
+        autoCorrect={false}
+        onChangeText={this.handleSearchChangeText}
+        autoCapitalize="none"
+        blurOnSubmit
+        autoFocus
+      />
+    ) : null;
+
     return (
       <View>
+        { searchBarElement }
         <GroupPassPrompt
           group={mainGroup}
           visible={this.state.promptVisible}
@@ -175,6 +219,7 @@ class SecretList extends React.Component {
           ListFooterComponent={this.renderFooter}
           renderItem={({ item }) => this.renderItem(item, mainGroup)}
           keyExtractor={(item, index) => index}
+          onScroll={this.handleSecretListScroll}
         />
       </View>
     );
