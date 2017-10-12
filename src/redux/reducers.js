@@ -26,8 +26,8 @@ function secrets(state = {}, action) {
       return persistAndReturn({
         ...state,
         services: [
-          ...state.services,
           action.service,
+          ...state.services,
         ],
       });
     case DEL_SERVICE:
