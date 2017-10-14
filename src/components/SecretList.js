@@ -142,7 +142,6 @@ class SecretList extends React.Component {
           title="Enable groups"
           subtitle="Keep services organized by security level"
           hideChevron
-          onPress={() => this.props.navigation.navigate('AddService')}
         />
       </List>
     ) : (
@@ -230,7 +229,7 @@ class SecretList extends React.Component {
 }
 
 SecretList.propTypes = {
-  groups: PropTypes.arrayOf(PropTypes.instanceOf(Group)).isRequired,
+  groups: PropTypes.arrayOf(PropTypes.instanceOf(Group)),
   services: PropTypes.arrayOf(PropTypes.instanceOf(Service)).isRequired,
   dispatch: PropTypes.func.isRequired,
   group: PropTypes.instanceOf(Group).isRequired,
@@ -242,6 +241,7 @@ SecretList.propTypes = {
 };
 
 SecretList.defaultProps = {
+  groups: [],
   showAddButton: false,
   showGroups: false,
   forceGroupUnlock: false,
