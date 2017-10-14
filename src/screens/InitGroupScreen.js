@@ -2,9 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import t from 'tcomb-form-native';
-import { ScrollView, TouchableHighlight, Text } from 'react-native';
+import { ScrollView, Text } from 'react-native';
+import { Button } from 'react-native-elements';
 
 import Style from '../Style';
+import Crypto from '../Crypto';
 import { Group } from '../Models';
 import { initGroup } from '../redux/actions';
 
@@ -17,9 +19,12 @@ class InitGroupScreen extends React.Component {
     super(props);
     this.state = {
       group: 'default',
+      saveDisabled: true,
+      value: null,
     };
 
-    this.onPress = this.onPress.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handlePress = this.handlePress.bind(this);
 
     // here we are: define your domain model
     this.InputGroup = t.struct({
@@ -28,14 +33,21 @@ class InitGroupScreen extends React.Component {
     });
   }
 
-  onPress() {
+  handleChange(value) {
+    this.setState({
+      value,
+      saveDisabled: value.passphrase.length === 0,
+    });
+  }
+
+  handlePress() {
     // TODO(ec): save data from form
     const formData = this.form.getValue();
     if (formData) {
       const group = new Group({
         ...this.props.group,
         inputPassphrase: formData.passphrase,
-        passphrase: formData.passphrase,
+        passphrase: Crypto.encryptPassphrase(formData.passphrase),
         // securityLevel: formData.securityLevel,
       });
       // const group = new Group({
@@ -52,7 +64,7 @@ class InitGroupScreen extends React.Component {
   render() {
     return (
       <ScrollView
-        style={Style.defaultBg}
+        style={[Style.defaultBg, Style.container]}
         keyboardShouldPersistTaps="always"
       >
         <Text>
@@ -62,10 +74,29 @@ class InitGroupScreen extends React.Component {
         <Form
           ref={(c) => { this.form = c; }}
           type={this.InputGroup}
+          value={this.state.value}
+          onChange={this.handleChange}
+          options={{
+            fields: {
+              passphrase: {
+                autoCapitalize: 'none',
+                autoCorrect: false,
+                autoFocus: true,
+              },
+            },
+          }}
         />
-        <TouchableHighlight style={Style.button} onPress={this.onPress} underlayColor="#99d9f4">
-          <Text style={Style.buttonText}>Save</Text>
-        </TouchableHighlight>
+
+        <Button
+          small
+          raised
+          disabled={this.state.saveDisabled}
+          icon={{ name: 'done', size: 32 }}
+          textStyle={{ textAlign: 'center' }}
+          buttonStyle={Style.primaryButton}
+          onPress={this.handlePress}
+          title={'Save'}
+        />
 
       </ScrollView>
     );

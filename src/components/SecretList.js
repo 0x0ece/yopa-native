@@ -14,9 +14,11 @@ import { createDefaultGroups, unlockGroup } from '../redux/actions';
 class SecretList extends React.Component {
   constructor(props, context) {
     super(props, context);
+
+    const promptVisible = this.props.group.isUnlocked() ? false : this.props.forceGroupUnlock;
     this.state = {
       clipboard: '',
-      promptVisible: false,
+      promptVisible,
       didUnlockCallback: null,
       searchString: '',
       searchBarVisible: false,
@@ -228,21 +230,21 @@ class SecretList extends React.Component {
 }
 
 SecretList.propTypes = {
-  groups: PropTypes.arrayOf(PropTypes.instanceOf(Group)),
+  groups: PropTypes.arrayOf(PropTypes.instanceOf(Group)).isRequired,
   services: PropTypes.arrayOf(PropTypes.instanceOf(Service)).isRequired,
   dispatch: PropTypes.func.isRequired,
-  group: PropTypes.instanceOf(Group),
+  group: PropTypes.instanceOf(Group).isRequired,
   showAddButton: PropTypes.bool,
   showGroups: PropTypes.bool,
+  forceGroupUnlock: PropTypes.bool,
   /* eslint react/forbid-prop-types:off */
   navigation: PropTypes.object.isRequired,
 };
 
 SecretList.defaultProps = {
-  groups: [],
-  group: null,
   showAddButton: false,
   showGroups: false,
+  forceGroupUnlock: false,
 };
 
 export default connect()(SecretList);

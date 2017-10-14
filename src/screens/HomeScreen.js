@@ -15,6 +15,8 @@ class HomeScreen extends React.Component {
         navigation={this.props.navigation}
         services={this.props.services}
         groups={this.props.groups}
+        group={homeGroup}
+        forceGroupUnlock
         showGroups
         showAddButton={(this.props.services.length < 5)}
       />
