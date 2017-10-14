@@ -14,6 +14,10 @@ class Group {
     this.inputPassphrase = group.inputPassphrase || '';
   }
 
+  getNavTitle() {
+    return `${this.group} ${this.isUnlocked() ? '🔐' : '🔒'}`;
+  }
+
   isInitialized() {
     return (!!this.passphrase) || (this.storePassphrase === false);
   }

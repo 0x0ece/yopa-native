@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { StackNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -11,38 +10,16 @@ import SettingsScreen from './screens/SettingsScreen';
 import Style from './Style';
 
 
-// TODO(ec) not sure how to get navigation working AND linting passing
-const MainScreen = ({ navigation, ...props }) => {
-  /* eslint no-undef:off */
-  navigate = (page, options) => {
-    if (page === 'back') {
-      navigation.goBack(null);
-    } else {
-      navigation.navigate(page, options);
-    }
-  };
-
-  return (
-    <HomeScreen navigation={navigation} {...props} />
-  );
-};
-
-MainScreen.propTypes = {
-  /* eslint react/forbid-prop-types:off */
-  navigation: PropTypes.object.isRequired,
-};
-
-
 const StackNav = StackNavigator({
-  Home: { screen: MainScreen,
-    navigationOptions: {
+  Home: { screen: HomeScreen,
+    navigationOptions: ({ navigation }) => ({
       title: 'MemPa',
       headerLeft: (
         <Ionicons
           name="ios-settings-outline"
           size={28}
           style={Style.headerIcon}
-          onPress={() => this.navigate('Settings')}
+          onPress={() => navigation.navigate('Settings')}
         />
       ),
       headerRight: (
@@ -50,10 +27,10 @@ const StackNav = StackNavigator({
           name="ios-add"
           size={28}
           style={Style.headerIcon}
-          onPress={() => this.navigate('AddService')}
+          onPress={() => navigation.navigate('AddService')}
         />
       ),
-    },
+    }),
   },
   Service: {
     screen: ServiceScreen,
@@ -66,7 +43,15 @@ const StackNav = StackNavigator({
     screen: GroupScreen,
     path: 'group/:group',
     navigationOptions: ({ navigation }) => ({
-      title: `${navigation.state.params.group.group}`,
+      title: `${navigation.state.params.group.getNavTitle()}`,
+      headerRight: (
+        <Ionicons
+          name="ios-add"
+          size={28}
+          style={Style.headerIcon}
+          onPress={() => navigation.navigate('AddService')}
+        />
+      ),
     }),
   },
 });
@@ -80,7 +65,7 @@ const ModalNav = StackNavigator({
   },
   Settings: {
     screen: SettingsScreen,
-    navigationOptions: {
+    navigationOptions: ({ navigation }) => ({
       title: 'Settings',
       headerLeft: null,
       headerRight: (
@@ -88,14 +73,14 @@ const ModalNav = StackNavigator({
           name="ios-close"
           size={28}
           style={Style.headerIcon}
-          onPress={() => { this.navigate('back'); }}
+          onPress={() => { navigation.goBack(); }}
         />
       ),
-    },
+    }),
   },
   AddService: {
     screen: AddServiceScreen,
-    navigationOptions: {
+    navigationOptions: ({ navigation }) => ({
       title: 'New',
       headerLeft: null,
       headerRight: (
@@ -103,10 +88,10 @@ const ModalNav = StackNavigator({
           name="ios-close"
           size={28}
           style={Style.headerIcon}
-          onPress={() => { this.navigate('back'); }}
+          onPress={() => { navigation.goBack(); }}
         />
       ),
-    },
+    }),
   },
 }, {
   mode: 'modal',
