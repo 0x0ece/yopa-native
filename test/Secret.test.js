@@ -13,10 +13,12 @@ it('renders correctly', () => {
   const service = new Service({});
   const component = renderer.create(
     <Secret
+      clipboard=""
       group={group}
       service={service}
       navigate={() => {}}
       onGroupWillUnlock={() => {}}
+      onSecretCopied={() => {}}
     />,
   );
 

@@ -55,6 +55,7 @@ class SecretList extends React.Component {
       inputPassphrase,
     });
     this.props.dispatch(unlockGroup(data));
+    this.props.navigation.setParams({ group: data });
 
     // invoke the callback, if any, with the new data
     if (didUnlockCallback) {
@@ -113,7 +114,7 @@ class SecretList extends React.Component {
           leftIcon={{ name: 'add' }}
           title="Add Service"
           hideChevron
-          onPress={() => this.props.navigate('AddService')}
+          onPress={() => this.props.navigation.navigate('AddService')}
         />
       </List>
     );
@@ -139,7 +140,7 @@ class SecretList extends React.Component {
           title="Enable groups"
           subtitle="Keep services organized by security level"
           hideChevron
-          onPress={() => this.props.navigate('AddService')}
+          onPress={() => this.props.navigation.navigate('AddService')}
         />
       </List>
     ) : (
@@ -150,7 +151,7 @@ class SecretList extends React.Component {
             key={g.key}
             leftIcon={{ name: g.icon }}
             title={g.group}
-            onPress={() => this.props.navigate('Group', { group: g })}
+            onPress={() => this.props.navigation.navigate('Group', { group: g })}
           />
         ))}
       </List>
@@ -171,7 +172,7 @@ class SecretList extends React.Component {
     return (
       <Secret
         clipboard={this.state.clipboard}
-        navigate={this.props.navigate}
+        navigate={this.props.navigation.navigate}
         service={item}
         group={mainGroup}
         onGroupWillUnlock={this.handleGroupWillUnlock}
@@ -230,10 +231,11 @@ SecretList.propTypes = {
   groups: PropTypes.arrayOf(PropTypes.instanceOf(Group)),
   services: PropTypes.arrayOf(PropTypes.instanceOf(Service)).isRequired,
   dispatch: PropTypes.func.isRequired,
-  navigate: PropTypes.func.isRequired,
   group: PropTypes.instanceOf(Group),
   showAddButton: PropTypes.bool,
   showGroups: PropTypes.bool,
+  /* eslint react/forbid-prop-types:off */
+  navigation: PropTypes.object.isRequired,
 };
 
 SecretList.defaultProps = {

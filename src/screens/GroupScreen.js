@@ -6,13 +6,17 @@ import { Service } from '../Models';
 import SecretList from '../components/SecretList';
 
 
-const GroupScreen = ({ navigation, services }) => (
-  <SecretList
-    navigate={navigation.navigate}
-    services={services}
-    group={navigation.state.params.group}
-  />
-);
+class GroupScreen extends React.Component {
+  render() {
+    return (
+      <SecretList
+        navigation={this.props.navigation}
+        services={this.props.services}
+        group={this.props.navigation.state.params.group}
+      />
+    );
+  }
+}
 
 function mapStateToProps(state) {
   return {

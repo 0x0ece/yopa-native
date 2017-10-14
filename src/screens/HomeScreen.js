@@ -12,7 +12,7 @@ class HomeScreen extends React.Component {
     const homeGroup = this.props.groups[0];
     return homeGroup.isInitialized() ? (
       <SecretList
-        navigate={this.props.navigation.navigate}
+        navigation={this.props.navigation}
         services={this.props.services}
         groups={this.props.groups}
         showGroups
