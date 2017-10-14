@@ -21,6 +21,7 @@ class HomeScreen extends React.Component {
     ) : (
       <InitGroupScreen
         group={homeGroup}
+        navigation={this.props.navigation}
       />
     );
   }

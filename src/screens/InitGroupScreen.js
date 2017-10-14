@@ -24,6 +24,7 @@ class InitGroupScreen extends React.Component {
     // here we are: define your domain model
     this.InputGroup = t.struct({
       passphrase: t.String,
+      // securityLevel: t.String,
     });
   }
 
@@ -32,10 +33,19 @@ class InitGroupScreen extends React.Component {
     const formData = this.form.getValue();
     if (formData) {
       const group = new Group({
-        group: 'default',
-        passphrase: 'NzIpsaDy551ACC0dXBG8zQ==:XVhOnr+U5omKv7t+2OmDauMyoOM3mT3aZFbYA91QVsOSAa4R8oyzI6er92NtyaGair3PWiWz2Kyab8kuun5g6A==',
+        ...this.props.group,
+        inputPassphrase: formData.passphrase,
+        passphrase: formData.passphrase,
+        // securityLevel: formData.securityLevel,
       });
+      // const group = new Group({
+      //   ...this.props.group,
+      //   inputPassphrase: formData.passphrase,
+      //   storePassphrase: false,
+      //   securityLevel: formData.securityLevel,
+      // });
       this.props.dispatch(initGroup(group));
+      this.props.navigation.setParams({ group });
     }
   }
 
@@ -65,6 +75,8 @@ class InitGroupScreen extends React.Component {
 InitGroupScreen.propTypes = {
   dispatch: PropTypes.func.isRequired,
   group: PropTypes.instanceOf(Group).isRequired,
+  /* eslint react/forbid-prop-types:off */
+  navigation: PropTypes.object.isRequired,
 };
 
 export default connect()(InitGroupScreen);
