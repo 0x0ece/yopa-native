@@ -1,5 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import { AppState } from 'react-native';
 import { createStore } from 'redux';
 import { AppLoading } from 'expo';
 
@@ -52,14 +53,30 @@ export default class App extends React.Component {
 
     this.state = {
       isReady: 0,
+      appState: AppState.currentState,
     };
+
+    this.handleAppStateChange = this.handleAppStateChange.bind(this);
   }
 
   componentDidMount() {
+    AppState.addEventListener('change', this.handleAppStateChange);
+
     // trigger state change, so we re-render (and switch from SimplifiedNav to Main)
     if (App.isFirstLaunch()) {
       store.subscribe(() => this.setState({ isReady: 2 }));
     }
+  }
+
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this.handleAppStateChange);
+  }
+
+  handleAppStateChange(nextAppState) {
+    if (nextAppState === 'background') {
+      // lock all groups
+    }
+    this.setState({ appState: nextAppState });
   }
 
   async startAsync() {
