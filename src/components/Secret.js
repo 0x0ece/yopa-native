@@ -10,9 +10,14 @@ import { Group, Service } from '../Models';
 
 
 export default class Secret extends React.Component {
+  static clearSecretFromClipboard() {
+    Clipboard.setString('');
+  }
+
   constructor(props) {
     super(props);
     this.getSecret = this.getSecret.bind(this);
+    this.isCopied = this.isCopied.bind(this);
     this.navigateToServiceScreen = this.navigateToServiceScreen.bind(this);
     this.copySecretToClipboard = this.copySecretToClipboard.bind(this);
     this.handlePress = this.handlePress.bind(this);
@@ -34,9 +39,19 @@ export default class Secret extends React.Component {
     // console.log(`copied: ${secret}`);
   }
 
+  isCopied() {
+    const group = this.props.group;
+    return (this.props.clipboard && group.isUnlocked()
+      && this.getSecret(group) === this.props.clipboard);
+  }
+
   handlePress() {
     if (this.props.group.isUnlocked()) {
-      this.copySecretToClipboard();
+      if (this.isCopied()) {
+        Secret.clearSecretFromClipboard();
+      } else {
+        this.copySecretToClipboard();
+      }
       this.props.onSecretCopied();
     } else {
       // pass copySecretToClipboard as callback, that will eventually
@@ -50,8 +65,7 @@ export default class Secret extends React.Component {
     const group = this.props.group;
 
     let secretShown = group.isUnlocked() ? 'XXX-...' : 'xxx-...';
-    if (this.props.clipboard && group.isUnlocked()
-      && this.getSecret(group) === this.props.clipboard) {
+    if (this.isCopied()) {
       secretShown = 'copied';
     }
 
