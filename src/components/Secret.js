@@ -30,7 +30,13 @@ export default class Secret extends React.Component {
   }
 
   navigateToServiceScreen() {
-    this.props.navigate('Service', { service: this.props.service });
+    let secret = 'Unlock Group to see secret';
+
+    if (this.props.group.isUnlocked()) {
+      secret = this.getSecret();
+    }
+    this.props.navigate.setParams({ service: this.props.service, secret });
+    this.props.navigate('Service');
   }
 
   copySecretToClipboard(group) {
@@ -61,6 +67,7 @@ export default class Secret extends React.Component {
   }
 
   render() {
+    console.log(`rendering ${this.props.service.id}`);
     const s = this.props.service;
     const group = this.props.group;
 
