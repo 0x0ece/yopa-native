@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import t from 'tcomb-form-native';
-import { ScrollView, Text } from 'react-native';
-import { Button } from 'react-native-elements';
+import { ScrollView } from 'react-native';
+import { Button, List, ListItem } from 'react-native-elements';
 
 import Style from '../Style';
 import Crypto from '../Crypto';
@@ -20,6 +20,7 @@ class InitGroupScreen extends React.Component {
     this.state = {
       group: 'default',
       saveDisabled: true,
+      securityLevel: 0,
       value: null,
     };
 
@@ -29,8 +30,33 @@ class InitGroupScreen extends React.Component {
     // here we are: define your domain model
     this.InputGroup = t.struct({
       passphrase: t.String,
-      // securityLevel: t.String,
     });
+  }
+
+  getGroupInstance(formData) {
+    switch (this.state.securityLevel) {
+      case 0:
+        // TODO
+        return new Group({
+          ...this.props.group,
+          inputPassphrase: formData.passphrase,
+          passphrase: Crypto.encryptPassphrase(formData.passphrase),
+        });
+      case 1:
+        return new Group({
+          ...this.props.group,
+          inputPassphrase: formData.passphrase,
+          passphrase: Crypto.encryptPassphrase(formData.passphrase),
+        });
+      case 2:
+        return new Group({
+          ...this.props.group,
+          inputPassphrase: formData.passphrase,
+          storePassphrase: false,
+        });
+      default:
+        return null;
+    }
   }
 
   handleChange(value) {
@@ -44,33 +70,42 @@ class InitGroupScreen extends React.Component {
     // TODO(ec): save data from form
     const formData = this.form.getValue();
     if (formData) {
-      const group = new Group({
-        ...this.props.group,
-        inputPassphrase: formData.passphrase,
-        passphrase: Crypto.encryptPassphrase(formData.passphrase),
-        // securityLevel: formData.securityLevel,
-      });
-      // const group = new Group({
-      //   ...this.props.group,
-      //   inputPassphrase: formData.passphrase,
-      //   storePassphrase: false,
-      //   securityLevel: formData.securityLevel,
-      // });
+      const group = this.getGroupInstance(formData);
       this.props.dispatch(initGroup(group));
       this.props.navigation.setParams({ group });
     }
   }
 
   render() {
+    const options = [
+      {
+        title: 'Secure',
+        desc: [
+          'Store your passphrase in the device secure storage.',
+          'Use your fingerprint to unlock.',
+        ],
+      },
+      {
+        title: 'Armored',
+        desc: [
+          'Store your passphrase encrypted.',
+          'Type your passphrase every time to unlock.',
+        ],
+      },
+      {
+        title: 'Paranoic',
+        desc: [
+          'Never store your passphrase.',
+          "Type your passphrase every time to unlock - MemPa won't check if it's correct or no.",
+        ],
+      },
+    ];
+
     return (
       <ScrollView
         style={[Style.defaultBg, Style.container]}
         keyboardShouldPersistTaps="always"
       >
-        <Text>
-          Set passphrase for group {this.props.group.group}
-        </Text>
-
         <Form
           ref={(c) => { this.form = c; }}
           type={this.InputGroup}
@@ -79,6 +114,8 @@ class InitGroupScreen extends React.Component {
           options={{
             fields: {
               passphrase: {
+                label: 'Choose a very long and very strong passphrase',
+                placeholder: 'correcthorsebatterystaple',
                 autoCapitalize: 'none',
                 autoCorrect: false,
                 autoFocus: true,
@@ -86,6 +123,23 @@ class InitGroupScreen extends React.Component {
             },
           }}
         />
+
+        <List
+          style={{ marginBottom: 30 }}
+        >
+          {options.map((o, i) => (
+            <ListItem
+              key={o.title}
+              containerStyle={{}}
+              leftIcon={{ name: (i === this.state.securityLevel) ? 'check-box' : 'check-box-outline-blank' }}
+              title={o.title}
+              subtitle={o.desc.join('\n')}
+              subtitleNumberOfLines={4}
+              hideChevron
+              onPress={() => { this.setState({ securityLevel: i }); }}
+            />
+          ))}
+        </List>
 
         <Button
           small
