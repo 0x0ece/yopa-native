@@ -2,7 +2,8 @@ import React from 'react';
 import { Clipboard, FlatList, Switch, View } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { List, ListItem, SearchBar } from 'react-native-elements';
+import { List, ListItem } from 'react-native-elements';
+import Search from './SearchBox';
 
 import GroupPassPrompt from './GroupPassPrompt';
 import Secret from './Secret';
@@ -10,6 +11,7 @@ import Style from '../Style';
 import { Group, Service } from '../Models';
 import { createDefaultGroups, unlockGroup } from '../redux/actions';
 
+const SEARCH_MIN_SERVICES = 5;
 
 class SecretList extends React.Component {
   constructor(props, context) {
@@ -75,13 +77,15 @@ class SecretList extends React.Component {
 
 
   handleSearchChangeText(text) {
+    this.searchBar.refs.input_keyword.props.onEndEditing = null;
     this.setState({ searchString: text });
   }
 
 
   handleSecretListScroll(event) {
     const currentOffset = event.nativeEvent.contentOffset.y;
-    if (currentOffset < 0 || this.offset <= 0) {
+    if ((currentOffset < 0 || this.offset <= 0) &&
+      (this.props.services.length >= SEARCH_MIN_SERVICES)) {
       this.setState({ searchBarVisible: true });
     } else if (this.state.searchString.length === 0) {
       this.setState({ searchBarVisible: false });
@@ -98,7 +102,7 @@ class SecretList extends React.Component {
   filterServices() {
     const servicesProps = this.props.services || [];
     if (this.state.searchString.length > 0) {
-      return servicesProps.filter(s => (s.service + s.username + s.description).toLowerCase()
+      return servicesProps.filter(s => (s.service + s.description).toLowerCase()
         .includes(this.state.searchString.toLowerCase()));
     }
     const filter = this.props.group ? this.props.group.group : 'default';
@@ -193,15 +197,18 @@ class SecretList extends React.Component {
     }
 
     const searchBarElement = (this.state.searchBarVisible) ? (
-      <SearchBar
-        lightTheme
-        clearIcon
+      <Search
         ref={(ref) => { this.searchBar = ref; }}
         autoCorrect={false}
         onChangeText={this.handleSearchChangeText}
+        onCancel={() => { this.setState({ searchBarVisible: false }); this.setState({ searchString: '' }); }}
+        onDelete={() => { this.setState({ searchString: '' }); }}
         autoCapitalize="none"
+        cancelButtonTextStyle={Style.cancelButtonText}
         blurOnSubmit
-        autoFocus
+        placeholder="search"
+        backgroundColor="white"
+        style={Style.searchBox}
       />
     ) : null;
 

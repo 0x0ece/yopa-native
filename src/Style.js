@@ -61,6 +61,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFC107',
   },
 
+  cancelButtonText: {
+    color: 'blue',
+  },
+
   groupListContainer: {
     backgroundColor: '#e9e9ee',
     marginTop: 0,
