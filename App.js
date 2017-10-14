@@ -11,7 +11,7 @@ import { reloadAll } from './src/redux/actions';
 import { Group, Service } from './src/Models';
 
 
-const EXAMPLE_DATA = true;
+const EXAMPLE_DATA = false;
 
 const store = createStore(secretApp, {
   // initial store - load a YML file for real data

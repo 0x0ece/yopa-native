@@ -114,7 +114,7 @@ class InitGroupScreen extends React.Component {
           options={{
             fields: {
               passphrase: {
-                label: 'Choose a very long and very strong passphrase',
+                label: 'Choose a very strong master password',
                 placeholder: 'correcthorsebatterystaple',
                 autoCapitalize: 'none',
                 autoCorrect: false,
