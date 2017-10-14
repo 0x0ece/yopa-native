@@ -3,13 +3,13 @@ import CryptoJS from 'crypto-js';
 import Crypto from '../src/Crypto';
 
 
-it('returns the secret', () => {
+it('computeSecret returns the secret', () => {
   const secret = Crypto.computeSecret('user', 'passphrase', '0', 'example.com');
   const expected = 'uBP-8Pe-5xM-mBe';
   expect(secret).toBe(expected);
 });
 
-it('implements the specs', () => {
+it('computeSecret implements the specs', () => {
   const secret = Crypto.computeSecret('user', 'passphrase', '0', 'example.com');
 
   // sha256
@@ -23,4 +23,10 @@ it('implements the specs', () => {
     + `-${s[6]}${s[7]}${s[8]}-${s[9]}${s[10]}${s[11]}`;
 
   expect(secret).toBe(expected);
+});
+
+it('encryptPassphrase then verifyPassphrase works', () => {
+  const encPass = Crypto.encryptPassphrase('passphrase');
+  const verify = Crypto.verifyPassphrase('passphrase', encPass);
+  expect(verify).toBe(true);
 });
