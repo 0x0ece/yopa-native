@@ -7,13 +7,17 @@ import GroupScreen from './screens/GroupScreen';
 import HomeScreen from './screens/HomeScreen';
 import ServiceScreen from './screens/ServiceScreen';
 import SettingsScreen from './screens/SettingsScreen';
-import Style from './Style';
+import Style, { Color } from './Style';
 
 
 const StackNav = StackNavigator({
   Home: { screen: HomeScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'MemPa',
+      headerStyle: {
+        backgroundColor: Color.mustard,
+      },
+      headerTintColor: 'white',
       headerLeft: (
         <Ionicons
           name="ios-settings-outline"
@@ -37,6 +41,10 @@ const StackNav = StackNavigator({
     path: 'service/:service',
     navigationOptions: ({ navigation }) => ({
       title: `${navigation.state.params.service.service}`,
+      headerStyle: {
+        backgroundColor: Color.mustard,
+      },
+      headerTintColor: 'white',
     }),
   },
   Group: {
@@ -44,6 +52,10 @@ const StackNav = StackNavigator({
     path: 'group/:group',
     navigationOptions: ({ navigation }) => ({
       title: `${navigation.state.params.group.getNavTitle()}`,
+      headerStyle: {
+        backgroundColor: Color.mustard,
+      },
+      headerTintColor: 'white',
       headerRight: (
         <Ionicons
           name="ios-add"
@@ -61,12 +73,20 @@ const ModalNav = StackNavigator({
     screen: StackNav,
     navigationOptions: {
       header: null,
+      headerStyle: {
+        backgroundColor: Color.mustard,
+      },
+      headerTintColor: 'white',
     },
   },
   Settings: {
     screen: SettingsScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'Settings',
+      headerStyle: {
+        backgroundColor: Color.mustard,
+      },
+      headerTintColor: 'white',
       headerLeft: null,
       headerRight: (
         <Ionicons
@@ -81,7 +101,11 @@ const ModalNav = StackNavigator({
   AddService: {
     screen: AddServiceScreen,
     navigationOptions: ({ navigation }) => ({
-      title: 'New',
+      title: 'Add Site',
+      headerStyle: {
+        backgroundColor: Color.mustard,
+      },
+      headerTintColor: 'white',
       headerLeft: null,
       headerRight: (
         <Ionicons
@@ -101,6 +125,10 @@ const SimplifiedNav = StackNavigator({
   Home: { screen: HomeScreen,
     navigationOptions: {
       title: 'MemPa',
+      headerStyle: {
+        backgroundColor: Color.mustard,
+      },
+      headerTintColor: 'white',
     },
   },
 });

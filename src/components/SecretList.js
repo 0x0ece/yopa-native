@@ -7,7 +7,7 @@ import Search from './SearchBox';
 
 import GroupPassPrompt from './GroupPassPrompt';
 import Secret from './Secret';
-import Style from '../Style';
+import Style, { Color } from '../Style';
 import { Group, Service } from '../Models';
 import { createDefaultGroups, unlockGroup } from '../redux/actions';
 
@@ -17,7 +17,8 @@ class SecretList extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    const promptVisible = this.props.group.isUnlocked() ? false : this.props.forceGroupUnlock;
+    const promptVisible = this.props.group.isUnlocked() || this.props.services.length === 0 ?
+      false : this.props.forceGroupUnlock;
     this.state = {
       clipboard: '',
       promptVisible,
@@ -39,6 +40,10 @@ class SecretList extends React.Component {
 
   componentDidMount() {
     this.readFromClipboard();
+
+    if (this.props.services.length === 0) {
+      this.props.navigation.navigate('AddService');
+    }
   }
 
   handleEnableGroups() {
@@ -113,15 +118,20 @@ class SecretList extends React.Component {
     if (!this.props.showAddButton) {
       return null;
     }
+
+    const title = (this.props.services.length === 0) ?
+      'Add your first site' : 'Add another site';
+
     return (
-      <List containerStyle={{}}>
-        <ListItem
-          containerStyle={{}}
-          leftIcon={{ name: 'add' }}
-          title="Add Service"
-          hideChevron
-          onPress={() => this.props.navigation.navigate('AddService')}
-        />
+      <List containerStyle={{ borderTopWidth: 0 }}>
+        <View style={[Style.container, { backgroundColor: '#e9e9ee' }]}>
+          <Button
+            buttonStyle={Style.primaryButton}
+            containerViewStyle={{ marginLeft: 0, marginRight: 0 }}
+            onPress={() => this.props.navigation.navigate('AddService')}
+            title={title}
+          />
+        </View>
       </List>
     );
   }
@@ -138,14 +148,16 @@ class SecretList extends React.Component {
       <List containerStyle={Style.groupListContainer}>
         <ListItem
           containerStyle={Style.defaultBg}
-          leftIcon={(
+          rightIcon={(
             <View>
-              <Switch onValueChange={this.handleEnableGroups} />
+              <Switch
+                onTintColor={Color.mustard}
+                onValueChange={this.handleEnableGroups}
+              />
             </View>
           )}
-          title="Enable groups"
-          subtitle="Keep services organized by security level"
-          hideChevron
+          title="Enable categories"
+          subtitle="Keep your passwords organized"
         />
       </List>
     ) : (
@@ -169,7 +181,7 @@ class SecretList extends React.Component {
         <ListItem
           containerStyle={{}}
           key={item}
-          title="Tap to copy the secret, swipe for more options"
+          title="Tap to copy the password, swipe for more..."
           hideChevron
         />
       );

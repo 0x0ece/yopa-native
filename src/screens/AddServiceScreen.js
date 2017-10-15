@@ -60,7 +60,7 @@ class AddServiceScreen extends React.Component {
         group: this.props.groups[formData.group].group,
       });
       this.props.dispatch(addService(service));
-      this.props.navigation.navigate('Home');
+      this.props.navigation.goBack();
     }
   }
 
@@ -79,6 +79,7 @@ class AddServiceScreen extends React.Component {
           options={{
             fields: {
               service: {
+                label: 'Site',
                 placeholder: 'example.com',
               },
               username: {

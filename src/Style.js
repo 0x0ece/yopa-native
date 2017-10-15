@@ -21,7 +21,38 @@ import { StyleSheet } from 'react-native';
 //   error: '#ff190c',
 // };
 
-const styles = StyleSheet.create({
+// plate28
+const Color = {
+  // bgMustard: '#DFAF25', // orig
+  // bgMustard: '#deaf26', // marg
+  mustard: '#dfa22c', // ec
+  // bgMustard: '#dfa22c', // ec
+  bgGray: '#404b4e',
+  bgLigthGray: '#eee',
+  // bgGray: '#545b5d',
+  bgPurple: '#4b3a4c',
+  bgWhite: '#fff',
+  // textMustard: '#dfa22c',
+  textGray: '#545b5d',
+  textGrayLight: '#999',
+  textGrayDone: '#BBB',
+  textPurple: '#4b3a4c',
+  textWhite: '#fff',
+  touchWhite: '#fff',
+};
+
+// tcomb
+const LABEL_COLOR = '#000000';
+// const INPUT_COLOR = '#000000';
+// const ERROR_COLOR = '#a94442';
+// const HELP_COLOR = '#999999';
+// const BORDER_COLOR = '#cccccc';
+// const DISABLED_COLOR = '#777777';
+// const DISABLED_BACKGROUND_COLOR = '#eeeeee';
+const FONT_SIZE = 17;
+const FONT_WEIGHT = '500';
+
+const Styles = StyleSheet.create({
   // container: {
   //   flex: 1,
   //   height: 100,
@@ -49,7 +80,8 @@ const styles = StyleSheet.create({
   },
 
   headerIcon: {
-    color: '#007aff',
+    // color: '#007aff',
+    color: 'white',
     padding: 10,
   },
 
@@ -58,7 +90,15 @@ const styles = StyleSheet.create({
   },
 
   primaryButton: {
-    backgroundColor: '#FFC107',
+    backgroundColor: '#4b3a4c',
+  },
+
+  formLabel: {
+    color: LABEL_COLOR,
+    fontSize: FONT_SIZE,
+    marginBottom: 7,
+    fontWeight: FONT_WEIGHT,
+    // color: '#4b3a4c',
   },
 
   cancelButtonText: {
@@ -75,4 +115,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default styles;
+export default Styles;
+export {
+  Color,
+};
+
