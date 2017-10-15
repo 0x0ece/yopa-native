@@ -1,3 +1,5 @@
+import Crypto from '../Crypto';
+
 class Service {
   constructor(service) {
     this.id = service.service + service.username || '';
@@ -30,6 +32,12 @@ class Service {
     }
 
     return ser;
+  }
+
+  getSecret(group) {
+    const s = this;
+    const g = group || this.props.group;
+    return Crypto.computeSecret(s.username, g.inputPassphrase, s.counter, s.service, s.extra);
   }
 }
 
