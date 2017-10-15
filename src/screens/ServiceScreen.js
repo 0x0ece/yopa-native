@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import t from 'tcomb-form-native';
-// import { ScrollView } from 'react-native';
-import { Button, ScrollView } from 'react-native-elements';
+import { ScrollView } from 'react-native';
+import { Button } from 'react-native-elements';
 import { Clipboard } from 'react-native';
 
 import Style from '../Style';
