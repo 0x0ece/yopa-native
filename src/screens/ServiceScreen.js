@@ -12,12 +12,17 @@ import { addService, updateService } from '../redux/actions';
 
 
 function getStateFromProps(props) {
+  const service = props.service;
+  const group = props.group;
+
+  console.log('getting state from');
+  console.log(props);
   return { value: {
-    service: props.navigation.state.params.service.service,
-    username: props.navigation.state.params.service.username,
-    counter: props.navigation.state.params.service.counter,
-    group: props.navigation.state.params.service.group,
-    secret: props.navigation.state.params.service.getSecret(),
+    service: service.service,
+    username: service.username,
+    counter: service.counter,
+    group: service.group,
+    secret: service.getSecret(group),
   },
   };
 }
@@ -27,8 +32,7 @@ const Form = t.form.Form;
 class ServiceScreen extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props.navigation.state.params);
-    this.state = getStateFromProps(this.props);
+    this.state = getStateFromProps(this.props.navigation.state.params);
 
     this.generateNewSecret = this.generateNewSecret.bind(this);
     this.revertSecret = this.revertSecret.bind(this);
@@ -59,15 +63,18 @@ class ServiceScreen extends React.Component {
   generateNewSecret() {
     const service = this.props.navigation.state.params.service;
     service.counter += 1;
-
-    console.log(service);
-
     this.props.dispatch(updateService(service));
-    console.log(this.props.navigation.state.params.service);
-    this.setState(getStateFromProps(this.props));
+    this.props.navigation.setParams({ service }); // FIX this
+    this.setState(getStateFromProps(this.props.navigation.state.params));
   }
 
-  revertSecret() {}
+  revertSecret() {
+    const service = this.props.navigation.state.params.service;
+    service.counter -= 1;
+    this.props.navigation.setParams({ service });
+    this.props.dispatch(updateService(service)); // FIX this
+    this.setState(getStateFromProps(this.props.navigation.state.params));
+  }
 
   deleteSecret() {}
 
