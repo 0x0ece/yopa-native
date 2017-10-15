@@ -68,7 +68,6 @@ export default class Secret extends React.Component {
   }
 
   render() {
-    console.log(`rendering ${this.props.service.id}`);
     const s = this.props.service;
     const group = this.props.group;
 

@@ -2,21 +2,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import t from 'tcomb-form-native';
-import { ScrollView } from 'react-native';
-import { Button, TouchableHighlight } from 'react-native-elements';
+// import { ScrollView } from 'react-native';
+import { Button, ScrollView } from 'react-native-elements';
 import { Clipboard } from 'react-native';
 
 import Style from '../Style';
-import { Group, Service } from '../Models';
-import { addService, updateService } from '../redux/actions';
+import { updateService } from '../redux/actions';
 
 
 function getStateFromProps(props) {
   const service = props.service;
   const group = props.group;
 
-  console.log('getting state from');
-  console.log(props);
   return { value: {
     service: service.service,
     username: service.username,
@@ -37,7 +34,7 @@ class ServiceScreen extends React.Component {
     this.generateNewSecret = this.generateNewSecret.bind(this);
     this.revertSecret = this.revertSecret.bind(this);
     this.deleteSecret = this.deleteSecret.bind(this);
-    this.onChange = this.onChange.bind(this);
+    // this.onChange = this.onChange.bind(this);
     this.copySecretToClipboard = this.copySecretToClipboard.bind(this);
 
     // here we are: define your domain model
@@ -58,8 +55,6 @@ class ServiceScreen extends React.Component {
     });
   }
 
-  onChange() {}
-
   generateNewSecret() {
     const service = this.props.navigation.state.params.service;
     service.counter += 1;
@@ -76,7 +71,9 @@ class ServiceScreen extends React.Component {
     this.setState(getStateFromProps(this.props.navigation.state.params));
   }
 
-  deleteSecret() {}
+  deleteSecret() {
+    // TODO
+  }
 
   copySecretToClipboard() {
     const state = this.getState();
@@ -152,13 +149,11 @@ class ServiceScreen extends React.Component {
 function mapStateToProps(state) {
   return {
     services: (state.secrets && state.secrets.services) || [],
-    groups: (state.secrets && state.secrets.groups) || [],
   };
 }
 
 ServiceScreen.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  groups: PropTypes.arrayOf(PropTypes.instanceOf(Group)).isRequired,
   /* eslint react/forbid-prop-types:off */
   navigation: PropTypes.object.isRequired,
 };
