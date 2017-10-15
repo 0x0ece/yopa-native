@@ -30,13 +30,14 @@ export default class Secret extends React.Component {
   }
 
   navigateToServiceScreen() {
-    let secret = 'Unlock Group to see secret';
-
-    if (this.props.group.isUnlocked()) {
-      secret = this.getSecret();
-    }
-    this.props.navigate.setParams({ service: this.props.service, secret });
-    this.props.navigate('Service');
+    // console.log('about to pass');
+    // console.log(this.props.service);
+    // this.props.navigation.setParams({ service: this.props.service });
+    // this.props.navigation.navigate('Service');
+    this.props.navigation.navigate('Service', {
+      service: this.props.service,
+      group: this.props.group,
+    });
   }
 
   copySecretToClipboard(group) {
@@ -101,4 +102,6 @@ Secret.propTypes = {
   navigate: PropTypes.func.isRequired,
   onGroupWillUnlock: PropTypes.func.isRequired,
   onSecretCopied: PropTypes.func.isRequired,
+  /* eslint react/forbid-prop-types:off */
+  navigation: PropTypes.object.isRequired,
 };
