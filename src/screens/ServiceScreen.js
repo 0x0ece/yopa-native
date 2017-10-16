@@ -2,12 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import t from 'tcomb-form-native';
-import { ScrollView } from 'react-native';
+import { ScrollView, Alert, Clipboard } from 'react-native';
 import { Button } from 'react-native-elements';
-import { Clipboard } from 'react-native';
 
 import Style from '../Style';
-import { updateService } from '../redux/actions';
+import { updateService, delService } from '../redux/actions';
 
 
 function getStateFromProps(props) {
@@ -33,7 +32,7 @@ class ServiceScreen extends React.Component {
 
     this.generateNewSecret = this.generateNewSecret.bind(this);
     this.revertSecret = this.revertSecret.bind(this);
-    this.deleteSecret = this.deleteSecret.bind(this);
+    this.deleteService = this.deleteService.bind(this);
     // this.onChange = this.onChange.bind(this);
     this.copySecretToClipboard = this.copySecretToClipboard.bind(this);
 
@@ -59,20 +58,31 @@ class ServiceScreen extends React.Component {
     const service = this.props.navigation.state.params.service;
     service.counter += 1;
     this.props.dispatch(updateService(service));
-    this.props.navigation.setParams({ service }); // FIX this
-    this.setState(getStateFromProps(this.props.navigation.state.params));
+    this.props.navigation.setParams({ service });
+    this.setState(getStateFromProps(this.props.navigation.state.params)); // FIX This
   }
 
   revertSecret() {
     const service = this.props.navigation.state.params.service;
     service.counter -= 1;
     this.props.navigation.setParams({ service });
-    this.props.dispatch(updateService(service)); // FIX this
-    this.setState(getStateFromProps(this.props.navigation.state.params));
+    this.props.dispatch(updateService(service));
+    this.setState(getStateFromProps(this.props.navigation.state.params)); // FIX This
   }
 
-  deleteSecret() {
-    // TODO
+  deleteService() {
+    Alert.alert(
+      'Delete site',
+      `Do you really want to delete ${this.props.navigation.state.params.service.service}?`,
+      [
+        {text: 'Cancel'},
+        {text: 'OK', onPress: () => {
+          this.props.dispatch(delService(this.props.navigation.state.params.service));
+          this.props.navigation.goBack();
+        }},
+      ],
+      { cancelable: false }
+    )
   }
 
   copySecretToClipboard() {
@@ -113,33 +123,30 @@ class ServiceScreen extends React.Component {
         />
 
         <Button
-          small
-          raised
           icon={{ name: 'done', size: 32 }}
-          textStyle={{ textAlign: 'center' }}
           buttonStyle={Style.primaryButton}
+          containerViewStyle={{ marginLeft: 0, marginRight: 0, marginBottom: 2 }}
+          loading={this.state.buttonLoading}
           onPress={this.generateNewSecret}
           title={'Generate new secret'}
         />
 
         <Button
-          small
-          raised
           icon={{ name: 'refresh', size: 32 }}
-          textStyle={{ textAlign: 'center' }}
           buttonStyle={Style.primaryButton}
+          containerViewStyle={{ marginLeft: 0, marginRight: 0, marginBottom: 2 }}
+          loading={this.state.buttonLoading}
           onPress={this.revertSecret}
           title={'Revert secret'}
         />
 
         <Button
-          small
-          raised
           icon={{ name: 'cancel', size: 32 }}
-          textStyle={{ textAlign: 'center' }}
           buttonStyle={Style.primaryButton}
-          onPress={this.deleteSecret}
-          title={'Delete service'}
+          containerViewStyle={{ marginLeft: 0, marginRight: 0, marginBottom: 2 }}
+          loading={this.state.buttonLoading}
+          onPress={this.deleteService}
+          title={'Delete site'}
         />
       </ScrollView>
     );
