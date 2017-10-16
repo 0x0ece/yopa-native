@@ -142,7 +142,8 @@ class InitGroupScreen extends React.Component {
               containerStyle={{}}
               leftIcon={{
                 name: (i === this.state.securityLevel) ? 'check-box' : 'check-box-outline-blank',
-                color: (i === this.state.securityLevel) ? Color.mustard : '',
+                color: (i === this.state.securityLevel) ? Color.checkboxChecked
+                  : Color.checkboxBlank,
               }}
               leftIconContainerStyle={{ justifyContent: 'flex-start' }}
               title={o.title}
@@ -159,7 +160,6 @@ class InitGroupScreen extends React.Component {
         <Button
           buttonStyle={Style.primaryButton}
           containerViewStyle={{ marginLeft: 0, marginRight: 0 }}
-          disabled={this.state.buttonDisabled}
           loading={this.state.buttonLoading}
           onPress={this.handlePress}
           title="Save"

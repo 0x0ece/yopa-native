@@ -21,24 +21,39 @@ import { StyleSheet } from 'react-native';
 //   error: '#ff190c',
 // };
 
-// plate28
+const PRIMARY = '#ff2d54';
+const BACKGROUND = 'white';
+
 const Color = {
-  // bgMustard: '#DFAF25', // orig
-  // bgMustard: '#deaf26', // marg
+  primary: PRIMARY,
+
+  appBg: BACKGROUND,
+  headerBg: BACKGROUND,
+  headerBorder: BACKGROUND,
+  headerTitle: 'black',
+  headerIcon: PRIMARY,
+
+  checkboxChecked: PRIMARY,
+  checkboxBlank: '',
+  switch: PRIMARY,
+
+  buttonPrimary: PRIMARY,
+
+  // plate28
   mustard: '#dfa22c', // ec
-  // bgMustard: '#dfa22c', // ec
   bgGray: '#404b4e',
   bgLigthGray: '#eee',
-  // bgGray: '#545b5d',
   bgPurple: '#4b3a4c',
   bgWhite: '#fff',
-  // textMustard: '#dfa22c',
   textGray: '#545b5d',
   textGrayLight: '#999',
   textGrayDone: '#BBB',
   textPurple: '#4b3a4c',
   textWhite: '#fff',
-  touchWhite: '#fff',
+
+  // apple
+  appleMusicPink: '#ff2d54',
+  appleBlue: '#007aff',
 };
 
 // tcomb
@@ -53,35 +68,19 @@ const FONT_SIZE = 17;
 const FONT_WEIGHT = '500';
 
 const Styles = StyleSheet.create({
-  // container: {
-  //   flex: 1,
-  //   height: 100,
-  //   backgroundColor: '#fff',
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  // },
-  // header: {
-  //   flex: 1,
-  //   marginTop: 50,
-  //   color: 'red',
-  //   fontWeight: 'bold',
-  // },
-  // body: {
-  //   flex: 4,
-  // },
-  // inputBar: {
-  //   flex: 2,
-  // },
-  // mempa: {
-  //   flex: 5,
-  // },
+
+  debug: {
+    borderWidth: 1,
+    borderColor: 'red',
+  },
+
   defaultBg: {
     backgroundColor: 'white',
   },
 
   headerIcon: {
     // color: '#007aff',
-    color: 'white',
+    color: Color.headerIcon,
     padding: 10,
   },
 
@@ -90,7 +89,7 @@ const Styles = StyleSheet.create({
   },
 
   primaryButton: {
-    backgroundColor: '#4b3a4c',
+    backgroundColor: Color.buttonPrimary,
   },
 
   formLabel: {
@@ -102,7 +101,7 @@ const Styles = StyleSheet.create({
   },
 
   cancelButtonText: {
-    color: 'blue',
+    color: Color.primary,
   },
 
   groupListContainer: {

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Clipboard, FlatList, Switch, View } from 'react-native';
+import { Clipboard, FlatList, Switch, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { List, ListItem } from 'react-native-elements';
+import { Button, List, ListItem } from 'react-native-elements';
 import Search from './SearchBox';
 
 import GroupPassPrompt from './GroupPassPrompt';
@@ -14,6 +14,19 @@ import { createDefaultGroups, unlockGroup } from '../redux/actions';
 const SEARCH_MIN_SERVICES = 5;
 
 class SecretList extends React.Component {
+  static renderEmpty() {
+    return (
+      <View style={Style.container}>
+        <Text style={{ fontSize: 16, fontStyle: 'italic' }}>
+          {'“The best way of keeping a secret is to pretend there isn\'t one.”'}
+        </Text>
+        <Text style={{ fontSize: 16, fontWeight: 'bold' }}>
+          - Margaret Atwood, The Blind Assassin
+        </Text>
+      </View>
+    );
+  }
+
   constructor(props, context) {
     super(props, context);
 
@@ -124,7 +137,7 @@ class SecretList extends React.Component {
 
     return (
       <List containerStyle={{ borderTopWidth: 0 }}>
-        <View style={[Style.container, { backgroundColor: '#e9e9ee' }]}>
+        <View style={Style.container}>
           <Button
             buttonStyle={Style.primaryButton}
             containerViewStyle={{ marginLeft: 0, marginRight: 0 }}
@@ -151,7 +164,7 @@ class SecretList extends React.Component {
           rightIcon={(
             <View>
               <Switch
-                onTintColor={Color.mustard}
+                onTintColor={Color.switch}
                 onValueChange={this.handleEnableGroups}
               />
             </View>
@@ -224,8 +237,9 @@ class SecretList extends React.Component {
       />
     ) : null;
 
+    const footer = this.renderFooter();
     return (
-      <View>
+      <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
         { searchBarElement }
         <GroupPassPrompt
           group={mainGroup}
@@ -234,14 +248,15 @@ class SecretList extends React.Component {
           onGroupDidUnlock={this.handleGroupDidUnlock}
         />
         <FlatList
-          style={{ height: '100%' }}
+          style={{ }}
           data={services}
           ListHeaderComponent={this.renderHeader}
-          ListFooterComponent={this.renderFooter}
+          ListEmptyComponent={SecretList.renderEmpty}
           renderItem={({ item }) => this.renderItem(item, mainGroup)}
           keyExtractor={(item, index) => index}
           onScroll={this.handleSecretListScroll}
         />
+        {footer}
       </View>
     );
   }
