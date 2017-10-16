@@ -98,7 +98,7 @@ class AddServiceScreen extends React.Component {
           textStyle={{ textAlign: 'center' }}
           buttonStyle={Style.primaryButton}
           onPress={this.onPress}
-          title={'Add service'}
+          title={'Add site'}
         />
 
       </ScrollView>
