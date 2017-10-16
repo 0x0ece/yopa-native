@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import {
   ADD_SERVICE,
   DEL_SERVICE,
+  UPDATE_SERVICE,
   CREATE_DEFAULT_GROUPS,
   INIT_GROUP,
   UNLOCK_GROUP,
@@ -35,6 +36,19 @@ function secrets(state = {}, action) {
         ...state,
         services: state.services.filter(s => s.id !== action.service.id),
       });
+    case UPDATE_SERVICE: {
+      const newServicesList = state.services.map((item) => {
+        if (item.id !== action.service.id) {
+          return item;
+        }
+        return action.service;
+      });
+
+      return persistAndReturn({
+        ...state,
+        services: newServicesList,
+      });
+    }
 
     case CREATE_DEFAULT_GROUPS:
       return persistAndReturn({

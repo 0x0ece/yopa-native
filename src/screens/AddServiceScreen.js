@@ -19,6 +19,8 @@ class AddServiceScreen extends React.Component {
     super(props);
     this.state = {
       group: 'default',
+      value: { group: 0 },
+      canAddService: false,
     };
 
     this.onPress = this.onPress.bind(this);
@@ -36,18 +38,12 @@ class AddServiceScreen extends React.Component {
     // this.onImport = this.onImport.bind(this);
   }
 
-  componentWillMount() {
-    this.setState({
-      value: { group: 0 },
-      canAddService: false,
-    });
-  }
-
   onChange(value) {
+    const newState = { value };
     if (value.service !== undefined && value.username !== undefined) {
-      this.setState({ canAddService: true });
+      newState.canAddService = true;
     }
-    this.setState({ value });
+    this.setState(newState);
   }
 
   onPress() {
@@ -102,7 +98,7 @@ class AddServiceScreen extends React.Component {
           textStyle={{ textAlign: 'center' }}
           buttonStyle={Style.primaryButton}
           onPress={this.onPress}
-          title={'Add service'}
+          title={'Add site'}
         />
 
       </ScrollView>

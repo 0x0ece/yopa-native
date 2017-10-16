@@ -203,6 +203,7 @@ class SecretList extends React.Component {
       <Secret
         clipboard={this.state.clipboard}
         navigate={this.props.navigation.navigate}
+        navigation={this.props.navigation}
         service={item}
         group={mainGroup}
         onGroupWillUnlock={this.handleGroupWillUnlock}
