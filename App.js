@@ -11,7 +11,7 @@ import { reloadAll } from './src/redux/actions';
 import { Group, Service } from './src/Models';
 
 
-const EXAMPLE_DATA = false;
+const EXAMPLE_DATA = true;
 
 const store = createStore(secretApp, {
   // initial store - load a YML file for real data
@@ -31,8 +31,11 @@ const store = createStore(secretApp, {
       new Group({ group: 'Banks', icon: 'account-balance' }),
     ],
   } : {
-    services: [],
+    services: [
+      // new Service({ service: 'mempa.io', username: 'mempa', group: 'default' }),
+    ],
     groups: [
+      // new Group({ group: 'default', storePassphrase: false, inputPassphrase: 'x' }),
       new Group({ group: 'default' }),
     ],
   },

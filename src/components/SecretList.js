@@ -1,23 +1,37 @@
 import React from 'react';
-import { Clipboard, FlatList, Switch, View } from 'react-native';
+import { Clipboard, FlatList, Switch, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { List, ListItem } from 'react-native-elements';
+import { Button, List, ListItem } from 'react-native-elements';
 import Search from './SearchBox';
 
 import GroupPassPrompt from './GroupPassPrompt';
 import Secret from './Secret';
-import Style from '../Style';
+import Style, { Color } from '../Style';
 import { Group, Service } from '../Models';
 import { createDefaultGroups, unlockGroup } from '../redux/actions';
 
 const SEARCH_MIN_SERVICES = 5;
 
 class SecretList extends React.Component {
+  static renderEmpty() {
+    return (
+      <View style={Style.container}>
+        <Text style={{ fontSize: 16, fontStyle: 'italic' }}>
+          {'“The best way of keeping a secret is to pretend there isn\'t one.”'}
+        </Text>
+        <Text style={{ fontSize: 16, fontWeight: 'bold' }}>
+          - Margaret Atwood, The Blind Assassin
+        </Text>
+      </View>
+    );
+  }
+
   constructor(props, context) {
     super(props, context);
 
-    const promptVisible = this.props.group.isUnlocked() ? false : this.props.forceGroupUnlock;
+    const promptVisible = this.props.group.isUnlocked() || this.props.services.length === 0 ?
+      false : this.props.forceGroupUnlock;
     this.state = {
       clipboard: '',
       promptVisible,
@@ -39,6 +53,10 @@ class SecretList extends React.Component {
 
   componentDidMount() {
     this.readFromClipboard();
+
+    if (this.props.services.length === 0) {
+      this.props.navigation.navigate('AddService');
+    }
   }
 
   handleEnableGroups() {
@@ -113,15 +131,20 @@ class SecretList extends React.Component {
     if (!this.props.showAddButton) {
       return null;
     }
+
+    const title = (this.props.services.length === 0) ?
+      'Add your first site' : 'Add another site';
+
     return (
-      <List containerStyle={{}}>
-        <ListItem
-          containerStyle={{}}
-          leftIcon={{ name: 'add' }}
-          title="Add Service"
-          hideChevron
-          onPress={() => this.props.navigation.navigate('AddService')}
-        />
+      <List containerStyle={{ borderTopWidth: 0 }}>
+        <View style={Style.container}>
+          <Button
+            buttonStyle={Style.primaryButton}
+            containerViewStyle={{ marginLeft: 0, marginRight: 0 }}
+            onPress={() => this.props.navigation.navigate('AddService')}
+            title={title}
+          />
+        </View>
       </List>
     );
   }
@@ -138,14 +161,16 @@ class SecretList extends React.Component {
       <List containerStyle={Style.groupListContainer}>
         <ListItem
           containerStyle={Style.defaultBg}
-          leftIcon={(
+          rightIcon={(
             <View>
-              <Switch onValueChange={this.handleEnableGroups} />
+              <Switch
+                onTintColor={Color.switch}
+                onValueChange={this.handleEnableGroups}
+              />
             </View>
           )}
-          title="Enable groups"
-          subtitle="Keep services organized by security level"
-          hideChevron
+          title="Enable categories"
+          subtitle="Keep your passwords organized"
         />
       </List>
     ) : (
@@ -169,7 +194,7 @@ class SecretList extends React.Component {
         <ListItem
           containerStyle={{}}
           key={item}
-          title="Tap to copy the secret, swipe for more options"
+          title="Tap to copy the password, swipe for more..."
           hideChevron
         />
       );
@@ -212,8 +237,9 @@ class SecretList extends React.Component {
       />
     ) : null;
 
+    const footer = this.renderFooter();
     return (
-      <View>
+      <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
         { searchBarElement }
         <GroupPassPrompt
           group={mainGroup}
@@ -222,14 +248,15 @@ class SecretList extends React.Component {
           onGroupDidUnlock={this.handleGroupDidUnlock}
         />
         <FlatList
-          style={{ height: '100%' }}
+          style={{ }}
           data={services}
           ListHeaderComponent={this.renderHeader}
-          ListFooterComponent={this.renderFooter}
+          ListEmptyComponent={SecretList.renderEmpty}
           renderItem={({ item }) => this.renderItem(item, mainGroup)}
           keyExtractor={(item, index) => index}
           onScroll={this.handleSecretListScroll}
         />
+        {footer}
       </View>
     );
   }

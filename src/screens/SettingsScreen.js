@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import Utils from '../Utils';
+import { Color } from '../Style';
 import { reloadAll } from '../redux/actions';
 
 
@@ -32,6 +33,7 @@ class SettingsScreen extends React.Component {
     return (
       <Button
         title="Import..."
+        color={Color.primary}
         onPress={this.onImport}
       />
     );

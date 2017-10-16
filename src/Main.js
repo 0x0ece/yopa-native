@@ -7,13 +7,22 @@ import GroupScreen from './screens/GroupScreen';
 import HomeScreen from './screens/HomeScreen';
 import ServiceScreen from './screens/ServiceScreen';
 import SettingsScreen from './screens/SettingsScreen';
-import Style from './Style';
+import Style, { Color } from './Style';
 
+
+const headerCommon = {
+  headerStyle: {
+    backgroundColor: Color.headerBg,
+    borderBottomColor: Color.headerBorder,
+  },
+  headerTintColor: Color.headerTitle,
+};
 
 const StackNav = StackNavigator({
   Home: { screen: HomeScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'MemPa',
+      ...headerCommon,
       headerLeft: (
         <Ionicons
           name="ios-settings-outline"
@@ -37,6 +46,7 @@ const StackNav = StackNavigator({
     path: 'service/:service',
     navigationOptions: ({ navigation }) => ({
       title: `${navigation.state.params.service.service}`,
+      ...headerCommon,
     }),
   },
   Group: {
@@ -44,6 +54,7 @@ const StackNav = StackNavigator({
     path: 'group/:group',
     navigationOptions: ({ navigation }) => ({
       title: `${navigation.state.params.group.getNavTitle()}`,
+      ...headerCommon,
       headerRight: (
         <Ionicons
           name="ios-add"
@@ -54,6 +65,10 @@ const StackNav = StackNavigator({
       ),
     }),
   },
+}, {
+  cardStyle: {
+    backgroundColor: Color.appBg,
+  },
 });
 
 const ModalNav = StackNavigator({
@@ -61,12 +76,14 @@ const ModalNav = StackNavigator({
     screen: StackNav,
     navigationOptions: {
       header: null,
+      ...headerCommon,
     },
   },
   Settings: {
     screen: SettingsScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'Settings',
+      ...headerCommon,
       headerLeft: null,
       headerRight: (
         <Ionicons
@@ -81,7 +98,8 @@ const ModalNav = StackNavigator({
   AddService: {
     screen: AddServiceScreen,
     navigationOptions: ({ navigation }) => ({
-      title: 'New',
+      title: 'Add Site',
+      ...headerCommon,
       headerLeft: null,
       headerRight: (
         <Ionicons
@@ -95,12 +113,16 @@ const ModalNav = StackNavigator({
   },
 }, {
   mode: 'modal',
+  cardStyle: {
+    backgroundColor: Color.appBg,
+  },
 });
 
 const SimplifiedNav = StackNavigator({
   Home: { screen: HomeScreen,
     navigationOptions: {
-      title: 'MemPa',
+      title: '👋  MemPa',
+      ...headerCommon,
     },
   },
 });

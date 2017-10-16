@@ -21,35 +21,66 @@ import { StyleSheet } from 'react-native';
 //   error: '#ff190c',
 // };
 
-const styles = StyleSheet.create({
-  // container: {
-  //   flex: 1,
-  //   height: 100,
-  //   backgroundColor: '#fff',
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  // },
-  // header: {
-  //   flex: 1,
-  //   marginTop: 50,
-  //   color: 'red',
-  //   fontWeight: 'bold',
-  // },
-  // body: {
-  //   flex: 4,
-  // },
-  // inputBar: {
-  //   flex: 2,
-  // },
-  // mempa: {
-  //   flex: 5,
-  // },
+const PRIMARY = '#ff2d54';
+const BACKGROUND = 'white';
+
+const Color = {
+  primary: PRIMARY,
+
+  appBg: BACKGROUND,
+  headerBg: BACKGROUND,
+  headerBorder: BACKGROUND,
+  headerTitle: 'black',
+  headerIcon: PRIMARY,
+
+  checkboxChecked: PRIMARY,
+  checkboxBlank: '',
+  switch: PRIMARY,
+
+  buttonPrimary: PRIMARY,
+
+  // plate28
+  mustard: '#dfa22c', // ec
+  bgGray: '#404b4e',
+  bgLigthGray: '#eee',
+  bgPurple: '#4b3a4c',
+  bgWhite: '#fff',
+  textGray: '#545b5d',
+  textGrayLight: '#999',
+  textGrayDone: '#BBB',
+  textPurple: '#4b3a4c',
+  textWhite: '#fff',
+
+  // apple
+  appleMusicPink: '#ff2d54',
+  appleBlue: '#007aff',
+};
+
+// tcomb
+const LABEL_COLOR = '#000000';
+// const INPUT_COLOR = '#000000';
+// const ERROR_COLOR = '#a94442';
+// const HELP_COLOR = '#999999';
+// const BORDER_COLOR = '#cccccc';
+// const DISABLED_COLOR = '#777777';
+// const DISABLED_BACKGROUND_COLOR = '#eeeeee';
+const FONT_SIZE = 17;
+const FONT_WEIGHT = '500';
+
+const Styles = StyleSheet.create({
+
+  debug: {
+    borderWidth: 1,
+    borderColor: 'red',
+  },
+
   defaultBg: {
     backgroundColor: 'white',
   },
 
   headerIcon: {
-    color: '#007aff',
+    // color: '#007aff',
+    color: Color.headerIcon,
     padding: 10,
   },
 
@@ -58,11 +89,19 @@ const styles = StyleSheet.create({
   },
 
   primaryButton: {
-    backgroundColor: '#FFC107',
+    backgroundColor: Color.buttonPrimary,
+  },
+
+  formLabel: {
+    color: LABEL_COLOR,
+    fontSize: FONT_SIZE,
+    marginBottom: 7,
+    fontWeight: FONT_WEIGHT,
+    // color: '#4b3a4c',
   },
 
   cancelButtonText: {
-    color: 'blue',
+    color: Color.primary,
   },
 
   groupListContainer: {
@@ -75,4 +114,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default styles;
+export default Styles;
+export {
+  Color,
+};
+

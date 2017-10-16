@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import t from 'tcomb-form-native';
-import { ScrollView } from 'react-native';
+import { ScrollView, Text } from 'react-native';
 import { Button, List, ListItem } from 'react-native-elements';
 
-import Style from '../Style';
+import Style, { Color } from '../Style';
 import Crypto from '../Crypto';
 import { Group } from '../Models';
 import { initGroup } from '../redux/actions';
@@ -19,7 +19,8 @@ class InitGroupScreen extends React.Component {
     super(props);
     this.state = {
       group: 'default',
-      saveDisabled: true,
+      buttonLoading: false,
+      buttonDisabled: true,
       securityLevel: 0,
       value: null,
     };
@@ -62,18 +63,22 @@ class InitGroupScreen extends React.Component {
   handleChange(value) {
     this.setState({
       value,
-      saveDisabled: value.passphrase.length === 0,
+      buttonDisabled: value.passphrase.length === 0,
     });
   }
 
   handlePress() {
-    // TODO(ec): save data from form
-    const formData = this.form.getValue();
-    if (formData) {
-      const group = this.getGroupInstance(formData);
-      this.props.dispatch(initGroup(group));
-      this.props.navigation.setParams({ group });
-    }
+    this.setState({ buttonLoading: true });
+
+    // HACK(ec): async otherwise the loading spinner doesn't work on iphone7/ios11.0.3
+    setTimeout(() => {
+      const formData = this.form.getValue();
+      if (formData) {
+        const group = this.getGroupInstance(formData);
+        this.props.navigation.setParams({ group });
+        this.props.dispatch(initGroup(group));
+      }
+    }, 0);
   }
 
   render() {
@@ -81,22 +86,22 @@ class InitGroupScreen extends React.Component {
       {
         title: 'Secure',
         desc: [
-          'Store your passphrase in the device secure storage.',
+          'Store the master password in the device secure storage.',
           'Use your fingerprint to unlock.',
         ],
       },
       {
         title: 'Armored',
         desc: [
-          'Store your passphrase encrypted.',
-          'Type your passphrase every time to unlock.',
+          'Store the master password encrypted.',
+          'Type it every time to unlock.',
         ],
       },
       {
         title: 'Paranoic',
         desc: [
-          'Never store your passphrase.',
-          "Type your passphrase every time to unlock - MemPa won't check if it's correct or no.",
+          'Never store the master password.',
+          "Type it every time to unlock - MemPa won't check if it's correct or not.",
         ],
       },
     ];
@@ -104,7 +109,7 @@ class InitGroupScreen extends React.Component {
     return (
       <ScrollView
         style={[Style.defaultBg, Style.container]}
-        keyboardShouldPersistTaps="always"
+        keyboardShouldPersistTaps="never"
       >
         <Form
           ref={(c) => { this.form = c; }}
@@ -124,6 +129,10 @@ class InitGroupScreen extends React.Component {
           }}
         />
 
+        <Text style={[Style.formLabel, { marginTop: 10 }]}>
+          {'Choose your security'}
+        </Text>
+        <Text>{'If unsure, leave the default'}</Text>
         <List
           style={{ marginBottom: 30 }}
         >
@@ -131,10 +140,17 @@ class InitGroupScreen extends React.Component {
             <ListItem
               key={o.title}
               containerStyle={{}}
-              leftIcon={{ name: (i === this.state.securityLevel) ? 'check-box' : 'check-box-outline-blank' }}
+              leftIcon={{
+                name: (i === this.state.securityLevel) ? 'check-box' : 'check-box-outline-blank',
+                color: (i === this.state.securityLevel) ? Color.checkboxChecked
+                  : Color.checkboxBlank,
+              }}
+              leftIconContainerStyle={{ justifyContent: 'flex-start' }}
               title={o.title}
+              titleStyle={[Style.formLabel, { marginBottom: 0 }]}
               subtitle={o.desc.join('\n')}
               subtitleNumberOfLines={4}
+              subtitleStyle={{ fontWeight: 'normal' }}
               hideChevron
               onPress={() => { this.setState({ securityLevel: i }); }}
             />
@@ -142,14 +158,11 @@ class InitGroupScreen extends React.Component {
         </List>
 
         <Button
-          small
-          raised
-          disabled={this.state.saveDisabled}
-          icon={{ name: 'done', size: 32 }}
-          textStyle={{ textAlign: 'center' }}
           buttonStyle={Style.primaryButton}
+          containerViewStyle={{ marginLeft: 0, marginRight: 0 }}
+          loading={this.state.buttonLoading}
           onPress={this.handlePress}
-          title={'Save'}
+          title="Save"
         />
 
       </ScrollView>
