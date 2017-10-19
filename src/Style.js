@@ -53,6 +53,7 @@ const Color = {
 
   // apple
   appleMusicPink: '#ff2d54',
+  appleMusicPinkLight: '#ff8a9f',
   appleBlue: '#007aff',
 };
 
@@ -98,6 +99,48 @@ const Styles = StyleSheet.create({
     marginBottom: 7,
     fontWeight: FONT_WEIGHT,
     // color: '#4b3a4c',
+  },
+
+  serviceScreen_note: {
+    color: Color.bgWhite,
+    fontSize: 12,
+    textAlign: 'center',
+  },
+
+  serviceScreen_text: {
+    color: Color.bgWhite,
+    fontSize: 22,
+  },
+
+  serviceScreen_label: {
+    color: Color.bgWhite,
+    fontWeight: 'bold',
+    textDecorationLine: 'underline',
+    fontSize: 22,
+  },
+
+  serviceScreen_container: {
+    backgroundColor: Color.appleMusicPink,
+    marginTop: 7,
+    padding: 20,
+  },
+
+  serviceScreen_view: {
+    backgroundColor: Color.appleMusicPink,
+    marginTop: 85,
+    marginBottom: 45,
+    marginLeft: 12,
+    marginRight: 12,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+
+  serviceScreen_button: {
+    backgroundColor: Color.appleMusicPinkLight,
+    marginLeft: 12,
+    marginRight: 12,
+    marginBottom: 5,
+    borderRadius: 5,
   },
 
   cancelButtonText: {
