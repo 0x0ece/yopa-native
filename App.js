@@ -17,7 +17,7 @@ const store = createStore(secretApp, {
   // initial store - load a YML file for real data
   secrets: EXAMPLE_DATA ? {
     services: [
-      new Service({ service: 'mempa.io', username: 'mempa', group: 'default' }),
+      new Service({ service: 'medium.com', username: 'mempa', group: 'default' }),
       new Service({ service: 'github.com', username: 'mempa', group: 'default' }),
       new Service({ service: 'twitter.com', username: 'mempassword', group: 'default' }),
       new Service({ service: 'google.com', username: 'mempa@example.com', description: 'gmail gplus gdocs', group: 'Important' }),
@@ -26,13 +26,13 @@ const store = createStore(secretApp, {
       new Service({ service: 'bankofamerica.com', username: 'mempa@example.com', group: 'Banks' }),
     ],
     groups: [
-      new Group({ group: 'default', storePassphrase: false }),
+      new Group({ group: 'default', storePassphrase: false, inputPassphrase: 'x' }),
       new Group({ group: 'Important', icon: 'star' }),
       new Group({ group: 'Banks', icon: 'account-balance' }),
     ],
   } : {
     services: [
-      // new Service({ service: 'mempa.io', username: 'mempa', group: 'default' }),
+      // new Service({ service: 'medium.com', username: 'mempa', group: 'default' }),
     ],
     groups: [
       // new Group({ group: 'default', storePassphrase: false, inputPassphrase: 'x' }),

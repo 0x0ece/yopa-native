@@ -2,7 +2,7 @@ import React from 'react';
 import { Clipboard, FlatList, Switch, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Button, List, ListItem } from 'react-native-elements';
+import { Button, Divider, List, ListItem } from 'react-native-elements';
 import Search from './SearchBox';
 
 import GroupPassPrompt from './GroupPassPrompt';
@@ -43,12 +43,13 @@ class SecretList extends React.Component {
     this.handleEnableGroups = this.handleEnableGroups.bind(this);
     this.handleGroupDidUnlock = this.handleGroupDidUnlock.bind(this);
     this.handleGroupWillUnlock = this.handleGroupWillUnlock.bind(this);
+    this.handleSearchChangeText = this.handleSearchChangeText.bind(this);
     this.readFromClipboard = this.readFromClipboard.bind(this);
-    this.renderFooter = this.renderFooter.bind(this);
+    this.renderAddButton = this.renderAddButton.bind(this);
+    this.renderGroups = this.renderGroups.bind(this);
     this.renderHeader = this.renderHeader.bind(this);
     this.renderItem = this.renderItem.bind(this);
-    this.handleSearchChangeText = this.handleSearchChangeText.bind(this);
-    this.handleSecretListScroll = this.handleSecretListScroll.bind(this);
+    this.renderSearch = this.renderSearch.bind(this);
   }
 
   componentDidMount() {
@@ -93,22 +94,8 @@ class SecretList extends React.Component {
     });
   }
 
-
   handleSearchChangeText(text) {
-    this.searchBar.refs.input_keyword.props.onEndEditing = null;
     this.setState({ searchString: text });
-  }
-
-
-  handleSecretListScroll(event) {
-    const currentOffset = event.nativeEvent.contentOffset.y;
-    if ((currentOffset < 0 || this.offset <= 0) &&
-      (this.props.services.length >= SEARCH_MIN_SERVICES)) {
-      this.setState({ searchBarVisible: true });
-    } else if (this.state.searchString.length === 0) {
-      this.setState({ searchBarVisible: false });
-    }
-    this.offset = currentOffset;
   }
 
   readFromClipboard() {
@@ -127,7 +114,7 @@ class SecretList extends React.Component {
     return servicesProps.filter(s => s.group === filter);
   }
 
-  renderFooter() {
+  renderAddButton() {
     if (!this.props.showAddButton) {
       return null;
     }
@@ -149,18 +136,37 @@ class SecretList extends React.Component {
     );
   }
 
-  renderHeader() {
+  renderSearch() {
+    return this.props.services.length >= SEARCH_MIN_SERVICES ? (
+      <Search
+        ref={(ref) => { this.searchBar = ref; }}
+        autoCorrect={false}
+        onChangeText={this.handleSearchChangeText}
+        onCancel={() => { this.setState({ searchString: '' }); this.list.scrollToIndex({ animated: true, index: 1 }); }}
+        onDelete={() => { this.setState({ searchString: '' }); }}
+        autoCapitalize="none"
+        cancelButtonTextStyle={Style.cancelButtonText}
+        blurOnSubmit
+        placeholder="search"
+        backgroundColor="white"
+        style={Style.searchBox}
+      />
+    ) : null;
+  }
+
+  renderGroups() {
     const groupsProps = this.props.groups || [];
     const groups = groupsProps.filter(g => g.group !== 'default' &&
       g.group.toLowerCase().includes(this.state.searchString.toLowerCase()));
 
-    if (this.props.services.length === 0 || !this.props.showGroups) {
+    if (this.props.services.length === 0 || !this.props.showGroups ||
+      (groupsProps.length > 1 && groups.length === 0)) {
       return null;
     }
     return groupsProps.length === 1 ? (
       <List containerStyle={Style.groupListContainer}>
         <ListItem
-          containerStyle={Style.defaultBg}
+          containerStyle={{ borderBottomWidth: 0 }}
           rightIcon={(
             <View>
               <Switch
@@ -175,26 +181,42 @@ class SecretList extends React.Component {
       </List>
     ) : (
       <List containerStyle={Style.groupListContainer}>
-        {groups.map(g => (
-          <ListItem
-            containerStyle={Style.defaultBg}
-            key={g.key}
-            leftIcon={{ name: g.icon }}
-            title={g.group}
-            onPress={() => this.props.navigation.navigate('Group', { group: g })}
-          />
+        <Divider style={{ marginLeft: 16 }} />
+        {groups.map((g, index) => (
+          <View key={g.key}>
+            {index > 0 ? <Divider style={{ marginLeft: 54 }} /> : null}
+            <ListItem
+              containerStyle={{ borderBottomWidth: 0 }}
+              leftIcon={{ name: g.icon }}
+              title={g.group}
+              titleStyle={{ color: Color.primary, paddingLeft: 2 }}
+              onPress={() => this.props.navigation.navigate('Group', { group: g })}
+            />
+          </View>
         ))}
+        <Divider style={{ marginLeft: 16 }} />
       </List>
     );
   }
 
-  renderItem(item, mainGroup) {
+  renderHeader() {
+    return (
+      <View>
+        {this.renderSearch()}
+        {this.renderGroups()}
+      </View>
+    );
+  }
+
+  renderItem(item, index, mainGroup) {
     if (typeof item === 'string') {
       return (
         <ListItem
-          containerStyle={{}}
+          containerStyle={{ borderBottomWidth: 0, paddingLeft: 34 }}
           key={item}
-          title="Tap to copy the password, swipe for more..."
+          title={'Tap to copy the password,\nswipe for more options'}
+          titleNumberOfLines={2}
+          titleStyle={{ fontStyle: 'italic' }}
           hideChevron
         />
       );
@@ -222,26 +244,10 @@ class SecretList extends React.Component {
       services.push('info');
     }
 
-    const searchBarElement = (this.state.searchBarVisible) ? (
-      <Search
-        ref={(ref) => { this.searchBar = ref; }}
-        autoCorrect={false}
-        onChangeText={this.handleSearchChangeText}
-        onCancel={() => { this.setState({ searchBarVisible: false }); this.setState({ searchString: '' }); }}
-        onDelete={() => { this.setState({ searchString: '' }); }}
-        autoCapitalize="none"
-        cancelButtonTextStyle={Style.cancelButtonText}
-        blurOnSubmit
-        placeholder="search"
-        backgroundColor="white"
-        style={Style.searchBox}
-      />
-    ) : null;
+    const isEmpty = servicesProps.length === 0;
 
-    const footer = this.renderFooter();
-    return (
+    return isEmpty ? SecretList.renderEmpty() : (
       <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
-        { searchBarElement }
         <GroupPassPrompt
           group={mainGroup}
           visible={this.state.promptVisible}
@@ -249,15 +255,20 @@ class SecretList extends React.Component {
           onGroupDidUnlock={this.handleGroupDidUnlock}
         />
         <FlatList
-          style={{ }}
+          getItemLayout={(data, index) => (
+            { length: 48, offset: 48 * index, index }
+          )}
+          initialScrollIndex={this.props.services.length >= SEARCH_MIN_SERVICES ? 1 : 0}
+          ref={(ref) => { this.list = ref; }}
+          style={{}}
           data={services}
+          ItemSeparatorComponent={() => (<Divider style={{ marginLeft: 54 }} />)}
           ListHeaderComponent={this.renderHeader}
-          ListEmptyComponent={SecretList.renderEmpty}
-          renderItem={({ item }) => this.renderItem(item, mainGroup)}
+          ListEmptyComponent={<Text style={{ paddingLeft: 20 }}>Ops, nothing here</Text>}
+          renderItem={({ item, index }) => this.renderItem(item, index, mainGroup)}
           keyExtractor={(item, index) => index}
-          onScroll={this.handleSecretListScroll}
         />
-        {footer}
+        {this.renderAddButton()}
       </View>
     );
   }

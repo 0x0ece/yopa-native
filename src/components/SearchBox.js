@@ -16,8 +16,8 @@ import {
 } from 'react-native';
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
-const containerHeight = 40;
-const middleHeight = 20;
+const containerHeight = 44;
+const middleHeight = containerHeight / 2;
 
 class Search extends PureComponent {
   constructor(props) {
@@ -393,7 +393,10 @@ const styles = {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    padding: 5
+    padding: 5,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 4,
   },
   input: {
     height: containerHeight - 10,
@@ -403,7 +406,7 @@ const styles = {
     borderColor: '#444',
     backgroundColor: '#f7f7f7',
     borderRadius: 5,
-    fontSize: 13
+    // fontSize: 13
   },
   placeholderColor: 'grey',
   iconSearch: {
@@ -411,7 +414,7 @@ const styles = {
     position: 'absolute',
     top: middleHeight - 7,
     height: 14,
-    width: 14
+    width: 14,
   },
   iconSearchDefault: {
     tintColor: 'grey'
@@ -434,7 +437,6 @@ const styles = {
     height: 50
   },
   cancelButtonText: {
-    fontSize: 14,
     color: '#fff'
   }
 };
