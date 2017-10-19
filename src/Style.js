@@ -79,7 +79,6 @@ const Styles = StyleSheet.create({
   },
 
   headerIcon: {
-    // color: '#007aff',
     color: Color.headerIcon,
     padding: 10,
   },
@@ -97,7 +96,6 @@ const Styles = StyleSheet.create({
     fontSize: FONT_SIZE,
     marginBottom: 7,
     fontWeight: FONT_WEIGHT,
-    // color: '#4b3a4c',
   },
 
   cancelButtonText: {
@@ -105,12 +103,10 @@ const Styles = StyleSheet.create({
   },
 
   groupListContainer: {
-    backgroundColor: '#e9e9ee',
+    backgroundColor: 'white',
     marginTop: 0,
     borderTopWidth: 0,
     paddingBottom: 20,
-    borderBottomWidth: 1,
-    // marginBottomColor: '#bbb',
   },
 });
 

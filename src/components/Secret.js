@@ -4,7 +4,6 @@ import { ListItem } from 'react-native-elements';
 import PropTypes from 'prop-types';
 
 import Crypto from '../Crypto';
-import Style from '../Style';
 import Swipeable from './Swipeable';
 import { Group, Service } from '../Models';
 
@@ -79,7 +78,7 @@ export default class Secret extends React.Component {
     return (
       <Swipeable onSwipeLeft={this.navigateToServiceScreen}>
         <ListItem
-          containerStyle={Style.defaultBg}
+          containerStyle={{ borderBottomWidth: 0 }}
           avatar={{ uri: `https://${s.icon}/favicon.ico` }}
           avatarOverlayContainerStyle={{ backgroundColor: 'transparent' }}
           avatarStyle={{ width: 16, height: 16, marginBottom: 14 }}
