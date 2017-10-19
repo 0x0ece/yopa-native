@@ -91,14 +91,11 @@ class AddServiceScreen extends React.Component {
         />
 
         <Button
-          small
-          raised
-          disabled={!this.state.canAddService}
-          icon={{ name: 'done', size: 32 }}
-          textStyle={{ textAlign: 'center' }}
           buttonStyle={Style.primaryButton}
+          containerViewStyle={{ marginLeft: 0, marginRight: 0 }}
+          disabled={!this.state.canAddService}
           onPress={this.onPress}
-          title={'Add site'}
+          title="Add site"
         />
 
       </ScrollView>

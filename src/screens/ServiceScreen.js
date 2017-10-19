@@ -75,14 +75,15 @@ class ServiceScreen extends React.Component {
       'Delete site',
       `Do you really want to delete ${this.props.navigation.state.params.service.service}?`,
       [
-        {text: 'Cancel'},
-        {text: 'OK', onPress: () => {
-          this.props.dispatch(delService(this.props.navigation.state.params.service));
-          this.props.navigation.goBack();
-        }},
+        { text: 'Cancel' },
+        { text: 'OK',
+          onPress: () => {
+            this.props.dispatch(delService(this.props.navigation.state.params.service));
+            this.props.navigation.goBack();
+          } },
       ],
-      { cancelable: false }
-    )
+      { cancelable: false },
+    );
   }
 
   copySecretToClipboard() {
