@@ -4,7 +4,7 @@ import { ListItem } from 'react-native-elements';
 import PropTypes from 'prop-types';
 
 import Crypto from '../Crypto';
-import Swipeable from './Swipeable';
+import SwipeableRow from './SwipeableRow';
 import { Group, Service } from '../Models';
 
 
@@ -76,7 +76,10 @@ export default class Secret extends React.Component {
     }
 
     return (
-      <Swipeable onSwipeLeft={this.navigateToServiceScreen}>
+      <SwipeableRow
+        swipedText={group.isUnlocked() ? this.getSecret(group) : 'xxx-xxx-xxx-xxx'}
+        onActionPress={this.navigateToServiceScreen}
+      >
         <ListItem
           containerStyle={{ borderBottomWidth: 0 }}
           avatar={{ uri: `https://${s.icon}/favicon.ico` }}
@@ -88,7 +91,7 @@ export default class Secret extends React.Component {
           rightTitle={secretShown}
           onPress={this.handlePress}
         />
-      </Swipeable>
+      </SwipeableRow>
     );
   }
 }
