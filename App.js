@@ -4,6 +4,7 @@ import { AppState } from 'react-native';
 import { createStore } from 'redux';
 import { AppLoading } from 'expo';
 
+import Analytics from './src/Analytics';
 import Main, { SimplifiedNav } from './src/Main';
 import Utils from './src/Utils';
 import secretApp from './src/redux/reducers';
@@ -63,6 +64,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
+    Analytics.initialize();
     AppState.addEventListener('change', this.handleAppStateChange);
 
     // trigger state change, so we re-render (and switch from SimplifiedNav to Main)
