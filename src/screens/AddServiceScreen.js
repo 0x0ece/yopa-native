@@ -6,6 +6,7 @@ import { ScrollView } from 'react-native';
 import { Button } from 'react-native-elements';
 
 
+import Analytics from '../Analytics';
 import Style from '../Style';
 import { Group, Service } from '../Models';
 import { addService } from '../redux/actions';
@@ -56,6 +57,7 @@ class AddServiceScreen extends React.Component {
         group: this.props.groups[formData.group].group,
       });
       this.props.dispatch(addService(service));
+      Analytics.logServiceAdd();
       this.props.navigation.goBack();
     }
   }
