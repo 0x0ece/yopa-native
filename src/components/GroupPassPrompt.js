@@ -1,8 +1,8 @@
 import React from 'react';
-import Prompt from 'react-native-prompt';
 import PropTypes from 'prop-types';
 
 import Crypto from '../Crypto';
+import Prompt from './Prompt';
 import { Group } from '../Models';
 
 

@@ -97,7 +97,6 @@ Secret.propTypes = {
   clipboard: PropTypes.string.isRequired,
   group: PropTypes.instanceOf(Group).isRequired,
   service: PropTypes.instanceOf(Service).isRequired,
-  navigate: PropTypes.func.isRequired,
   onGroupWillUnlock: PropTypes.func.isRequired,
   onSecretCopied: PropTypes.func.isRequired,
   /* eslint react/forbid-prop-types:off */

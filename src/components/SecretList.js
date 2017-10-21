@@ -224,7 +224,6 @@ class SecretList extends React.Component {
     return (
       <Secret
         clipboard={this.state.clipboard}
-        navigate={this.props.navigation.navigate}
         navigation={this.props.navigation}
         service={item}
         group={mainGroup}
