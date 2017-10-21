@@ -4,7 +4,7 @@
     "icon": "./mempa.png",
     "version": "0.1.0",
     "slug": "mempa",
-    "sdkVersion": "21.0.0",
+    "sdkVersion": "22.0.0",
     "ios": {
       "bundleIdentifier": "io.mempa.mempa"
     },

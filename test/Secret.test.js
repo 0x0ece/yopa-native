@@ -16,7 +16,7 @@ it('renders correctly', () => {
       clipboard=""
       group={group}
       service={service}
-      navigate={() => {}}
+      navigation={{}}
       onGroupWillUnlock={() => {}}
       onSecretCopied={() => {}}
     />,
