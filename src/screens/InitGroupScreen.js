@@ -123,7 +123,9 @@ class InitGroupScreen extends React.Component {
                 placeholder: 'correcthorsebatterystaple',
                 autoCapitalize: 'none',
                 autoCorrect: false,
-                autoFocus: true,
+                // EC: autoFocus removed based on user testing
+                // (it seems better to see the full page and explicitly input the master pass)
+                // autoFocus: true,
               },
             },
           }}

@@ -2,10 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import t from 'tcomb-form-native';
-import { ScrollView } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Button } from 'react-native-elements';
 
 
+import Analytics from '../Analytics';
 import Style from '../Style';
 import { Group, Service } from '../Models';
 import { addService } from '../redux/actions';
@@ -23,8 +24,8 @@ class AddServiceScreen extends React.Component {
       canAddService: false,
     };
 
-    this.onPress = this.onPress.bind(this);
-    this.onChange = this.onChange.bind(this);
+    this.handlePress = this.handlePress.bind(this);
+    this.handleChange = this.handleChange.bind(this);
 
     // here we are: define your domain model
     this.InputService = t.struct({
@@ -38,7 +39,7 @@ class AddServiceScreen extends React.Component {
     // this.onImport = this.onImport.bind(this);
   }
 
-  onChange(value) {
+  handleChange(value) {
     const newState = { value };
     if (value.service !== undefined && value.username !== undefined) {
       newState.canAddService = true;
@@ -46,7 +47,7 @@ class AddServiceScreen extends React.Component {
     this.setState(newState);
   }
 
-  onPress() {
+  handlePress() {
     // call getValue() to get the values of the form
     const formData = this.form.getValue();
     if (formData) { // if validation fails, value will be null
@@ -56,6 +57,7 @@ class AddServiceScreen extends React.Component {
         group: this.props.groups[formData.group].group,
       });
       this.props.dispatch(addService(service));
+      Analytics.logServiceAdd();
       this.props.navigation.goBack();
     }
   }
@@ -71,7 +73,7 @@ class AddServiceScreen extends React.Component {
           ref={(c) => { this.form = c; }}
           type={this.InputService}
           value={this.state.value}
-          onChange={this.onChange}
+          onChange={this.handleChange}
           options={{
             fields: {
               service: {
@@ -90,13 +92,15 @@ class AddServiceScreen extends React.Component {
           }}
         />
 
-        <Button
-          buttonStyle={Style.primaryButton}
-          containerViewStyle={{ marginLeft: 0, marginRight: 0 }}
-          disabled={!this.state.canAddService}
-          onPress={this.onPress}
-          title="Add site"
-        />
+        <View style={{ marginTop: 10 }}>
+          <Button
+            buttonStyle={Style.primaryButton}
+            containerViewStyle={{ marginLeft: 0, marginRight: 0 }}
+            disabled={!this.state.canAddService}
+            onPress={this.handlePress}
+            title="Add site"
+          />
+        </View>
 
       </ScrollView>
     );

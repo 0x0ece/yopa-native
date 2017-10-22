@@ -14,19 +14,6 @@ import { createDefaultGroups, unlockGroup } from '../redux/actions';
 const SEARCH_MIN_SERVICES = 5;
 
 class SecretList extends React.Component {
-  static renderEmpty() {
-    return (
-      <View style={Style.container}>
-        <Text style={{ fontSize: 16, fontStyle: 'italic' }}>
-          {'“The best way of keeping a secret is to pretend there isn\'t one.”'}
-        </Text>
-        <Text style={{ fontSize: 16, fontWeight: 'bold' }}>
-          - Margaret Atwood, The Blind Assassin
-        </Text>
-      </View>
-    );
-  }
-
   constructor(props, context) {
     super(props, context);
 
@@ -46,6 +33,7 @@ class SecretList extends React.Component {
     this.handleSearchChangeText = this.handleSearchChangeText.bind(this);
     this.readFromClipboard = this.readFromClipboard.bind(this);
     this.renderAddButton = this.renderAddButton.bind(this);
+    this.renderEmpty = this.renderEmpty.bind(this);
     this.renderGroups = this.renderGroups.bind(this);
     this.renderHeader = this.renderHeader.bind(this);
     this.renderItem = this.renderItem.bind(this);
@@ -54,10 +42,6 @@ class SecretList extends React.Component {
 
   componentDidMount() {
     this.readFromClipboard();
-
-    if (this.props.services.length === 0) {
-      this.props.navigation.navigate('AddService');
-    }
   }
 
   handleEnableGroups() {
@@ -133,6 +117,22 @@ class SecretList extends React.Component {
           />
         </View>
       </List>
+    );
+  }
+
+  renderEmpty() {
+    return (
+      <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
+        <View style={Style.container}>
+          <Text style={{ fontSize: 16, fontStyle: 'italic' }}>
+            {'“The best way of keeping a secret is to pretend there isn\'t one.”'}
+          </Text>
+          <Text style={{ fontSize: 16, fontWeight: 'bold' }}>
+            - Margaret Atwood, The Blind Assassin
+          </Text>
+        </View>
+        {this.renderAddButton()}
+      </View>
     );
   }
 
@@ -224,7 +224,6 @@ class SecretList extends React.Component {
     return (
       <Secret
         clipboard={this.state.clipboard}
-        navigate={this.props.navigation.navigate}
         navigation={this.props.navigation}
         service={item}
         group={mainGroup}
@@ -246,7 +245,7 @@ class SecretList extends React.Component {
 
     const isEmpty = servicesProps.length === 0;
 
-    return isEmpty ? SecretList.renderEmpty() : (
+    return isEmpty ? this.renderEmpty() : (
       <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
         <GroupPassPrompt
           group={mainGroup}

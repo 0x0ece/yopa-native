@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { View, ScrollView, Alert, Clipboard, Text, TouchableHighlight } from 'react-native';
+import { ActionSheetIOS, View, ScrollView, Alert, Clipboard, Text, TouchableHighlight } from 'react-native';
 import { Button } from 'react-native-elements';
+import { Ionicons } from '@expo/vector-icons';
 
 import Style from '../Style';
 import { updateService, delService } from '../redux/actions';
@@ -15,8 +16,6 @@ function getStateFromProps(props) {
   return { value: {
     service: service.service,
     username: service.username,
-    counter: service.counter,
-    group: service.group,
     secret: service.getSecret(group),
   },
   };
@@ -32,13 +31,11 @@ class ServiceScreen extends React.Component {
     };
     this.state = newState;
 
+    this.handlePress = this.handlePress.bind(this);
     this.generateNewSecret = this.generateNewSecret.bind(this);
     this.revertSecret = this.revertSecret.bind(this);
     this.deleteService = this.deleteService.bind(this);
-    // this.onChange = this.onChange.bind(this);
     this.copySecretToClipboard = this.copySecretToClipboard.bind(this);
-
-    // this.onImport = this.onImport.bind(this);
   }
 
   componentWillMount() {
@@ -75,16 +72,16 @@ class ServiceScreen extends React.Component {
 
   deleteService() {
     Alert.alert(
-      'Delete site',
       `Do you really want to delete ${this.props.navigation.state.params.service.service}?`,
+      '',
       [
         { text: 'Cancel' },
         { text: 'OK',
+          style: 'destructive',
           onPress: () => {
             this.props.dispatch(delService(this.props.navigation.state.params.service));
             this.props.navigation.goBack();
-          },
-        },
+          } },
       ],
       { cancelable: false },
     );
@@ -92,6 +89,38 @@ class ServiceScreen extends React.Component {
 
   copySecretToClipboard(value) {
     Clipboard.setString(value);
+  }
+
+  handlePress() {
+    const service = this.props.navigation.state.params.service;
+
+    const options = service.counter > 0 ? [
+      'Generate new password',
+      'Revert previous password',
+      'Delete site',
+      'Cancel',
+    ] : [
+      'Generate new password',
+      'Delete site',
+      'Cancel',
+    ];
+    ActionSheetIOS.showActionSheetWithOptions({
+      options,
+      cancelButtonIndex: options.length - 1,
+      destructiveButtonIndex: options.length - 2,
+    }, (index) => {
+      switch (index) {
+        case options.length - 2:
+          this.deleteService();
+          break;
+        case 0:
+          this.generateNewSecret();
+          break;
+        case 1:
+          this.revertSecret();
+          break;
+      }
+    });
   }
 
   touchableLabel(value) {
