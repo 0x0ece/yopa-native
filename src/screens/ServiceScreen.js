@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import t from 'tcomb-form-native';
 import { ActionSheetIOS, ScrollView, Alert, Clipboard, View } from 'react-native';
 import { Button } from 'react-native-elements';
-import { Ionicons } from '@expo/vector-icons';
 
 import Style from '../Style';
 import { updateService, delService } from '../redux/actions';
@@ -107,8 +106,8 @@ class ServiceScreen extends React.Component {
       options,
       cancelButtonIndex: options.length - 1,
       destructiveButtonIndex: options.length - 2,
-    }, index => {
-      switch(index) {
+    }, (index) => {
+      switch (index) {
         case options.length - 2:
           this.deleteService();
           break;
@@ -117,6 +116,8 @@ class ServiceScreen extends React.Component {
           break;
         case 1:
           this.revertSecret();
+          break;
+        default:
           break;
       }
     });
@@ -165,21 +166,6 @@ class ServiceScreen extends React.Component {
     );
   }
 }
-/*
-          <Button
-            buttonStyle={Style.secondaryButton}
-            disabled={service.counter <= 0}
-            containerViewStyle={{ marginLeft: 0, marginRight: 0, flex: 1 }}
-            onPress={this.revertSecret}
-            leftIcon={{ name: "replay", size: 20 }}
-          />
-          <Button
-            buttonStyle={[Style.secondaryButton, { alignItems: 'center', justifyContent: 'center' }]}
-            containerViewStyle={{ marginLeft: 0, marginRight: 0, flex: 1 }}
-            onPress={this.deleteService}
-            rightIcon={{ name: "more-horiz", size: 20 }}
-          />
-*/
 
 function mapStateToProps(state) {
   return {
