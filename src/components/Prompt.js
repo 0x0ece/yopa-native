@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   View,
+  ViewPropTypes,
 } from 'react-native';
 
 
@@ -177,15 +178,15 @@ Prompt.propTypes = {
   submitText: PropTypes.string,
   onChangeText: PropTypes.func.isRequired,
   borderColor: PropTypes.string,
-  promptStyle: View.propTypes.style,
-  titleStyle: Text.propTypes.style,
-  buttonStyle: View.propTypes.style,
-  buttonTextStyle: Text.propTypes.style,
-  submitButtonStyle: View.propTypes.style,
-  submitButtonTextStyle: Text.propTypes.style,
-  cancelButtonStyle: View.propTypes.style,
-  cancelButtonTextStyle: Text.propTypes.style,
-  inputStyle: TextInput.propTypes.style,
+  promptStyle: ViewPropTypes.style,
+  titleStyle: ViewPropTypes.style,
+  buttonStyle: ViewPropTypes.style,
+  buttonTextStyle: ViewPropTypes.style,
+  submitButtonStyle: ViewPropTypes.style,
+  submitButtonTextStyle: ViewPropTypes.style,
+  cancelButtonStyle: ViewPropTypes.style,
+  cancelButtonTextStyle: ViewPropTypes.style,
+  inputStyle: ViewPropTypes.style,
   /* eslint react/forbid-prop-types:off */
   textInputProps: PropTypes.object,
 };
