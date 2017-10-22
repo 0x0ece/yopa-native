@@ -5,6 +5,7 @@ import { createStore } from 'redux';
 import { AppLoading } from 'expo';
 
 import Analytics from './src/Analytics';
+import Config from './src/Config';
 import Main, { SimplifiedNav } from './src/Main';
 import Utils from './src/Utils';
 import secretApp from './src/redux/reducers';
@@ -13,10 +14,16 @@ import { Group, Service } from './src/Models';
 
 
 const EXAMPLE_DATA = true;
+const PERSIST_DATA = true;
 
 const store = createStore(secretApp, {
-  // initial store - load a YML file for real data
-  secrets: EXAMPLE_DATA ? {
+  /* eslint no-nested-ternary:off */
+  secrets: Config.PRODUCTION ? {
+    services: [],
+    groups: [
+      new Group({ group: 'default' }),
+    ],
+  } : (EXAMPLE_DATA ? {
     services: [
       new Service({ service: 'medium.com', username: 'mempa', group: 'default' }),
       new Service({ service: 'github.com', username: 'mempa', group: 'default' }),
@@ -39,7 +46,7 @@ const store = createStore(secretApp, {
       // new Group({ group: 'default', storePassphrase: false, inputPassphrase: 'x' }),
       new Group({ group: 'default' }),
     ],
-  },
+  }),
 });
 
 
@@ -85,8 +92,10 @@ export default class App extends React.Component {
   }
 
   async startAsync() {
-    // Utils.deleteDataFromStoreAsync()
-    Utils.loadDataFromStoreAsync()
+    const storeAction = (Config.PRODUCTION || PERSIST_DATA) ? Utils.loadDataFromStoreAsync
+      : Utils.deleteDataFromStoreAsync;
+
+    storeAction()
       .then((data) => {
         store.dispatch(reloadAll(data));
         this.setState({ isReady: 1 });

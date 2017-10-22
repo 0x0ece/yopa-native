@@ -5,7 +5,7 @@ import Config from './Config';
 
 const Analytics = {
 
-  ENABLED: false,
+  ENABLED: Config.PRODUCTION,
 
   SECRET_ACTION_COPY: 'copy',
   SECRET_ACTION_VIEW: 'view',
