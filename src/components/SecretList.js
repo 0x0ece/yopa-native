@@ -38,6 +38,7 @@ class SecretList extends React.Component {
     this.renderHeader = this.renderHeader.bind(this);
     this.renderItem = this.renderItem.bind(this);
     this.renderSearch = this.renderSearch.bind(this);
+    this.showSearch = this.showSearch.bind(this);
   }
 
   componentDidMount() {
@@ -98,6 +99,11 @@ class SecretList extends React.Component {
     return servicesProps.filter(s => s.group === filter);
   }
 
+  showSearch() {
+    return (this.props.services.length >= SEARCH_MIN_SERVICES) &&
+      (this.props.showGroups);
+  }
+
   renderAddButton() {
     if (!this.props.showAddButton) {
       return null;
@@ -137,7 +143,7 @@ class SecretList extends React.Component {
   }
 
   renderSearch() {
-    return this.props.services.length >= SEARCH_MIN_SERVICES ? (
+    return this.showSearch() ? (
       <Search
         ref={(ref) => { this.searchBar = ref; }}
         autoCorrect={false}
@@ -257,7 +263,7 @@ class SecretList extends React.Component {
           getItemLayout={(data, index) => (
             { length: 48, offset: 48 * index, index }
           )}
-          initialScrollIndex={this.props.services.length >= SEARCH_MIN_SERVICES ? 1 : 0}
+          initialScrollIndex={this.showSearch() ? 1 : 0}
           ref={(ref) => { this.list = ref; }}
           style={{}}
           data={services}
