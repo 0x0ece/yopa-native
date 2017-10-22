@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import t from 'tcomb-form-native';
-import { ScrollView, Alert, Clipboard } from 'react-native';
+import { ActionSheetIOS, ScrollView, Alert, Clipboard, View } from 'react-native';
 import { Button } from 'react-native-elements';
+import { Ionicons } from '@expo/vector-icons';
 
 import Style from '../Style';
 import { updateService, delService } from '../redux/actions';
@@ -16,8 +17,6 @@ function getStateFromProps(props) {
   return { value: {
     service: service.service,
     username: service.username,
-    counter: service.counter,
-    group: service.group,
     secret: service.getSecret(group),
   },
   };
@@ -30,6 +29,7 @@ class ServiceScreen extends React.Component {
     super(props);
     this.state = getStateFromProps(this.props.navigation.state.params);
 
+    this.handlePress = this.handlePress.bind(this);
     this.generateNewSecret = this.generateNewSecret.bind(this);
     this.revertSecret = this.revertSecret.bind(this);
     this.deleteService = this.deleteService.bind(this);
@@ -40,8 +40,6 @@ class ServiceScreen extends React.Component {
     this.InputService = t.struct({
       service: t.String,
       username: t.String,
-      counter: t.Integer,
-      group: t.String,
       secret: t.String,
     });
 
@@ -72,11 +70,12 @@ class ServiceScreen extends React.Component {
 
   deleteService() {
     Alert.alert(
-      'Delete site',
       `Do you really want to delete ${this.props.navigation.state.params.service.service}?`,
+      '',
       [
         { text: 'Cancel' },
         { text: 'OK',
+          style: 'destructive',
           onPress: () => {
             this.props.dispatch(delService(this.props.navigation.state.params.service));
             this.props.navigation.goBack();
@@ -89,6 +88,38 @@ class ServiceScreen extends React.Component {
   copySecretToClipboard() {
     const state = this.getState();
     Clipboard.setString(state.value.secret);
+  }
+
+  handlePress() {
+    const service = this.props.navigation.state.params.service;
+
+    const options = service.counter > 0 ? [
+      'Generate new password',
+      'Revert previous password',
+      'Delete site',
+      'Cancel',
+    ] : [
+      'Generate new password',
+      'Delete site',
+      'Cancel',
+    ];
+    ActionSheetIOS.showActionSheetWithOptions({
+      options,
+      cancelButtonIndex: options.length - 1,
+      destructiveButtonIndex: options.length - 2,
+    }, index => {
+      switch(index) {
+        case options.length - 2:
+          this.deleteService();
+          break;
+        case 0:
+          this.generateNewSecret();
+          break;
+        case 1:
+          this.revertSecret();
+          break;
+      }
+    });
   }
 
   render() {
@@ -105,54 +136,50 @@ class ServiceScreen extends React.Component {
           options={{
             fields: {
               service: {
+                label: 'Site',
                 placeholder: 'example.com',
+                editable: false,
               },
               username: {
                 label: 'Username or email',
-              },
-              counter: {
-                label: 'Counter',
-              },
-              group: {
-                label: 'Group',
+                editable: false,
               },
               secret: {
-                label: 'Secret',
+                label: 'Password',
+                editable: false,
               },
             },
           }}
         />
 
-        <Button
-          icon={{ name: 'done', size: 32 }}
-          buttonStyle={Style.primaryButton}
-          containerViewStyle={{ marginLeft: 0, marginRight: 0, marginBottom: 2 }}
-          loading={this.state.buttonLoading}
-          onPress={this.generateNewSecret}
-          title={'Generate new secret'}
-        />
+        <View style={{ marginTop: 10 }}>
+          <Button
+            buttonStyle={Style.primaryButton}
+            containerViewStyle={{ marginLeft: 0, marginRight: 0 }}
+            onPress={this.handlePress}
+            title="Edit site..."
+          />
+        </View>
 
-        <Button
-          icon={{ name: 'refresh', size: 32 }}
-          buttonStyle={Style.primaryButton}
-          containerViewStyle={{ marginLeft: 0, marginRight: 0, marginBottom: 2 }}
-          loading={this.state.buttonLoading}
-          onPress={this.revertSecret}
-          title={'Revert secret'}
-        />
-
-        <Button
-          icon={{ name: 'cancel', size: 32 }}
-          buttonStyle={Style.primaryButton}
-          containerViewStyle={{ marginLeft: 0, marginRight: 0, marginBottom: 2 }}
-          loading={this.state.buttonLoading}
-          onPress={this.deleteService}
-          title={'Delete site'}
-        />
       </ScrollView>
     );
   }
 }
+/*
+          <Button
+            buttonStyle={Style.secondaryButton}
+            disabled={service.counter <= 0}
+            containerViewStyle={{ marginLeft: 0, marginRight: 0, flex: 1 }}
+            onPress={this.revertSecret}
+            leftIcon={{ name: "replay", size: 20 }}
+          />
+          <Button
+            buttonStyle={[Style.secondaryButton, { alignItems: 'center', justifyContent: 'center' }]}
+            containerViewStyle={{ marginLeft: 0, marginRight: 0, flex: 1 }}
+            onPress={this.deleteService}
+            rightIcon={{ name: "more-horiz", size: 20 }}
+          />
+*/
 
 function mapStateToProps(state) {
   return {
