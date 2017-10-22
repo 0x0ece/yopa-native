@@ -53,8 +53,8 @@ const Utils = {
           const data = yaml.safeLoad(txt);
           const models = {
             ...data,
-            services: data.services.map(s => new Service(s)),
-            groups: data.groups.map(g => new Group(g)),
+            services: (data.services || []).map(s => new Service(s)),
+            groups: (data.groups || []).map(g => new Group(g)),
           };
           resolve(models);
         })
