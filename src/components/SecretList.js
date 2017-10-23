@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { Button, Divider, List, ListItem } from 'react-native-elements';
 import Search from './SearchBox';
 
+import Analytics from '../Analytics';
 import GroupPassPrompt from './GroupPassPrompt';
 import Secret from './Secret';
 import Style, { Color } from '../Style';
@@ -24,13 +25,13 @@ class SecretList extends React.Component {
       promptVisible,
       didUnlockCallback: null,
       searchString: '',
-      searchBarVisible: false,
     };
 
     this.handleEnableGroups = this.handleEnableGroups.bind(this);
     this.handleGroupDidUnlock = this.handleGroupDidUnlock.bind(this);
     this.handleGroupWillUnlock = this.handleGroupWillUnlock.bind(this);
     this.handleSearchChangeText = this.handleSearchChangeText.bind(this);
+    this.handleSecretCopied = this.handleSecretCopied.bind(this);
     this.readFromClipboard = this.readFromClipboard.bind(this);
     this.renderAddButton = this.renderAddButton.bind(this);
     this.renderEmpty = this.renderEmpty.bind(this);
@@ -83,10 +84,17 @@ class SecretList extends React.Component {
     this.setState({ searchString: text });
   }
 
-  readFromClipboard() {
-    Clipboard.getString().then(
-      (clipboard) => { this.setState({ clipboard }); },
-    );
+  handleSecretCopied(copied) {
+    this.readFromClipboard();
+
+    if (copied) {
+      let screen = this.props.showGroups ? Analytics.SCREEN_HOME : Analytics.SCREEN_GROUP;
+      if (this.state.searchString) {
+        screen = Analytics.SCREEN_SEARCH;
+      }
+      console.log(screen);
+      Analytics.logSecretGet(Analytics.SECRET_ACTION_COPY, screen);
+    }
   }
 
   filterServices() {
@@ -97,6 +105,12 @@ class SecretList extends React.Component {
     }
     const filter = this.props.group ? this.props.group.group : 'default';
     return servicesProps.filter(s => s.group === filter);
+  }
+
+  readFromClipboard() {
+    Clipboard.getString().then(
+      (clipboard) => { this.setState({ clipboard }); },
+    );
   }
 
   showSearch() {
@@ -234,7 +248,7 @@ class SecretList extends React.Component {
         service={item}
         group={mainGroup}
         onGroupWillUnlock={this.handleGroupWillUnlock}
-        onSecretCopied={this.readFromClipboard}
+        onSecretCopied={this.handleSecretCopied}
       />
     );
   }
