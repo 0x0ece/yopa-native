@@ -92,7 +92,6 @@ class SecretList extends React.Component {
       if (this.state.searchString) {
         screen = Analytics.SCREEN_SEARCH;
       }
-      console.log(screen);
       Analytics.logSecretGet(Analytics.SECRET_ACTION_COPY, screen);
     }
   }
