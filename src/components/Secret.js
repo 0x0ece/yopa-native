@@ -53,12 +53,13 @@ export default class Secret extends React.Component {
 
   handlePress() {
     if (this.props.group.isUnlocked()) {
-      if (this.isCopied()) {
+      const isCopied = this.isCopied();
+      if (isCopied) {
         Secret.clearSecretFromClipboard();
       } else {
         this.copySecretToClipboard();
       }
-      this.props.onSecretCopied();
+      this.props.onSecretCopied(!isCopied);
     } else {
       // pass copySecretToClipboard as callback, that will eventually
       // be invoked with the unlocked group as parameter

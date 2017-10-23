@@ -10,7 +10,7 @@ const Analytics = {
   SECRET_ACTION_COPY: 'copy',
   SECRET_ACTION_VIEW: 'view',
 
-  SCREEN_MAIN: 'main',
+  SCREEN_HOME: 'home',
   SCREEN_GROUP: 'group',
   SCREEN_SEARCH: 'search',
   SCREEN_SERVICE: 'service',
