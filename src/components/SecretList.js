@@ -262,6 +262,7 @@ class SecretList extends React.Component {
           ref={(ref) => { this.list = ref; }}
           style={{}}
           data={services}
+          keyboardShouldPersistTaps="always"
           ItemSeparatorComponent={() => (<Divider style={{ marginLeft: 54 }} />)}
           ListHeaderComponent={this.renderHeader}
           ListEmptyComponent={<Text style={{ paddingLeft: 20 }}>Ops, nothing here</Text>}
