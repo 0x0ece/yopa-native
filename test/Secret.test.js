@@ -6,11 +6,12 @@ import Secret from '../src/components/Secret';
 import { Group, Service } from '../src/Models';
 
 
-// TODO: test view
+jest.mock('../src/components/SwipeableRow', () => 'SwipeableRow');
 
 it('renders correctly', () => {
   const group = new Group({});
   const service = new Service({});
+
   const component = renderer.create(
     <Secret
       clipboard=""

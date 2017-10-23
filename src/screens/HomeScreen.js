@@ -9,7 +9,7 @@ import { Group, Service } from '../Models';
 
 class HomeScreen extends React.Component {
   render() {
-    const homeGroup = this.props.groups[0];
+    const homeGroup = this.props.groups[0] || new Group({});
     return homeGroup.isInitialized() ? (
       <SecretList
         navigation={this.props.navigation}
