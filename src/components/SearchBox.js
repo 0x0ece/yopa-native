@@ -14,6 +14,7 @@ import {
   Image,
   View
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 const containerHeight = 44;
@@ -78,7 +79,6 @@ class Search extends PureComponent {
     if(this.autoFocus) {
       this.setState({expanded: true})
       this.refs.input_keyword._component.focus();
-
     }
   }
 
@@ -253,6 +253,7 @@ class Search extends PureComponent {
   };
 
   render() {
+    AnimatedIcons = Animated.createAnimatedComponent(Ionicons)
     return (
       <Animated.View
         ref="searchContainer"
@@ -315,13 +316,14 @@ class Search extends PureComponent {
               >
                 {this.props.iconSearch}
               </Animated.View>
-            : <Animated.Image
-                source={require('./img/search.png')}
+            : <AnimatedIcons
+                name="md-search"
+                size={18}
                 style={[
                   styles.iconSearch,
                   styles.iconSearchDefault,
                   this.props.tintColorSearch && {
-                    tintColor: this.props.tintColorSearch
+                    color: this.props.tintColorSearch
                   },
                   {
                     left: this.iconSearchAnimated
@@ -342,13 +344,14 @@ class Search extends PureComponent {
               >
                 {this.props.iconDelete}
               </Animated.View>
-            : <Animated.Image
-                source={require('./img/delete.png')}
+            : <AnimatedIcons
+                name="md-close-circle"
+                size={18}
                 style={[
                   styles.iconDelete,
                   styles.iconDeleteDefault,
                   this.props.tintColorDelete && {
-                    tintColor: this.props.tintColorDelete
+                    color: this.props.tintColorDelete
                   },
                   this.props.positionRightDelete && {
                     right: this.props.positionRightDelete
@@ -412,22 +415,24 @@ const styles = {
   iconSearch: {
     flex: 1,
     position: 'absolute',
-    top: middleHeight - 7,
-    height: 14,
-    width: 14,
+    top: middleHeight - 9,
+    height: 18,
+    width: 18,
+    backgroundColor: 'transparent',
   },
   iconSearchDefault: {
-    tintColor: 'grey'
+    color: 'grey'
   },
   iconDelete: {
     position: 'absolute',
     right: 70,
-    top: middleHeight - 7,
-    height: 14,
-    width: 14
+    top: middleHeight - 9,
+    height: 18,
+    width: 18,
+    backgroundColor: 'transparent',
   },
   iconDeleteDefault: {
-    tintColor: 'grey'
+    color: 'grey',
   },
   cancelButton: {
     justifyContent: 'center',
