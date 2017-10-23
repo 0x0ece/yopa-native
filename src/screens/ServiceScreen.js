@@ -1,8 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import t from 'tcomb-form-native';
-import { ActionSheetIOS, ScrollView, Alert, Clipboard, View } from 'react-native';
+import { ActionSheetIOS, View, ScrollView, Alert, Clipboard, Text, TouchableHighlight } from 'react-native';
 import { Button } from 'react-native-elements';
 
 import Style from '../Style';
@@ -21,28 +20,21 @@ function getStateFromProps(props) {
   };
 }
 
-
-const Form = t.form.Form;
+/* eslint class-methods-use-this: ["error", { "exceptMethods": ["copySecretToClipboard"] }] */
 class ServiceScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = getStateFromProps(this.props.navigation.state.params);
+    const newState = {
+      ...getStateFromProps(this.props.navigation.state.params),
+      regeneratedSecret: false,
+    };
+    this.state = newState;
 
     this.handlePress = this.handlePress.bind(this);
     this.generateNewSecret = this.generateNewSecret.bind(this);
     this.revertSecret = this.revertSecret.bind(this);
     this.deleteService = this.deleteService.bind(this);
-    // this.onChange = this.onChange.bind(this);
     this.copySecretToClipboard = this.copySecretToClipboard.bind(this);
-
-    // here we are: define your domain model
-    this.InputService = t.struct({
-      service: t.String,
-      username: t.String,
-      secret: t.String,
-    });
-
-    // this.onImport = this.onImport.bind(this);
   }
 
   componentWillMount() {
@@ -56,7 +48,12 @@ class ServiceScreen extends React.Component {
     service.counter += 1;
     this.props.dispatch(updateService(service));
     this.props.navigation.setParams({ service });
-    this.setState(getStateFromProps(this.props.navigation.state.params)); // FIX This
+
+    const newState = {
+      ...getStateFromProps(this.props.navigation.state.params),
+      regeneratedSecret: true,
+    };
+    this.setState(newState); // FIX This
   }
 
   revertSecret() {
@@ -64,7 +61,12 @@ class ServiceScreen extends React.Component {
     service.counter -= 1;
     this.props.navigation.setParams({ service });
     this.props.dispatch(updateService(service));
-    this.setState(getStateFromProps(this.props.navigation.state.params)); // FIX This
+
+    const newState = {
+      ...getStateFromProps(this.props.navigation.state.params),
+      regeneratedSecret: false,
+    };
+    this.setState(newState); // FIX This
   }
 
   deleteService() {
@@ -84,9 +86,8 @@ class ServiceScreen extends React.Component {
     );
   }
 
-  copySecretToClipboard() {
-    const state = this.getState();
-    Clipboard.setString(state.value.secret);
+  copySecretToClipboard(value) {
+    Clipboard.setString(value);
   }
 
   handlePress() {
@@ -123,45 +124,81 @@ class ServiceScreen extends React.Component {
     });
   }
 
+  touchableLabel(value) {
+    return (
+      <TouchableHighlight onPress={() => this.copySecretToClipboard(value)}>
+        <Text style={[Style.serviceScreen_label]}>
+          {value}
+        </Text>
+      </TouchableHighlight >
+    );
+  }
+
+  secretButton() {
+    if (this.state.regeneratedSecret) {
+      return (
+        <Button
+          buttonStyle={Style.serviceScreen_button}
+          containerViewStyle={{ marginLeft: 0, marginRight: 0, marginBottom: 2 }}
+          loading={this.state.buttonLoading}
+          onPress={this.revertSecret}
+          title={'Revert Secret'}
+        />
+      );
+    }
+
+    return (
+      <Button
+        buttonStyle={Style.serviceScreen_button}
+        containerViewStyle={{ marginLeft: 0, marginRight: 0, marginBottom: 2 }}
+        loading={this.state.buttonLoading}
+        onPress={this.generateNewSecret}
+        title={'Generate new secret'}
+      />
+    );
+  }
+
+  counterText() {
+    if (this.state.value.counter > 0) {
+      return (
+        <Text style={[Style.serviceScreen_text]}>
+          and has been regenerated {this.state.value.counter} times.
+        </Text>
+      );
+    }
+
+    return (<Text />);
+  }
+
   render() {
     return (
       <ScrollView
-        style={[Style.defaultBg, Style.container]}
+        style={[Style.defaultBg, Style.serviceScreen_container]}
         keyboardShouldPersistTaps="always"
       >
-        <Form
-          ref={(c) => { this.form = c; }}
-          type={this.InputService}
-          value={this.state.value}
-          onChange={this.onChange}
-          options={{
-            fields: {
-              service: {
-                label: 'Site',
-                placeholder: 'example.com',
-                editable: false,
-              },
-              username: {
-                label: 'Username or email',
-                editable: false,
-              },
-              secret: {
-                label: 'Password',
-                editable: false,
-              },
-            },
-          }}
-        />
+        <Text style={[Style.serviceScreen_note]}>
+          Tap any of the highlighted elements to copy it
+        </Text>
 
-        <View style={{ marginTop: 10 }}>
-          <Button
-            buttonStyle={Style.primaryButton}
-            containerViewStyle={{ marginLeft: 0, marginRight: 0 }}
-            onPress={this.handlePress}
-            title="Edit site..."
-          />
+        <View style={[Style.serviceScreen_view]}>
+          <Text style={[Style.serviceScreen_text]}>Password for user </Text>
+          {this.touchableLabel(this.state.value.username)}
+          <Text style={[Style.serviceScreen_text]}> on site </Text>
+          {this.touchableLabel(this.state.value.service)}
+          <Text style={[Style.serviceScreen_text]}> is </Text>
+          {this.touchableLabel(this.state.value.secret)}
+          {this.counterText()}
         </View>
 
+        {this.secretButton()}
+
+        <Button
+          buttonStyle={Style.serviceScreen_button}
+          containerViewStyle={{ marginLeft: 0, marginRight: 0, marginBottom: 2 }}
+          loading={this.state.buttonLoading}
+          onPress={this.deleteService}
+          title={'Delete site'}
+        />
       </ScrollView>
     );
   }
