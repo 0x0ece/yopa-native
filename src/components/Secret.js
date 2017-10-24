@@ -1,10 +1,10 @@
 import React from 'react';
 import { Clipboard } from 'react-native';
 import { ListItem } from 'react-native-elements';
-import { RectButton } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
 
 import Crypto from '../Crypto';
+import RectButton from './RectButton';
 import SwipeableRow from './SwipeableRow';
 import { Group, Service } from '../Models';
 
