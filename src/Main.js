@@ -1,6 +1,7 @@
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
+import { Platform } from 'react-native';
 
 import AddServiceScreen from './screens/AddServiceScreen';
 import GroupScreen from './screens/GroupScreen';
@@ -55,14 +56,14 @@ const StackNav = StackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: `${navigation.state.params.group.getNavTitle()}`,
       ...headerCommon,
-      headerRight: (
+      headerRight: (Platform.OS === 'ios' )?(
         <Ionicons
           name="ios-add"
           size={28}
           style={Style.headerIcon}
           onPress={() => navigation.navigate('AddService')}
         />
-      ),
+      ):null,
     }),
   },
 }, {
