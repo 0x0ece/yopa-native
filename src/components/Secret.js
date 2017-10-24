@@ -1,6 +1,7 @@
 import React from 'react';
 import { Clipboard } from 'react-native';
 import { ListItem } from 'react-native-elements';
+import { RectButton } from 'react-native-gesture-handler';
 import PropTypes from 'prop-types';
 
 import Crypto from '../Crypto';
@@ -81,17 +82,18 @@ export default class Secret extends React.Component {
         swipedText={group.isUnlocked() ? this.getSecret(group) : 'xxx-xxx-xxx-xxx'}
         onActionPress={this.navigateToServiceScreen}
       >
-        <ListItem
-          containerStyle={{ borderBottomWidth: 0 }}
-          avatar={{ uri: `https://${s.icon}/favicon.ico` }}
-          avatarOverlayContainerStyle={{ backgroundColor: 'transparent' }}
-          avatarStyle={{ width: 16, height: 16, marginBottom: 14 }}
-          hideChevron
-          title={s.service}
-          subtitle={s.username}
-          rightTitle={secretShown}
-          onPress={this.handlePress}
-        />
+        <RectButton onPress={this.handlePress}>
+          <ListItem
+            containerStyle={{ borderBottomWidth: 0 }}
+            avatar={{ uri: `https://${s.icon}/favicon.ico` }}
+            avatarOverlayContainerStyle={{ backgroundColor: 'transparent' }}
+            avatarStyle={{ width: 16, height: 16, marginBottom: 14 }}
+            hideChevron
+            title={s.service}
+            subtitle={s.username}
+            rightTitle={secretShown}
+          />
+        </RectButton>
       </SwipeableRow>
     );
   }
