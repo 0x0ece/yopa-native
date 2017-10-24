@@ -3,10 +3,11 @@ import { Clipboard, FlatList, Switch, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Divider, List, ListItem } from 'react-native-elements';
-import Search from './SearchBox';
+import { RectButton } from 'react-native-gesture-handler';
 
 import Analytics from '../Analytics';
 import GroupPassPrompt from './GroupPassPrompt';
+import Search from './SearchBox';
 import Secret from './Secret';
 import Style, { Color } from '../Style';
 import { Group, Service } from '../Models';
@@ -197,16 +198,18 @@ class SecretList extends React.Component {
       <List containerStyle={Style.groupListContainer}>
         <Divider style={{ marginLeft: 16 }} />
         {groups.map((g, index) => (
-          <View key={g.key}>
+          <RectButton
+            key={g.key}
+            onPress={() => this.props.navigation.navigate('Group', { group: g })}
+          >
             {index > 0 ? <Divider style={{ marginLeft: 54 }} /> : null}
             <ListItem
               containerStyle={{ borderBottomWidth: 0 }}
               leftIcon={{ name: g.icon }}
               title={g.group}
               titleStyle={{ color: Color.primary, paddingLeft: 2 }}
-              onPress={() => this.props.navigation.navigate('Group', { group: g })}
             />
-          </View>
+          </RectButton>
         ))}
         <Divider style={{ marginLeft: 16 }} />
       </List>
