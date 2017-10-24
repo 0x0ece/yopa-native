@@ -5,6 +5,7 @@ import renderer from 'react-test-renderer';
 import App from '../App';
 
 
+jest.mock('../src/components/RectButton', () => 'RectButton');
 jest.mock('../src/components/SwipeableRow', () => 'SwipeableRow');
 
 it('does nothing', () => {

@@ -6,6 +6,7 @@ import Secret from '../src/components/Secret';
 import { Group, Service } from '../src/Models';
 
 
+jest.mock('../src/components/RectButton', () => 'RectButton');
 jest.mock('../src/components/SwipeableRow', () => 'SwipeableRow');
 
 it('renders correctly', () => {

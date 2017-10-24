@@ -3,10 +3,10 @@ import { Clipboard, FlatList, Switch, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Divider, List, ListItem } from 'react-native-elements';
-import { RectButton } from 'react-native-gesture-handler';
 
 import Analytics from '../Analytics';
 import GroupPassPrompt from './GroupPassPrompt';
+import RectButton from './RectButton';
 import Search from './SearchBox';
 import Secret from './Secret';
 import Style, { Color } from '../Style';
