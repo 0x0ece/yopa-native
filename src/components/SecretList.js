@@ -15,11 +15,23 @@ import { createDefaultGroups, unlockGroup } from '../redux/actions';
 const SEARCH_MIN_SERVICES = 5;
 
 class SecretList extends React.Component {
+  static renderEmpty() {
+    return (
+      <View style={Style.container}>
+        <Text style={{ fontSize: 16, fontStyle: 'italic' }}>
+          {'“The best way of keeping a secret is to pretend there isn\'t one.”'}
+        </Text>
+        <Text style={{ fontSize: 16, fontWeight: 'bold' }}>
+          - Margaret Atwood, The Blind Assassin
+        </Text>
+      </View>
+    );
+  }
+
   constructor(props, context) {
     super(props, context);
 
-    const promptVisible = this.props.group.isUnlocked() || this.props.services.length === 0 ?
-      false : this.props.forceGroupUnlock;
+    const promptVisible = this.props.group.isUnlocked() ? false : this.props.forceGroupUnlock;
     this.state = {
       clipboard: '',
       promptVisible,
@@ -34,7 +46,6 @@ class SecretList extends React.Component {
     this.handleSecretCopied = this.handleSecretCopied.bind(this);
     this.readFromClipboard = this.readFromClipboard.bind(this);
     this.renderAddButton = this.renderAddButton.bind(this);
-    this.renderEmpty = this.renderEmpty.bind(this);
     this.renderGroups = this.renderGroups.bind(this);
     this.renderHeader = this.renderHeader.bind(this);
     this.renderItem = this.renderItem.bind(this);
@@ -136,22 +147,6 @@ class SecretList extends React.Component {
           />
         </View>
       </List>
-    );
-  }
-
-  renderEmpty() {
-    return (
-      <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
-        <View style={Style.container}>
-          <Text style={{ fontSize: 16, fontStyle: 'italic' }}>
-            {'“The best way of keeping a secret is to pretend there isn\'t one.”'}
-          </Text>
-          <Text style={{ fontSize: 16, fontWeight: 'bold' }}>
-            - Margaret Atwood, The Blind Assassin
-          </Text>
-        </View>
-        {this.renderAddButton()}
-      </View>
     );
   }
 
@@ -263,8 +258,25 @@ class SecretList extends React.Component {
     }
 
     const isEmpty = servicesProps.length === 0;
+    const mainComponent = isEmpty ? SecretList.renderEmpty() : (
+      <FlatList
+        getItemLayout={(data, index) => (
+          { length: 48, offset: 48 * index, index }
+        )}
+        initialScrollIndex={this.showSearch() ? 1 : 0}
+        ref={(ref) => { this.list = ref; }}
+        style={{}}
+        data={services}
+        keyboardShouldPersistTaps="always"
+        ItemSeparatorComponent={() => (<Divider style={{ marginLeft: 54 }} />)}
+        ListHeaderComponent={this.renderHeader}
+        ListEmptyComponent={<Text style={{ paddingLeft: 20 }}>Ops, nothing here</Text>}
+        renderItem={({ item, index }) => this.renderItem(item, index, mainGroup)}
+        keyExtractor={(item, index) => index}
+      />
+    );
 
-    return isEmpty ? this.renderEmpty() : (
+    return (
       <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
         <GroupPassPrompt
           group={mainGroup}
@@ -272,21 +284,7 @@ class SecretList extends React.Component {
           onCancel={() => { this.setState({ promptVisible: false }); }}
           onGroupDidUnlock={this.handleGroupDidUnlock}
         />
-        <FlatList
-          getItemLayout={(data, index) => (
-            { length: 48, offset: 48 * index, index }
-          )}
-          initialScrollIndex={this.showSearch() ? 1 : 0}
-          ref={(ref) => { this.list = ref; }}
-          style={{}}
-          data={services}
-          keyboardShouldPersistTaps="always"
-          ItemSeparatorComponent={() => (<Divider style={{ marginLeft: 54 }} />)}
-          ListHeaderComponent={this.renderHeader}
-          ListEmptyComponent={<Text style={{ paddingLeft: 20 }}>Ops, nothing here</Text>}
-          renderItem={({ item, index }) => this.renderItem(item, index, mainGroup)}
-          keyExtractor={(item, index) => index}
-        />
+        {mainComponent}
         {this.renderAddButton()}
       </View>
     );
