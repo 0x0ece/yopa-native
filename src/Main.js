@@ -36,7 +36,11 @@ const StackNav = StackNavigator({
           name="ios-add"
           size={28}
           style={Style.headerIcon}
-          onPress={() => navigation.navigate('AddService')}
+          onPress={() => {
+            navigation.navigate('AddService', {
+              group: navigation.state.params.group,
+            });
+          }}
         />
       ),
     }),
@@ -60,7 +64,11 @@ const StackNav = StackNavigator({
           name="ios-add"
           size={28}
           style={Style.headerIcon}
-          onPress={() => navigation.navigate('AddService')}
+          onPress={() => {
+            navigation.navigate('AddService', {
+              group: navigation.state.params.group,
+            });
+          }}
         />
       ),
     }),
