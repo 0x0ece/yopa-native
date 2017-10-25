@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import t from 'tcomb-form-native';
-import { ScrollView, View } from 'react-native';
+import { Alert, ScrollView, View } from 'react-native';
 import { Button } from 'react-native-elements';
 
 
@@ -18,9 +18,14 @@ const Form = t.form.Form;
 class AddServiceScreen extends React.Component {
   constructor(props) {
     super(props);
+    const currentGroup = props.navigation.state.params.group;
+    const groupId = (currentGroup.isUnlocked() ?
+      this.props.groups.findIndex(g => g.group === currentGroup.group) : 0);
+    const groupName = (currentGroup.isUnlocked() ?
+      currentGroup.group : 'default');
     this.state = {
-      group: 'default',
-      value: { group: 0 },
+      group: groupName,
+      value: { group: groupId },
       canAddService: false,
     };
 
@@ -56,9 +61,14 @@ class AddServiceScreen extends React.Component {
         username: formData.username,
         group: this.props.groups[formData.group].group,
       });
-      this.props.dispatch(addService(service));
-      Analytics.logServiceAdd();
-      this.props.navigation.goBack();
+      if (this.props.services.find(s => s.id ===
+       service.id) !== undefined) {
+        Alert.alert('Service already exists, not added');
+      } else {
+        this.props.dispatch(addService(service));
+        Analytics.logServiceAdd();
+        this.props.navigation.goBack();
+      }
     }
   }
 
@@ -74,6 +84,8 @@ class AddServiceScreen extends React.Component {
           type={this.InputService}
           value={this.state.value}
           onChange={this.handleChange}
+          autoCapitalize="none"
+          autoCorrect={false}
           options={{
             fields: {
               service: {
@@ -110,13 +122,14 @@ class AddServiceScreen extends React.Component {
 function mapStateToProps(state) {
   return {
     services: (state.secrets && state.secrets.services) || [],
-    groups: (state.secrets && state.secrets.groups) || [],
+    groups: (state.secrets && state.secrets.groups.filter(g => g.isUnlocked())) || [],
   };
 }
 
 AddServiceScreen.propTypes = {
   dispatch: PropTypes.func.isRequired,
   groups: PropTypes.arrayOf(PropTypes.instanceOf(Group)).isRequired,
+  services: PropTypes.arrayOf(PropTypes.instanceOf(Service)).isRequired,
   /* eslint react/forbid-prop-types:off */
   navigation: PropTypes.object.isRequired,
 };
