@@ -9,6 +9,7 @@ import HomeScreen from './screens/HomeScreen';
 import ServiceScreen from './screens/ServiceScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import Style, { Color } from './Style';
+import Config from './Config';
 
 
 const headerCommon = {
@@ -60,7 +61,8 @@ const StackNav = StackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: `${navigation.state.params.group.getNavTitle()}`,
       ...headerCommon,
-      headerRight: (Platform.OS === 'ios' )?(
+      headerRight: (Config.Android && Platform.OS === 'android')?
+        null :(
         <Ionicons
           name="ios-add"
           size={28}
@@ -71,7 +73,7 @@ const StackNav = StackNavigator({
             });
           }}
         />
-      ):null,
+      ),
     }),
   },
 }, {
