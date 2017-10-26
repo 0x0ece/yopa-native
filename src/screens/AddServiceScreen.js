@@ -18,11 +18,15 @@ const Form = t.form.Form;
 class AddServiceScreen extends React.Component {
   constructor(props) {
     super(props);
-    const currentGroup = props.navigation.state.params.group;
-    const groupId = (currentGroup.isUnlocked() ?
-      this.props.groups.findIndex(g => g.group === currentGroup.group) : 0);
-    const groupName = (currentGroup.isUnlocked() ?
-      currentGroup.group : 'default');
+    const useCurrent = props.navigation.state.params !== undefined &&
+     props.navigation.state.params.group !== undefined &&
+      props.navigation.state.params.group.isInitialized();
+    const currentGroup = useCurrent ? props.navigation.state.params.group : undefined;
+    const groupId = useCurrent ?
+      this.props.groups.findIndex(g => g.group === currentGroup.group) : 0;
+    const groupName = useCurrent ?
+      currentGroup.group : 'default';
+
     this.state = {
       group: groupName,
       value: { group: groupId },
@@ -122,7 +126,7 @@ class AddServiceScreen extends React.Component {
 function mapStateToProps(state) {
   return {
     services: (state.secrets && state.secrets.services) || [],
-    groups: (state.secrets && state.secrets.groups.filter(g => g.isUnlocked())) || [],
+    groups: (state.secrets && state.secrets.groups.filter(g => g.isInitialized())) || [],
   };
 }
 

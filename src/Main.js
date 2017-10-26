@@ -37,9 +37,7 @@ const StackNav = StackNavigator({
           size={28}
           style={Style.headerIcon}
           onPress={() => {
-            navigation.navigate('AddService', {
-              group: navigation.state.params.group,
-            });
+            navigation.navigate('AddService');
           }}
         />
       ),
