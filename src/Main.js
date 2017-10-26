@@ -33,7 +33,8 @@ const StackNav = StackNavigator({
           onPress={() => navigation.navigate('Settings')}
         />
       ),
-      headerRight: (
+      headerRight:  Config.Android ?
+        null :(
         <Ionicons
           name="ios-add"
           size={28}
@@ -59,7 +60,7 @@ const StackNav = StackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: `${navigation.state.params.group.getNavTitle()}`,
       ...headerCommon,
-      headerRight: (Config.Android && Platform.OS === 'android')?
+      headerRight: Config.Android ?
         null :(
         <Ionicons
           name="ios-add"

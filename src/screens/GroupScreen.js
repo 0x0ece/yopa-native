@@ -12,28 +12,13 @@ import Config from '../Config';
 class GroupScreen extends React.Component {
   render() {
     const group = this.props.navigation.state.params.group;
-    let view = null;
-    if (group.isInitialized()) {
-      if(Config.Android && Platform.OS === 'android') {
-        view =
-          <View style={{flex:1}}>
-            <SecretList
-              group={group}
-              navigation={this.props.navigation}
-              services={this.props.services}
-            />
-          <ActionButton
-            buttonColor="rgba(231,76,60,1)"
-            onPress={() => this.props.navigation.navigate('AddService')}
-          />
-         </View>;
-      } else {
-        view  = <SecretList group={group} navigation={this.props.navigation} services={this.props.services}/>;
-      }
-    } else {
-      view = <InitGroupScreen group={group} navigation={this.props.navigation}/>;
-    }
-    return view;
+    return (group.isInitialized()) ?
+      <SecretList
+        group={group}
+        navigation={this.props.navigation}
+        services={this.props.services}
+      />
+    : <InitGroupScreen group={group} navigation={this.props.navigation}/>;
   }
 }
 

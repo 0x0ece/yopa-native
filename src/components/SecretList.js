@@ -3,6 +3,7 @@ import { Clipboard, FlatList, Switch, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Divider, List, ListItem } from 'react-native-elements';
+import ActionButton from 'react-native-action-button';
 
 import Analytics from '../Analytics';
 import GroupPassPrompt from './GroupPassPrompt';
@@ -12,6 +13,7 @@ import Secret from './Secret';
 import Style, { Color } from '../Style';
 import { Group, Service } from '../Models';
 import { createDefaultGroups, unlockGroup } from '../redux/actions';
+import Config from '../Config';
 
 const SEARCH_MIN_SERVICES = 5;
 
@@ -130,14 +132,21 @@ class SecretList extends React.Component {
   }
 
   renderAddButton() {
-    if (!this.props.showAddButton) {
+    if (!Config.Android && !this.props.showAddButton) {
       return null;
     }
 
     const title = (this.props.services.length === 0) ?
       'Add your first site' : 'Add another site';
 
-    return (
+    return (Config.Android) ? (
+      <ActionButton 
+        buttonColor={Color.primary}
+        onPress={() => {
+          this.props.navigation.navigate('AddService');
+        }}
+      />
+    ) : (
       <List containerStyle={{ borderTopWidth: 0 }}>
         <View style={Style.container}>
           <Button
