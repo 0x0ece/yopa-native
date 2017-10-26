@@ -144,9 +144,7 @@ class SecretList extends React.Component {
             buttonStyle={Style.primaryButton}
             containerViewStyle={{ marginLeft: 0, marginRight: 0 }}
             onPress={() => {
-              this.props.navigation.navigate('AddService', {
-                group: this.props.group,
-              });
+              this.props.navigation.navigate('AddService');
             }}
             title={title}
           />
