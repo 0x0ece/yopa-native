@@ -1,7 +1,6 @@
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
-import { Platform } from 'react-native';
 
 import AddServiceScreen from './screens/AddServiceScreen';
 import GroupScreen from './screens/GroupScreen';
@@ -33,17 +32,17 @@ const StackNav = StackNavigator({
           onPress={() => navigation.navigate('Settings')}
         />
       ),
-      headerRight:  Config.Android ?
-        null :(
-        <Ionicons
-          name="ios-add"
-          size={28}
-          style={Style.headerIcon}
-          onPress={() => {
-            navigation.navigate('AddService');
-          }}
-        />
-      ),
+      headerRight: Config.Android ?
+        null : (
+          <Ionicons
+            name="ios-add"
+            size={28}
+            style={Style.headerIcon}
+            onPress={() => {
+              navigation.navigate('AddService');
+            }}
+          />
+        ),
     }),
   },
   Service: {
@@ -61,18 +60,18 @@ const StackNav = StackNavigator({
       title: `${navigation.state.params.group.getNavTitle()}`,
       ...headerCommon,
       headerRight: Config.Android ?
-        null :(
-        <Ionicons
-          name="ios-add"
-          size={28}
-          style={Style.headerIcon}
-          onPress={() => {
-            navigation.navigate('AddService', {
-              group: navigation.state.params.group,
-            });
-          }}
-        />
-      ),
+        null : (
+          <Ionicons
+            name="ios-add"
+            size={28}
+            style={Style.headerIcon}
+            onPress={() => {
+              navigation.navigate('AddService', {
+                group: navigation.state.params.group,
+              });
+            }}
+          />
+        ),
     }),
   },
 }, {

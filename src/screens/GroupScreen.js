@@ -1,24 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Text, View, Platform } from 'react-native';
-import ActionButton from 'react-native-action-button';
 
 import InitGroupScreen from './InitGroupScreen';
 import SecretList from '../components/SecretList';
 import { Service } from '../Models';
-import Config from '../Config';
 
 class GroupScreen extends React.Component {
   render() {
     const group = this.props.navigation.state.params.group;
-    return (group.isInitialized()) ?
+    return (group.isInitialized()) ? (
       <SecretList
         group={group}
         navigation={this.props.navigation}
         services={this.props.services}
       />
-    : <InitGroupScreen group={group} navigation={this.props.navigation}/>;
+    ) : (
+      <InitGroupScreen group={group} navigation={this.props.navigation} />
+    );
   }
 }
 

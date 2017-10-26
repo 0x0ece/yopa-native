@@ -140,7 +140,7 @@ class SecretList extends React.Component {
       'Add your first site' : 'Add another site';
 
     return (Config.Android) ? (
-      <ActionButton 
+      <ActionButton
         buttonColor={Color.primary}
         onPress={() => {
           this.props.navigation.navigate('AddService');
