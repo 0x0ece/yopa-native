@@ -80,7 +80,7 @@ const Styles = StyleSheet.create({
 
   headerIcon: {
     color: Color.headerIcon,
-    padding: 10,
+    padding: 15,
   },
 
   container: {

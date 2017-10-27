@@ -9,12 +9,16 @@ class Group {
     // ui
     this.id = group.group || '';
     this.key = this.id;
+    this.defaultSecurityLevel = group.defaultSecurityLevel || 0;
 
     // internal state
     this.inputPassphrase = group.inputPassphrase || '';
   }
 
   getNavTitle() {
+    if (!this.isInitialized()) {
+      return `${this.group} - Setup`;
+    }
     return `${this.group} ${this.isUnlocked() ? '🔐' : '🔒'}`;
   }
 

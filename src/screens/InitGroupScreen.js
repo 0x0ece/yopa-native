@@ -21,7 +21,7 @@ class InitGroupScreen extends React.Component {
       group: 'default',
       buttonLoading: false,
       buttonDisabled: true,
-      securityLevel: 0,
+      securityLevel: this.props.group.defaultSecurityLevel || 0,
       value: null,
     };
 
