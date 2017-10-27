@@ -132,21 +132,25 @@ class SecretList extends React.Component {
   }
 
   renderAddButton() {
-    if (!Config.Android && !this.props.showAddButton) {
+    if (Config.Android) {
+      return (
+        <ActionButton
+          buttonColor={Color.primary}
+          onPress={() => {
+            this.props.navigation.navigate('AddService');
+          }}
+        />
+      );
+    }
+
+    if (!this.props.showAddButton) {
       return null;
     }
 
     const title = (this.props.services.length === 0) ?
       'Add your first site' : 'Add another site';
 
-    return (Config.Android) ? (
-      <ActionButton
-        buttonColor={Color.primary}
-        onPress={() => {
-          this.props.navigation.navigate('AddService');
-        }}
-      />
-    ) : (
+    return (
       <List containerStyle={{ borderTopWidth: 0 }}>
         <View style={Style.container}>
           <Button
