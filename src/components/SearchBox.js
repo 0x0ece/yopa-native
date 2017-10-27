@@ -69,7 +69,7 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'flex-start',
     backgroundColor: 'transparent',
-    width: 60,
+    // width: 60,
     height: 50,
   },
   cancelButtonText: {
@@ -89,7 +89,7 @@ class Search extends PureComponent {
     const { width } = Dimensions.get('window');
     this.contentWidth = width;
     this.middleWidth = width / 2;
-    this.cancelButtonWidth = this.props.cancelButtonWidth || 70;
+    this.cancelButtonWidth = this.props.cancelButtonWidth || 65;
 
     /**
      * Animated values
@@ -579,9 +579,9 @@ Search.defaultProps = {
   blurOnSubmit: true,
   keyboardShouldPersist: false,
   searchIconCollapsedMargin: 25,
-  searchIconExpandedMargin: 10,
-  placeholderCollapsedMargin: 15,
-  placeholderExpandedMargin: 20,
+  searchIconExpandedMargin: 15,
+  placeholderCollapsedMargin: 10,
+  placeholderExpandedMargin: 30,
   shadowOffsetWidth: 0,
   shadowOffsetHeightCollapsed: 2,
   shadowOffsetHeightExpanded: 4,

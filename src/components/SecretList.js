@@ -177,7 +177,6 @@ class SecretList extends React.Component {
         autoCapitalize="none"
         cancelButtonTextStyle={Style.cancelButtonText}
         blurOnSubmit
-        placeholder="search"
         backgroundColor="white"
         style={Style.searchBox}
       />
@@ -288,7 +287,8 @@ class SecretList extends React.Component {
         keyboardShouldPersistTaps="always"
         ItemSeparatorComponent={() => (<Divider style={{ marginLeft: 54 }} />)}
         ListHeaderComponent={this.renderHeader}
-        ListEmptyComponent={<Text style={{ paddingLeft: 20 }}>Ops, nothing here</Text>}
+        ListEmptyComponent={this.state.searchString ?
+          <Text style={{ paddingLeft: 15 }}>Ops, nothing here</Text> : null}
         renderItem={({ item, index }) => this.renderItem(item, index, mainGroup)}
         keyExtractor={(item, index) => index}
       />
