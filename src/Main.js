@@ -8,6 +8,7 @@ import HomeScreen from './screens/HomeScreen';
 import ServiceScreen from './screens/ServiceScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import Style, { Color } from './Style';
+import Config from './Config';
 
 
 const headerCommon = {
@@ -31,16 +32,17 @@ const StackNav = StackNavigator({
           onPress={() => navigation.navigate('Settings')}
         />
       ),
-      headerRight: (
-        <Ionicons
-          name="ios-add"
-          size={28}
-          style={Style.headerIcon}
-          onPress={() => {
-            navigation.navigate('AddService');
-          }}
-        />
-      ),
+      headerRight: Config.Android ?
+        null : (
+          <Ionicons
+            name="ios-add"
+            size={28}
+            style={Style.headerIcon}
+            onPress={() => {
+              navigation.navigate('AddService');
+            }}
+          />
+        ),
     }),
   },
   Service: {
@@ -57,18 +59,19 @@ const StackNav = StackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: `${navigation.state.params.group.getNavTitle()}`,
       ...headerCommon,
-      headerRight: (
-        <Ionicons
-          name="ios-add"
-          size={28}
-          style={Style.headerIcon}
-          onPress={() => {
-            navigation.navigate('AddService', {
-              group: navigation.state.params.group,
-            });
-          }}
-        />
-      ),
+      headerRight: Config.Android ?
+        null : (
+          <Ionicons
+            name="ios-add"
+            size={28}
+            style={Style.headerIcon}
+            onPress={() => {
+              navigation.navigate('AddService', {
+                group: navigation.state.params.group,
+              });
+            }}
+          />
+        ),
     }),
   },
 }, {
