@@ -1,6 +1,7 @@
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
+import PropTypes from 'prop-types';
 
 import AddServiceScreen from './screens/AddServiceScreen';
 import GroupScreen from './screens/GroupScreen';
@@ -80,6 +81,42 @@ const StackNav = StackNavigator({
   },
 });
 
+const SettingsNav = StackNavigator({
+  Settings: {
+    screen: SettingsScreen,
+    path: 'settings/:settings',
+    navigationOptions: ({ navigation, screenProps }) => ({
+      title: (navigation.state.params && navigation.state.params.title) || 'Settings',
+      ...headerCommon,
+      headerRight: (
+        <Ionicons
+          name="ios-close"
+          size={28}
+          style={Style.headerIcon}
+          onPress={() => { screenProps.rootNavigation.goBack(); }}
+        />
+      ),
+    }),
+  },
+}, {
+  cardStyle: {
+    backgroundColor: Color.appBg,
+  },
+});
+
+class SettingsNavWrapper extends React.Component {
+  render() {
+    return (
+      <SettingsNav screenProps={{ rootNavigation: this.props.navigation }} />
+    );
+  }
+}
+
+SettingsNavWrapper.propTypes = {
+  /* eslint react/forbid-prop-types:off */
+  navigation: PropTypes.object.isRequired,
+};
+
 const ModalNav = StackNavigator({
   Home: {
     screen: StackNav,
@@ -89,20 +126,11 @@ const ModalNav = StackNavigator({
     },
   },
   Settings: {
-    screen: SettingsScreen,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Settings',
+    screen: SettingsNavWrapper,
+    navigationOptions: {
+      header: null,
       ...headerCommon,
-      headerLeft: null,
-      headerRight: (
-        <Ionicons
-          name="ios-close"
-          size={28}
-          style={Style.headerIcon}
-          onPress={() => { navigation.goBack(); }}
-        />
-      ),
-    }),
+    },
   },
   AddService: {
     screen: AddServiceScreen,
