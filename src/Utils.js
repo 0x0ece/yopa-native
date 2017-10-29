@@ -1,5 +1,5 @@
 import yaml from 'js-yaml';
-import { DocumentPicker, FileSystem } from 'expo';
+import { DocumentPicker, FileSystem, SecureStore } from 'expo';
 
 import { Group, Service } from './Models';
 
@@ -15,6 +15,30 @@ const Utils = {
       version: 1,
       services: services.map(s => s.serialize()),
       groups: groups.map(g => g.serialize()),
+    });
+  },
+
+  async savePassphraseToSecureStoreAsync(group, passphrase) {
+    return new Promise((resolve, reject) => {
+      SecureStore.setItemAsync(group.id, passphrase)
+        .then(() => {
+          resolve();
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+
+  async loadPassphraseFromSecureStoreAsync(group) {
+    return new Promise((resolve, reject) => {
+      SecureStore.getItemAsync(group.id)
+        .then((value) => {
+          resolve(value);
+        })
+        .catch((error) => {
+          reject(error);
+        });
     });
   },
 

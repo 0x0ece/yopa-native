@@ -55,8 +55,8 @@ function secrets(state = {}, action) {
         ...state,
         groups: [
           ...state.groups,
-          new Group({ group: 'Important', icon: 'star', defaultSecurityLevel: 2 }),
-          new Group({ group: 'Banks', icon: 'account-balance', defaultSecurityLevel: 2 }),
+          new Group({ group: 'Important', icon: 'star', defaultSecurityLevel: 0 }),
+          new Group({ group: 'Banks', icon: 'account-balance', defaultSecurityLevel: 0 }),
         ],
       });
 

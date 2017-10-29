@@ -2,7 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { AppState } from 'react-native';
 import { createStore } from 'redux';
-import { AppLoading } from 'expo';
+import { AppLoading, Fingerprint } from 'expo';
 
 import Analytics from './src/Analytics';
 import Config from './src/Config';
@@ -94,6 +94,11 @@ export default class App extends React.Component {
   async startAsync() {
     const storeAction = (Config.PRODUCTION || PERSIST_DATA) ? Utils.loadDataFromStoreAsync
       : Utils.deleteDataFromStoreAsync;
+
+    // TODO(ec): this is a dirty hack, find a better way
+    const fpHasHardware = await Fingerprint.hasHardwareAsync();
+    const fpIsEnrolled = await Fingerprint.isEnrolledAsync();
+    Config.DeviceSecurity = (fpHasHardware && fpIsEnrolled);
 
     storeAction()
       .then((data) => {
