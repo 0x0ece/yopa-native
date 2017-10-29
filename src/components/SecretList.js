@@ -57,7 +57,8 @@ class SecretList extends React.Component {
   }
 
   componentDidMount() {
-    this.readFromClipboard();
+    // TODO(ec) - deleted because this is currently bugged AND it's causing dbl render
+    // this.readFromClipboard();
   }
 
   handleEnableGroups() {
@@ -297,6 +298,7 @@ class SecretList extends React.Component {
     return (
       <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
         <GroupPassPrompt
+          key="prompt"
           group={mainGroup}
           visible={this.state.promptVisible}
           onCancel={() => { this.setState({ promptVisible: false }); }}
