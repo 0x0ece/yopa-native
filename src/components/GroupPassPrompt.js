@@ -20,7 +20,7 @@ export default class GroupPassPrompt extends React.Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.savePassphraseIfNotSaved = this.savePassphraseIfNotSaved.bind(this);
-    this.showFingerprint = this.showFingerprint.bind(this);
+    this.shouldShowFingerprint = this.shouldShowFingerprint.bind(this);
   }
 
   componentDidMount() {
@@ -63,9 +63,9 @@ export default class GroupPassPrompt extends React.Component {
     }
   }
 
-  showFingerprint() {
+  shouldShowFingerprint() {
     /* eslint no-multi-spaces:off */
-    return Config.deviceSecurity          // fingerprint is available on the device
+    return Config.DeviceSecurity          // fingerprint is available on the device
       && this.props.group.deviceSecurity  // group is configured for fingerprint
       && this.state.passphrase            // passphrase is stored in the secure storage
       && this.props.visible;              // prompt should be shown
@@ -77,11 +77,24 @@ export default class GroupPassPrompt extends React.Component {
     }
 
     const group = this.props.group;
-    if (this.showFingerprint()) {
+    if (this.shouldShowFingerprint()) {
       Fingerprint.authenticateAsync()
         .then((res) => {
           if (res.success) {
             this.props.onGroupDidUnlock.call(this, group, this.state.passphrase);
+          } else {
+            switch (res.error) {
+              case 'lockout':                // user failed and fingerprint is now disabled
+              case 'authentication_failed':  // user failed
+              case 'user_fallback':          // user failed once and tapped "enter password"
+                this.setState({ passphrase: '' });
+                break;
+              case 'user_cancel':
+              case 'system_cancel':
+              default:
+                // do nothing
+                break;
+            }
           }
         })
         .catch(() => {
