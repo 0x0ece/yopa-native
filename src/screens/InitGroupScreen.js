@@ -6,7 +6,9 @@ import { ScrollView, Text } from 'react-native';
 import { Button, List, ListItem } from 'react-native-elements';
 
 import Style, { Color } from '../Style';
+import Config from '../Config';
 import Crypto from '../Crypto';
+import Utils from '../Utils';
 import { Group } from '../Models';
 import { initGroup } from '../redux/actions';
 
@@ -17,11 +19,13 @@ const Form = t.form.Form;
 class InitGroupScreen extends React.Component {
   constructor(props) {
     super(props);
+
+    const defaultSecurityLevel = Config.DeviceSecurity ? 2 : 1;
     this.state = {
       group: 'default',
       buttonLoading: false,
       buttonDisabled: true,
-      securityLevel: this.props.group.defaultSecurityLevel || 0,
+      securityLevel: this.props.group.defaultSecurityLevel || defaultSecurityLevel,
       value: null,
     };
 
@@ -37,11 +41,10 @@ class InitGroupScreen extends React.Component {
   getGroupInstance(formData) {
     switch (this.state.securityLevel) {
       case 0:
-        // TODO
         return new Group({
           ...this.props.group,
           inputPassphrase: formData.passphrase,
-          passphrase: Crypto.encryptPassphrase(formData.passphrase),
+          storePassphrase: false,
         });
       case 1:
         return new Group({
@@ -49,12 +52,16 @@ class InitGroupScreen extends React.Component {
           inputPassphrase: formData.passphrase,
           passphrase: Crypto.encryptPassphrase(formData.passphrase),
         });
-      case 2:
-        return new Group({
+      case 2: {
+        const group = new Group({
           ...this.props.group,
+          deviceSecurity: true,
           inputPassphrase: formData.passphrase,
-          storePassphrase: false,
+          passphrase: Crypto.encryptPassphrase(formData.passphrase),
         });
+        Utils.savePassphraseToSecureStoreAsync(group, group.inputPassphrase);
+        return group;
+      }
       default:
         return null;
     }
@@ -82,12 +89,12 @@ class InitGroupScreen extends React.Component {
   }
 
   render() {
-    const options = [
+    const optionsAll = [
       {
-        title: 'Secure',
+        title: 'Paranoic',
         desc: [
-          'Store the master password in the device secure storage.',
-          'Use your fingerprint to unlock.',
+          'Never store the master password.',
+          "Type it every time to unlock - MemPa won't check if it's correct or not.",
         ],
       },
       {
@@ -98,13 +105,14 @@ class InitGroupScreen extends React.Component {
         ],
       },
       {
-        title: 'Paranoic',
+        title: 'Secure',
         desc: [
-          'Never store the master password.',
-          "Type it every time to unlock - MemPa won't check if it's correct or not.",
+          'Store the master password in the device secure storage.',
+          'Use your fingerprint to unlock.',
         ],
       },
     ];
+    const options = Config.DeviceSecurity ? optionsAll : optionsAll.slice(0, -1);
 
     return (
       <ScrollView
@@ -162,6 +170,7 @@ class InitGroupScreen extends React.Component {
         <Button
           buttonStyle={Style.primaryButton}
           containerViewStyle={{ marginLeft: 0, marginRight: 0 }}
+          disabled={this.state.buttonDisabled}
           loading={this.state.buttonLoading}
           onPress={this.handlePress}
           title="Save"

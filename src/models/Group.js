@@ -3,6 +3,7 @@ class Group {
     // serialized
     this.group = group.group || '';
     this.icon = group.icon || 'folder';
+    this.deviceSecurity = group.deviceSecurity;
     this.passphrase = group.passphrase || '';
     this.storePassphrase = group.storePassphrase;
 
@@ -23,7 +24,7 @@ class Group {
   }
 
   isInitialized() {
-    return (!!this.passphrase) || (this.storePassphrase === false);
+    return (!!this.passphrase) || (this.storePassphrase === false) || (!!this.deviceSecurity);
   }
 
   isUnlocked() {
@@ -43,6 +44,10 @@ class Group {
       ser.storePassphrase = false;
     } else {
       ser.passphrase = this.passphrase;
+    }
+
+    if (this.deviceSecurity) {
+      ser.deviceSecurity = true;
     }
 
     return ser;
