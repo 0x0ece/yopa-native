@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import Utils from '../Utils';
-import { reloadAll } from '../redux/actions';
+import { Group } from '../Models';
+import { reloadAll, wipeAll } from '../redux/actions';
 
 
 const settings = [
@@ -113,6 +114,13 @@ class SettingsScreen extends React.Component {
         { text: 'OK',
           style: 'destructive',
           onPress: () => {
+            const groups = this.props.groups;
+            groups.forEach((g) => {
+              if (g.deviceSecurity) {
+                Utils.deletePassphraseFromSecureStoreAsync(g);
+              }
+            });
+            this.props.dispatch(wipeAll());
             this.closeScreen();
           } },
       ],
@@ -173,11 +181,20 @@ class SettingsScreen extends React.Component {
   }
 }
 
-export default connect()(SettingsScreen);
+function mapStateToProps(state) {
+  return {
+    // services: (state.secrets && state.secrets.services) || [],
+    groups: (state.secrets && state.secrets.groups) || [],
+  };
+}
 
 SettingsScreen.propTypes = {
+  groups: PropTypes.arrayOf(PropTypes.instanceOf(Group)).isRequired,
+  // services: PropTypes.arrayOf(PropTypes.instanceOf(Service)).isRequired,
   dispatch: PropTypes.func.isRequired,
   /* eslint react/forbid-prop-types:off */
   navigation: PropTypes.object.isRequired,
   screenProps: PropTypes.object.isRequired,
 };
+
+export default connect(mapStateToProps)(SettingsScreen);

@@ -13,8 +13,9 @@ export default class GroupPassPrompt extends React.Component {
   constructor(props) {
     super(props);
 
+    const group = this.props.group;
     this.state = {
-      isReady: false,
+      isReady: !group.deviceSecurity,  // only needed when group.deviceSecurity === true
       passphrase: undefined,
     };
 
