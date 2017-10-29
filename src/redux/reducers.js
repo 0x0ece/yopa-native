@@ -7,6 +7,7 @@ import {
   INIT_GROUP,
   UNLOCK_GROUP,
   RELOAD_ALL,
+  WIPE_ALL,
 } from './actions';
 
 import Group from '../models/Group';
@@ -92,6 +93,19 @@ function secrets(state = {}, action) {
         ...state,
         ...action.data,
       };
+    case WIPE_ALL:
+      return persistAndReturn({
+        ...state,
+        groups: state.groups.map(g => (
+          new Group({
+            ...g,
+            inputPassphrase: '',
+            passphrase: '',
+            deviceSecurity: false,
+            storePassphrase: false,
+          })
+        )),
+      });
 
     default:
       return state;

@@ -42,6 +42,18 @@ const Utils = {
     });
   },
 
+  async deletePassphraseFromSecureStoreAsync(group) {
+    return new Promise((resolve, reject) => {
+      SecureStore.deleteItemAsync(group.id)
+        .then((value) => {
+          resolve(value);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+
   async saveDataToStoreAsync(store) {
     return new Promise((resolve, reject) => {
       const file = FileSystem.documentDirectory + Utils.LOCAL_STORE;

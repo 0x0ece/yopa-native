@@ -11,6 +11,7 @@ export const INIT_GROUP = 'INIT_GROUP';
 export const UNLOCK_GROUP = 'UNLOCK_GROUP';
 
 export const RELOAD_ALL = 'RELOAD_ALL';
+export const WIPE_ALL = 'WIPE_ALL';
 
 /*
  * action creators
@@ -42,4 +43,8 @@ export function createDefaultGroups() {
 
 export function reloadAll(data) {
   return { type: RELOAD_ALL, data };
+}
+
+export function wipeAll() {
+  return { type: WIPE_ALL };
 }
