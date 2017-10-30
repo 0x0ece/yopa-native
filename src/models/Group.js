@@ -23,6 +23,20 @@ class Group {
     return `${this.group} ${this.isUnlocked() ? '🔐' : '🔒'}`;
   }
 
+  getSecurityLevel() {
+    // TODO(ec): assign constants, guarantee that we never get -1
+    if (this.storePassphrase === false) {
+      return 0;
+    }
+    if (this.deviceSecurity === true) {
+      return 2;
+    }
+    if (this.passphrase) {
+      return 1;
+    }
+    return -1;
+  }
+
   isInitialized() {
     return (!!this.passphrase) || (this.storePassphrase === false) || (!!this.deviceSecurity);
   }
