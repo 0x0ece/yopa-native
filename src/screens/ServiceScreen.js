@@ -127,7 +127,6 @@ class ServiceScreen extends React.Component {
     return (
       <ScrollView
         style={[Style.defaultBg, Style.container]}
-        keyboardShouldPersistTaps="always"
       >
         <Form
           ref={(c) => { this.form = c; }}

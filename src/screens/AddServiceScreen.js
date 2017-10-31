@@ -80,7 +80,7 @@ class AddServiceScreen extends React.Component {
     return (
       <ScrollView
         style={[Style.defaultBg, Style.container]}
-        keyboardShouldPersistTaps="always"
+        keyboardShouldPersistTaps="handled"
       >
 
         <Form
@@ -88,17 +88,19 @@ class AddServiceScreen extends React.Component {
           type={this.InputService}
           value={this.state.value}
           onChange={this.handleChange}
-          autoCapitalize="none"
-          autoCorrect={false}
           options={{
             fields: {
               service: {
                 label: 'Site',
                 placeholder: 'example.com',
+                autoCapitalize: 'none',
+                autoCorrect: false,
               },
               username: {
                 label: 'Username or email',
                 placeholder: 'mempa',
+                autoCapitalize: 'none',
+                autoCorrect: false,
               },
               group: {
                 nullOption: false,
