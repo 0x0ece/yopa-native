@@ -78,7 +78,8 @@ export default class GroupPassPrompt extends React.Component {
     }
 
     const group = this.props.group;
-    if (this.shouldShowFingerprint()) {
+    const showFingerprint = this.shouldShowFingerprint();
+    if (showFingerprint) {
       Fingerprint.authenticateAsync()
         .then((res) => {
           if (res.success) {
@@ -91,6 +92,9 @@ export default class GroupPassPrompt extends React.Component {
                 this.setState({ passphrase: '' });
                 break;
               case 'user_cancel':
+                // onCancel will set visible=false
+                this.props.onCancel();
+                break;
               case 'system_cancel':
               default:
                 // do nothing
@@ -100,7 +104,6 @@ export default class GroupPassPrompt extends React.Component {
         })
         .catch(() => {
         });
-      return null;
     }
 
     const title = group.group === 'default' ? 'Master password'
@@ -109,7 +112,7 @@ export default class GroupPassPrompt extends React.Component {
     return (
       <Prompt
         title={title}
-        visible={this.props.visible}
+        visible={this.props.visible && !showFingerprint}
         textInputProps={{
           secureTextEntry: true,
         }}
