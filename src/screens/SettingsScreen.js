@@ -8,14 +8,14 @@ import Crypto from '../Crypto';
 import Prompt from '../components/Prompt';
 import Utils from '../Utils';
 import { Group, Service } from '../Models';
-import { initGroup, reloadAll, wipeAll } from '../redux/actions';
+import { initGroup, reloadAll, eraseAll } from '../redux/actions';
 
 
 const settings = [
   [ // section 1
     {
-      label: 'Wipe all master passwords',
-      onPress: 'handleWipePassphrases',
+      label: 'Erase master passwords',
+      onPress: 'handleErasePassphrases',
     },
     {
       label: 'General',
@@ -216,13 +216,13 @@ class SettingsScreen extends React.Component {
     this.handleImport = this.handleImport.bind(this);
     this.handleExport = this.handleExport.bind(this);
     this.handlePromptSubmit = this.handlePromptSubmit.bind(this);
-    this.handleWipePassphrases = this.handleWipePassphrases.bind(this);
+    this.handleErasePassphrases = this.handleErasePassphrases.bind(this);
     this.renderItem = this.renderItem.bind(this);
     this.renderSection = this.renderSection.bind(this);
   }
 
   setGroupSecurityLevel(group, index, callback) {
-    const promptTitle = group.group === 'default' ? 'xMaster password'
+    const promptTitle = group.group === 'default' ? 'Master password'
       : `Master password for ${group.group}`;
 
     // State machine:
@@ -307,9 +307,9 @@ class SettingsScreen extends React.Component {
       });
   }
 
-  handleWipePassphrases() {
+  handleErasePassphrases() {
     Alert.alert(
-      'Confirm wiping?',
+      'Confirm?',
       '',
       [
         { text: 'Cancel' },
@@ -322,7 +322,7 @@ class SettingsScreen extends React.Component {
                 Utils.deletePassphraseFromSecureStoreAsync(g);
               }
             });
-            this.props.dispatch(wipeAll());
+            this.props.dispatch(eraseAll());
             this.closeScreen();
           } },
       ],

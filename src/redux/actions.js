@@ -11,7 +11,7 @@ export const INIT_GROUP = 'INIT_GROUP';
 export const UNLOCK_GROUP = 'UNLOCK_GROUP';
 
 export const RELOAD_ALL = 'RELOAD_ALL';
-export const WIPE_ALL = 'WIPE_ALL';
+export const ERASE_ALL = 'ERASE_ALL';
 
 /*
  * action creators
@@ -45,6 +45,6 @@ export function reloadAll(data) {
   return { type: RELOAD_ALL, data };
 }
 
-export function wipeAll() {
-  return { type: WIPE_ALL };
+export function eraseAll() {
+  return { type: ERASE_ALL };
 }
