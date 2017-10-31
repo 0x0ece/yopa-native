@@ -7,7 +7,7 @@ import {
   INIT_GROUP,
   UNLOCK_GROUP,
   RELOAD_ALL,
-  WIPE_ALL,
+  ERASE_ALL,
 } from './actions';
 
 import Group from '../models/Group';
@@ -57,7 +57,7 @@ function secrets(state = {}, action) {
         groups: [
           ...state.groups,
           new Group({ group: 'Important', icon: 'star', defaultSecurityLevel: 0 }),
-          new Group({ group: 'Banks', icon: 'account-balance', defaultSecurityLevel: 0 }),
+          new Group({ group: 'Financial', icon: 'account-balance', defaultSecurityLevel: 0 }),
         ],
       });
 
@@ -93,7 +93,7 @@ function secrets(state = {}, action) {
         ...state,
         ...action.data,
       };
-    case WIPE_ALL:
+    case ERASE_ALL:
       return persistAndReturn({
         ...state,
         groups: state.groups.map(g => (
