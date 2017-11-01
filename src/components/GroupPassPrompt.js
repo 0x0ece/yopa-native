@@ -106,12 +106,9 @@ export default class GroupPassPrompt extends React.Component {
         });
     }
 
-    const title = group.group === 'default' ? 'Master password'
-      : `Master password for ${group.group}`;
-
     return (
       <Prompt
-        title={title}
+        title={group.getPromptTitle()}
         visible={this.props.visible && !showFingerprint}
         textInputProps={{
           secureTextEntry: true,

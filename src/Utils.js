@@ -8,6 +8,10 @@ const Utils = {
 
   LOCAL_STORE: 'data.yml',
 
+  /*
+   * Redux store
+   */
+
   serializeStore(store) {
     const services = store.services || [];
     const groups = store.groups || [];
@@ -17,6 +21,10 @@ const Utils = {
       groups: groups.map(g => g.serialize()),
     });
   },
+
+  /*
+   * SecureStore
+   */
 
   async savePassphraseToSecureStoreAsync(group, passphrase) {
     return new Promise((resolve, reject) => {
@@ -54,24 +62,15 @@ const Utils = {
     });
   },
 
+  /*
+   * FileSystem
+   */
+
   async saveDataToStoreAsync(store) {
     return new Promise((resolve, reject) => {
       const file = FileSystem.documentDirectory + Utils.LOCAL_STORE;
       const content = Utils.serializeStore(store);
       FileSystem.writeAsStringAsync(file, content)
-        .then(() => {
-          resolve();
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  },
-
-  async deleteDataFromStoreAsync() {
-    return new Promise((resolve, reject) => {
-      const file = FileSystem.documentDirectory + Utils.LOCAL_STORE;
-      FileSystem.deleteAsync(file)
         .then(() => {
           resolve();
         })
@@ -100,6 +99,23 @@ const Utils = {
     });
   },
 
+  async deleteDataFromStoreAsync() {
+    return new Promise((resolve, reject) => {
+      const file = FileSystem.documentDirectory + Utils.LOCAL_STORE;
+      FileSystem.deleteAsync(file)
+        .then(() => {
+          resolve();
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  },
+
+  /*
+   * DocumentPicker
+   */
+
   async getRemoteDocumentAsync() {
     return new Promise((resolve, reject) => {
       DocumentPicker.getDocumentAsync({ type: 'text/*' })
@@ -117,6 +133,26 @@ const Utils = {
           }
         });
     });
+  },
+
+  /*
+   * Group utils
+   */
+
+  updateGroup(group, passphrase, securityLevel) {
+    switch (securityLevel) {
+      case Group.SEC_LEVEL_MEMORY:
+        return group.updateSecurityLevelMemory(passphrase);
+      case Group.SEC_LEVEL_ENCRYPTED:
+        return group.updateSecurityLevelEncrypted(passphrase);
+      case Group.SEC_LEVEL_DEVICE: {
+        const g = group.updateSecurityLevelDevice(passphrase);
+        Utils.savePassphraseToSecureStoreAsync(g, passphrase);
+        return g;
+      }
+      default:
+        return null;
+    }
   },
 
 };

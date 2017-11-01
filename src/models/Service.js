@@ -1,12 +1,13 @@
 import Crypto from '../Crypto';
+import Group from './Group';
 
 class Service {
-  constructor(service) {
+  constructor(service = {}) {
     this.id = service.service + service.username || '';
     this.key = this.id;
     this.service = service.service || '';
     this.username = service.username || '';
-    this.group = service.group || 'default';
+    this.group = service.group || Group.DEFAULT_GROUP;
     this.counter = service.counter || 0;
     this.icon = service.icon || this.service;
     this.description = service.description || '';
@@ -19,7 +20,7 @@ class Service {
       counter: this.counter,
     };
 
-    if (this.group !== 'default') {
+    if (this.group !== Group.DEFAULT_GROUP) {
       ser.group = this.group;
     }
 

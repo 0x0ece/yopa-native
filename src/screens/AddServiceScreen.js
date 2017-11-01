@@ -23,9 +23,9 @@ class AddServiceScreen extends React.Component {
       props.navigation.state.params.group.isInitialized();
     const currentGroup = useCurrent ? props.navigation.state.params.group : undefined;
     const groupId = useCurrent ?
-      this.props.groups.findIndex(g => g.group === currentGroup.group) : 0;
+      this.props.groups.findIndex(g => g.id === currentGroup.id) : 0;
     const groupName = useCurrent ?
-      currentGroup.group : 'default';
+      currentGroup.group : Group.DEFAULT_GROUP;
 
     this.state = {
       group: groupName,

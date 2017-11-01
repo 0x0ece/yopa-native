@@ -117,8 +117,7 @@ class SecretList extends React.Component {
       return servicesProps.filter(s => (s.service + s.description).toLowerCase()
         .includes(this.state.searchString.toLowerCase()));
     }
-    const filter = this.props.group ? this.props.group.group : 'default';
-    return servicesProps.filter(s => s.group === filter);
+    return servicesProps.filter(s => s.group === this.props.group.id);
   }
 
   readFromClipboard() {
@@ -186,7 +185,7 @@ class SecretList extends React.Component {
 
   renderGroups() {
     const groupsProps = this.props.groups || [];
-    const groups = groupsProps.filter(g => g.group !== 'default' &&
+    const groups = groupsProps.filter(g => !g.isDefaultGroup() &&
       g.group.toLowerCase().includes(this.state.searchString.toLowerCase()));
 
     if (this.props.services.length === 0 || !this.props.showGroups ||
