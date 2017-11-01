@@ -134,11 +134,14 @@ class SecretList extends React.Component {
 
   renderAddButton() {
     if (Config.Android) {
+      const group = this.props.group;
       return (
         <ActionButton
           buttonColor={Color.primary}
           onPress={() => {
-            this.props.navigation.navigate('AddService');
+            this.props.navigation.navigate('AddService', {
+              group,
+            });
           }}
         />
       );
