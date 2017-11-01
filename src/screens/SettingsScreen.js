@@ -193,11 +193,7 @@ class SettingsScreen extends React.Component {
     // 2 -> 0 composition
     // 0 -> 1 store - if unlocked use the passphrase
     // 1 -> 2 secure store - if unlocked use the passphrase
-    const currentSecurityLevel = SettingsScreen.getGroupSecurityLevel(group);
-    if (currentSecurityLevel === 2) {
-      Utils.deletePassphraseFromSecureStoreAsync(group);
-    }
-
+    const currentSecurityLevel = group.getSecurityLevel();
     const shouldShowPrompt = (currentSecurityLevel === 0)
       || (index > currentSecurityLevel && !group.isUnlocked());
     const promptData = {
@@ -232,8 +228,12 @@ class SettingsScreen extends React.Component {
     } = promptData || this.state.promptData;
     this.setState({ promptData: null, promptVisible: false });
     if (passphrase || promptData) {
+      const currentSecurityLevel = group.getSecurityLevel();
+      if (currentSecurityLevel === 2) {
+        Utils.deletePassphraseFromSecureStoreAsync(group);
+      }
+
       const g = Utils.updateGroup(group, passphrase, index);
-      console.log(g);
       this.props.dispatch(initGroup(g));
 
       if (callback) {
