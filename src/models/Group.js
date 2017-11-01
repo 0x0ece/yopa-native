@@ -62,7 +62,7 @@ class Group {
       group: this.group,
     };
 
-    if (this.icon !== 'folder') {
+    if (this.icon !== Group.DEFAULT_ICON) {
       ser.icon = this.icon;
     }
 
