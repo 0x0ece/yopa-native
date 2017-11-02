@@ -21,30 +21,30 @@ const store = createStore(secretApp, {
   secrets: Config.PRODUCTION ? {
     services: [],
     groups: [
-      new Group({ group: 'default' }),
+      new Group(),
     ],
   } : (EXAMPLE_DATA ? {
     services: [
-      new Service({ service: 'medium.com', username: 'mempa', group: 'default' }),
-      new Service({ service: 'github.com', username: 'mempa', group: 'default' }),
-      new Service({ service: 'twitter.com', username: 'mempassword', group: 'default' }),
+      new Service({ service: 'medium.com', username: 'mempa' }),
+      new Service({ service: 'github.com', username: 'mempa' }),
+      new Service({ service: 'twitter.com', username: 'mempassword' }),
       new Service({ service: 'google.com', username: 'mempa@example.com', description: 'gmail gplus gdocs', group: 'Important' }),
       new Service({ service: 'google.com', username: 'mempa2@example.com', description: 'gmail gplus gdocs', group: 'Important' }),
       new Service({ service: 'facebook.com', username: 'mempa@example.com', group: 'Important' }),
       new Service({ service: 'bankofamerica.com', username: 'mempa@example.com', group: 'Banks' }),
     ],
     groups: [
-      new Group({ group: 'default', storePassphrase: false, inputPassphrase: 'x' }),
-      new Group({ group: 'Important', icon: 'star' }),
-      new Group({ group: 'Banks', icon: 'account-balance' }),
+      new Group({ storePassphrase: false, inputPassphrase: 'x' }),
+      new Group({ group: 'Important', icon: 'star', defaultSecurityLevel: 0 }),
+      new Group({ group: 'Financial', icon: 'account-balance', defaultSecurityLevel: 0 }),
     ],
   } : {
     services: [
-      // new Service({ service: 'medium.com', username: 'mempa', group: 'default' }),
+      // new Service({ service: 'medium.com', username: 'mempa' }),
     ],
     groups: [
       // new Group({ group: 'default', storePassphrase: false, inputPassphrase: 'x' }),
-      new Group({ group: 'default' }),
+      new Group(),
     ],
   }),
 });

@@ -7,7 +7,6 @@ import { Button, List, ListItem } from 'react-native-elements';
 
 import Style, { Color } from '../Style';
 import Config from '../Config';
-import Crypto from '../Crypto';
 import Utils from '../Utils';
 import { Group } from '../Models';
 import { initGroup } from '../redux/actions';
@@ -20,12 +19,16 @@ class InitGroupScreen extends React.Component {
   constructor(props) {
     super(props);
 
-    const defaultSecurityLevel = Config.DeviceSecurity ? 2 : 1;
+    const defaultSecurityLevel = Config.DeviceSecurity ?
+      Group.SEC_LEVEL_DEVICE : Group.SEC_LEVEL_ENCRYPTED;
+
+    const securityLevel = this.props.group.defaultSecurityLevel !== undefined ?
+      this.props.group.defaultSecurityLevel : defaultSecurityLevel;
+
     this.state = {
-      group: 'default',
       buttonLoading: false,
       buttonDisabled: true,
-      securityLevel: this.props.group.defaultSecurityLevel || defaultSecurityLevel,
+      securityLevel,
       value: null,
     };
 
@@ -36,35 +39,6 @@ class InitGroupScreen extends React.Component {
     this.InputGroup = t.struct({
       passphrase: t.String,
     });
-  }
-
-  getGroupInstance(formData) {
-    switch (this.state.securityLevel) {
-      case 0:
-        return new Group({
-          ...this.props.group,
-          inputPassphrase: formData.passphrase,
-          storePassphrase: false,
-        });
-      case 1:
-        return new Group({
-          ...this.props.group,
-          inputPassphrase: formData.passphrase,
-          passphrase: Crypto.encryptPassphrase(formData.passphrase),
-        });
-      case 2: {
-        const group = new Group({
-          ...this.props.group,
-          deviceSecurity: true,
-          inputPassphrase: formData.passphrase,
-          passphrase: Crypto.encryptPassphrase(formData.passphrase),
-        });
-        Utils.savePassphraseToSecureStoreAsync(group, group.inputPassphrase);
-        return group;
-      }
-      default:
-        return null;
-    }
   }
 
   handleChange(value) {
@@ -81,7 +55,8 @@ class InitGroupScreen extends React.Component {
     setTimeout(() => {
       const formData = this.form.getValue();
       if (formData) {
-        const group = this.getGroupInstance(formData);
+        const group = Utils.updateGroup(this.props.group, formData.passphrase,
+          this.state.securityLevel);
         this.props.navigation.setParams({ group });
         this.props.dispatch(initGroup(group));
       }

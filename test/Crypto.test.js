@@ -30,3 +30,9 @@ it('encryptPassphrase then verifyPassphrase works', () => {
   const verify = Crypto.verifyPassphrase('passphrase', encPass);
   expect(verify).toBe(true);
 });
+
+it('encryptPassphrase uses randomness', () => {
+  const encPass1 = Crypto.encryptPassphrase('passphrase');
+  const encPass2 = Crypto.encryptPassphrase('passphrase');
+  expect(encPass1).not.toBe(encPass2);
+});

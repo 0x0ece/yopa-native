@@ -4,7 +4,6 @@ import { List, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import Crypto from '../Crypto';
 import Prompt from '../components/Prompt';
 import Utils from '../Utils';
 import { Group, Service } from '../Models';
@@ -160,42 +159,6 @@ class SettingsScreen extends React.Component {
     return group.getSecurityLevel();
   }
 
-  static getUpdatedGroup(group, passphrase, securityLevel) {
-    switch (securityLevel) {
-      case 0:
-        return new Group({
-          ...group,
-          deviceSecurity: false,
-          inputPassphrase: '',
-          storePassphrase: false,
-          passphrase: '',
-        });
-      case 1:
-        return new Group({
-          ...group,
-          deviceSecurity: false,
-          inputPassphrase: passphrase,
-          storePassphrase: true,
-          passphrase: passphrase ? Crypto.encryptPassphrase(passphrase) : group.passphrase,
-        });
-      case 2: {
-        const g = new Group({
-          ...group,
-          deviceSecurity: true,
-          inputPassphrase: passphrase,
-          storePassphrase: true,
-          passphrase: passphrase ? Crypto.encryptPassphrase(passphrase) : group.passphrase,
-        });
-        if (g.inputPassphrase) {
-          Utils.savePassphraseToSecureStoreAsync(g, g.inputPassphrase);
-        }
-        return g;
-      }
-      default:
-        return null;
-    }
-  }
-
   constructor(props) {
     super(props);
 
@@ -222,8 +185,7 @@ class SettingsScreen extends React.Component {
   }
 
   setGroupSecurityLevel(group, index, callback) {
-    const promptTitle = group.group === 'default' ? 'Master password'
-      : `Master password for ${group.group}`;
+    const promptTitle = group.getPromptTitle();
 
     // State machine:
     // 2 -> 1 delete from secure store
@@ -231,11 +193,7 @@ class SettingsScreen extends React.Component {
     // 2 -> 0 composition
     // 0 -> 1 store - if unlocked use the passphrase
     // 1 -> 2 secure store - if unlocked use the passphrase
-    const currentSecurityLevel = SettingsScreen.getGroupSecurityLevel(group);
-    if (currentSecurityLevel === 2) {
-      Utils.deletePassphraseFromSecureStoreAsync(group);
-    }
-
+    const currentSecurityLevel = group.getSecurityLevel();
     const shouldShowPrompt = (currentSecurityLevel === 0)
       || (index > currentSecurityLevel && !group.isUnlocked());
     const promptData = {
@@ -270,8 +228,12 @@ class SettingsScreen extends React.Component {
     } = promptData || this.state.promptData;
     this.setState({ promptData: null, promptVisible: false });
     if (passphrase || promptData) {
-      const g = SettingsScreen.getUpdatedGroup(group, passphrase, index);
-      console.log(g);
+      const currentSecurityLevel = group.getSecurityLevel();
+      if (currentSecurityLevel === 2) {
+        Utils.deletePassphraseFromSecureStoreAsync(group);
+      }
+
+      const g = Utils.updateGroup(group, passphrase, index);
       this.props.dispatch(initGroup(g));
 
       if (callback) {
