@@ -7,6 +7,7 @@ import { Button } from 'react-native-elements';
 
 
 import Analytics from '../Analytics';
+import Config from '../Config';
 import Style from '../Style';
 import { Group, Service } from '../Models';
 import { addService } from '../redux/actions';
@@ -60,16 +61,28 @@ class AddServiceScreen extends React.Component {
     // call getValue() to get the values of the form
     const formData = this.form.getValue();
     if (formData) { // if validation fails, value will be null
-      const service = new Service({
-        service: formData.service,
-        username: formData.username,
+      const service = formData.service;
+      const username = formData.username;
+
+      // auto description for google, facebook, ...
+      let description = '';
+      Object.keys(Config.SERVICE_AUTO_DESCRIPTION).forEach((key) => {
+        if (service.includes(key)) {
+          description = Config.SERVICE_AUTO_DESCRIPTION[key];
+        }
+      });
+
+      const model = new Service({
+        service,
+        username,
+        description,
         group: this.props.groups[formData.group].group,
       });
-      if (this.props.services.find(s => s.id ===
-       service.id) !== undefined) {
-        Alert.alert('Service already exists, not added');
+
+      if (this.props.services.find(s => s.id === model.id) !== undefined) {
+        Alert.alert('This site with this username already exists.');
       } else {
-        this.props.dispatch(addService(service));
+        this.props.dispatch(addService(model));
         Analytics.logServiceAdd();
         this.props.navigation.goBack();
       }
