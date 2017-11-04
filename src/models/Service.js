@@ -13,6 +13,10 @@ class Service {
     this.description = service.description || '';
   }
 
+  getIconUrl() {
+    return this.icon.startsWith('http') ? this.icon : `https://${this.icon}/favicon.ico`;
+  }
+
   serialize() {
     const ser = {
       service: this.service,

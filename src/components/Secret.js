@@ -85,7 +85,7 @@ export default class Secret extends React.Component {
         <RectButton onPress={this.handlePress}>
           <ListItem
             containerStyle={{ borderBottomWidth: 0 }}
-            avatar={{ uri: `https://${s.icon}/favicon.ico` }}
+            avatar={{ uri: s.getIconUrl() }}
             avatarOverlayContainerStyle={{ backgroundColor: 'transparent' }}
             avatarStyle={{ width: 16, height: 16, marginBottom: 14 }}
             hideChevron
