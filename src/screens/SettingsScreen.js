@@ -257,6 +257,7 @@ class SettingsScreen extends React.Component {
   handleImport() {
     Utils.getRemoteDocumentAsync()
       .then(() => {
+        Utils.deleteAllPassphrasesFromSecureStore(this.props.groups);
         Utils.loadDataFromStoreAsync()
           .then((data) => {
             this.props.dispatch(reloadAll(data));
@@ -278,12 +279,7 @@ class SettingsScreen extends React.Component {
         { text: 'OK',
           style: 'destructive',
           onPress: () => {
-            const groups = this.props.groups;
-            groups.forEach((g) => {
-              if (g.deviceSecurity) {
-                Utils.deletePassphraseFromSecureStoreAsync(g);
-              }
-            });
+            Utils.deleteAllPassphrasesFromSecureStore(this.props.groups);
             this.props.dispatch(eraseAll());
             this.closeScreen();
           } },

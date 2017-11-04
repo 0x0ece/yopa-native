@@ -62,6 +62,14 @@ const Utils = {
     });
   },
 
+  deleteAllPassphrasesFromSecureStore(groups) {
+    groups.forEach((g) => {
+      if (g.deviceSecurity) {
+        Utils.deletePassphraseFromSecureStoreAsync(g);
+      }
+    });
+  },
+
   /*
    * FileSystem
    */
