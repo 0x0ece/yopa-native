@@ -283,7 +283,7 @@ class SecretList extends React.Component {
         getItemLayout={(data, index) => (
           { length: 48, offset: 48 * index, index }
         )}
-        initialScrollIndex={this.showSearch() ? 1 : 0}
+        initialScrollIndex={this.showSearch() && services.length > 1 ? 1 : 0}
         ref={(ref) => { this.list = ref; }}
         style={{}}
         data={services}
