@@ -3,7 +3,6 @@ import { Clipboard } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import PropTypes from 'prop-types';
 
-import Crypto from '../Crypto';
 import RectButton from './RectButton';
 import SwipeableRow from './SwipeableRow';
 import { Group, Service } from '../Models';
@@ -16,51 +15,37 @@ export default class Secret extends React.Component {
 
   constructor(props) {
     super(props);
-    this.getSecret = this.getSecret.bind(this);
-    this.isCopied = this.isCopied.bind(this);
     this.navigateToServiceScreen = this.navigateToServiceScreen.bind(this);
     this.copySecretToClipboard = this.copySecretToClipboard.bind(this);
     this.handlePress = this.handlePress.bind(this);
   }
 
-  getSecret(group) {
-    const s = this.props.service;
-    const g = group || this.props.group;
-    return Crypto.computeSecret(s.username, g.inputPassphrase, s.counter, s.service, s.extra);
-  }
-
   navigateToServiceScreen() {
-    // console.log('about to pass');
-    // console.log(this.props.service);
-    // this.props.navigation.setParams({ service: this.props.service });
-    // this.props.navigation.navigate('Service');
     this.props.navigation.navigate('Service', {
       service: this.props.service,
       group: this.props.group,
     });
   }
 
-  copySecretToClipboard(group) {
-    const secret = this.getSecret(group);
+  copySecretToClipboard() {
+    const secret = this.props.service.getSecret(this.props.group);
     Clipboard.setString(secret);
-    // console.log(`copied: ${secret}`);
-  }
-
-  isCopied() {
-    const group = this.props.group;
-    return (this.props.clipboard && group.isUnlocked()
-      && this.getSecret(group) === this.props.clipboard);
   }
 
   handlePress() {
     if (this.props.group.isUnlocked()) {
-      const isCopied = this.isCopied();
-      if (isCopied) {
+      const service = this.props.service;
+      if (service.copied) {
         Secret.clearSecretFromClipboard();
       } else {
         this.copySecretToClipboard();
       }
-      this.props.onSecretCopied(!isCopied);
+
+      const newService = new Service({
+        ...service,
+        copied: !service.copied,
+      });
+      this.props.onSecretCopied(newService);
     } else {
       // pass copySecretToClipboard as callback, that will eventually
       // be invoked with the unlocked group as parameter
@@ -72,14 +57,9 @@ export default class Secret extends React.Component {
     const s = this.props.service;
     const group = this.props.group;
 
-    let secretShown = group.isUnlocked() ? 'XXX-...' : 'xxx-...';
-    if (this.isCopied()) {
-      secretShown = 'copied';
-    }
-
     return (
       <SwipeableRow
-        swipedText={group.isUnlocked() ? this.getSecret(group) : 'xxx-xxx-xxx-xxx'}
+        swipedText={s.getSecret(group)}
         onActionPress={this.navigateToServiceScreen}
       >
         <RectButton onPress={this.handlePress}>
@@ -91,7 +71,7 @@ export default class Secret extends React.Component {
             hideChevron
             title={s.service}
             subtitle={s.username}
-            rightTitle={secretShown}
+            rightTitle={s.getSecretPreview(group)}
           />
         </RectButton>
       </SwipeableRow>
@@ -100,7 +80,6 @@ export default class Secret extends React.Component {
 }
 
 Secret.propTypes = {
-  clipboard: PropTypes.string.isRequired,
   group: PropTypes.instanceOf(Group).isRequired,
   service: PropTypes.instanceOf(Service).isRequired,
   onGroupWillUnlock: PropTypes.func.isRequired,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clipboard, FlatList, Switch, Text, View } from 'react-native';
+import { FlatList, Switch, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Divider, List, ListItem } from 'react-native-elements';
@@ -12,7 +12,7 @@ import Search from './SearchBox';
 import Secret from './Secret';
 import Style, { Color } from '../Style';
 import { Group, Service } from '../Models';
-import { createDefaultGroups, unlockGroup } from '../redux/actions';
+import { createDefaultGroups, unlockGroup, copyServiceSecret } from '../redux/actions';
 import Config from '../Config';
 
 const SEARCH_MIN_SERVICES = 5;
@@ -36,7 +36,6 @@ class SecretList extends React.Component {
 
     const promptVisible = this.props.group.isUnlocked() ? false : this.props.forceGroupUnlock;
     this.state = {
-      clipboard: '',
       promptVisible,
       didUnlockCallback: null,
       searchString: '',
@@ -47,18 +46,12 @@ class SecretList extends React.Component {
     this.handleGroupWillUnlock = this.handleGroupWillUnlock.bind(this);
     this.handleSearchChangeText = this.handleSearchChangeText.bind(this);
     this.handleSecretCopied = this.handleSecretCopied.bind(this);
-    this.readFromClipboard = this.readFromClipboard.bind(this);
     this.renderAddButton = this.renderAddButton.bind(this);
     this.renderGroups = this.renderGroups.bind(this);
     this.renderHeader = this.renderHeader.bind(this);
     this.renderItem = this.renderItem.bind(this);
     this.renderSearch = this.renderSearch.bind(this);
     this.showSearch = this.showSearch.bind(this);
-  }
-
-  componentDidMount() {
-    // TODO(ec) - deleted because this is currently bugged AND it's causing dbl render
-    // this.readFromClipboard();
   }
 
   handleEnableGroups() {
@@ -99,16 +92,15 @@ class SecretList extends React.Component {
     this.setState({ searchString: text });
   }
 
-  handleSecretCopied(copied) {
-    this.readFromClipboard();
-
-    if (copied) {
+  handleSecretCopied(service) {
+    if (service.copied) {
       let screen = this.props.showGroups ? Analytics.SCREEN_HOME : Analytics.SCREEN_GROUP;
       if (this.state.searchString) {
         screen = Analytics.SCREEN_SEARCH;
       }
       Analytics.logSecretGet(Analytics.SECRET_ACTION_COPY, screen);
     }
+    this.props.dispatch(copyServiceSecret(service));
   }
 
   filterServices() {
@@ -118,12 +110,6 @@ class SecretList extends React.Component {
         .includes(this.state.searchString.toLowerCase()));
     }
     return servicesProps.filter(s => s.group === this.props.group.id);
-  }
-
-  readFromClipboard() {
-    Clipboard.getString().then(
-      (clipboard) => { this.setState({ clipboard }); },
-    );
   }
 
   showSearch() {
@@ -257,7 +243,6 @@ class SecretList extends React.Component {
     }
     return (
       <Secret
-        clipboard={this.state.clipboard}
         navigation={this.props.navigation}
         service={item}
         group={mainGroup}
