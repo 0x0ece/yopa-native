@@ -7,97 +7,14 @@ import PropTypes from 'prop-types';
 import Prompt from '../components/Prompt';
 import Utils from '../Utils';
 import { Group, Service } from '../Models';
-import { initGroup, reloadAll, eraseAll } from '../redux/actions';
-
-
-const settings = [
-  [ // section 1
-    {
-      label: 'Erase master passwords',
-      onPress: 'handleErasePassphrases',
-    },
-    {
-      label: 'General',
-      items: [
-        // [
-        //   {
-        //     label: 'Hacker mode',
-        //   },
-        // ],
-        [
-          {
-            label: 'Export',
-            onPress: 'handleExport',
-          },
-          {
-            label: 'Import',
-            onPress: 'handleImport',
-          },
-        ],
-      ],
-    }, // General
-  ],
-
-  [ // section 2
-    {
-      label: 'Master password',
-      select: {
-        getValue: 'getDefaultGroupSecurityLevel',
-        setValue: 'setDefaultGroupSecurityLevel',
-        items: [
-          {
-            label: 'Paranoic',
-            desc: [
-              'Never store the master password.',
-              "Type it every time to unlock - MemPa won't check if it's correct or not.",
-            ],
-          },
-          {
-            label: 'Armored',
-            desc: [
-              'Store the master password encrypted.',
-              'Type it every time to unlock.',
-            ],
-          },
-          {
-            label: 'Secure',
-            desc: [
-              'Store the master password in the device secure storage.',
-              'Use your fingerprint to unlock.',
-            ],
-          },
-        ],
-      }, // Master password
-    },
-    // {
-    //   label: 'Categories',
-    // },
-    // {
-    //   label: 'Vaults',
-    //   selected: true,
-    // },
-    // {
-    //   label: 'Two-factor authentication',
-    // },
-  ],
-
-  [ // section 3
-    {
-      label: 'Any issue?',
-      link: 'mailto:support@mempa.io',
-    },
-    {
-      label: 'Rate us',
-      link: 'itms-apps://itunes.apple.com/app/id429047995',
-    },
-  ],
-
-  // [ // section 4
-  //   {
-  //     label: 'About',
-  //   },
-  // ],
-];
+import {
+  addGroup,
+  deleteGroup,
+  initGroup,
+  renameGroup,
+  reloadAll,
+  eraseAll,
+} from '../redux/actions';
 
 
 /* eslint react/no-multi-comp:off */
@@ -127,7 +44,7 @@ class SettingsSelectScreen extends React.Component {
     return (
       <ListItem
         key={index}
-        title={item.label}
+        title={item.title}
         rightIcon={index === selected ? { name: 'check' } : undefined}
         hideChevron={index !== selected}
         onPress={index !== selected ? this.handlePress.bind(this, index) : () => {}}
@@ -154,9 +71,193 @@ SettingsSelectScreen.propTypes = {
 };
 
 
+class SettingsInputScreen extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      value: this.props.initialValue,
+    };
+
+    this.handleChanged = this.handleChanged.bind(this);
+    this.renderItem = this.renderItem.bind(this);
+  }
+
+  handleChanged() {
+    if (this.state.value && (this.state.value !== this.props.initialValue)) {
+      this.props.onChange(this.state.value);
+    }
+  }
+
+  renderItem({ index }) {
+    return (
+      <ListItem
+        key={index}
+        hideChevron
+        textInput
+        textInputAutoFocus
+        textInputPlaceholder={this.props.placeholder}
+        textInputValue={this.state.value}
+        textInputOnChangeText={(value) => { this.setState({ value }); }}
+        textInputOnBlur={this.handleChanged}
+        textInputReturnKeyType="done"
+        textInputContainerStyle={{ marginLeft: 15 }}
+        textInputStyle={{ textAlign: 'left' }}
+        wrapperStyle={{ flexDirection: 'row-reverse' }}
+      />
+    );
+  }
+
+  render() {
+    return (
+      <FlatList
+        style={{}}
+        data={[{}]}
+        renderItem={this.renderItem}
+        keyExtractor={(item, index) => index}
+      />
+    );
+  }
+}
+
+SettingsInputScreen.propTypes = {
+  initialValue: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
+
+
 class SettingsScreen extends React.Component {
-  static getGroupSecurityLevel(group) {
-    return group.getSecurityLevel();
+  static getLayout(groups) {
+    const settings = [
+      [ // section 1
+        {
+          title: 'Erase master passwords',
+          onPress: 'handleErasePassphrases',
+        },
+        {
+          title: 'General',
+          items: [
+            // [
+            //   {
+            //     title: 'Hacker mode',
+            //   },
+            // ],
+            [
+              {
+                title: 'Export',
+                onPress: 'handleExport',
+              },
+              {
+                title: 'Import',
+                onPress: 'handleImport',
+              },
+            ],
+          ],
+        }, // General
+      ],
+
+      [ // section 2
+        {
+          title: 'Master password security',
+          select: {
+            getValue: 'getDefaultGroupSecurityLevel',
+            setValue: 'setDefaultGroupSecurityLevel',
+            items: Utils.getGroupSecurityLevels(),
+          }, // Master password security
+        },
+        // {
+        //   title: 'Groups',
+        // },
+        // {
+        //   title: 'Vaults',
+        //   selected: true,
+        // },
+        // {
+        //   title: 'Two-factor authentication',
+        // },
+      ],
+
+      [ // section 3
+        {
+          title: 'Any issue?',
+          link: 'mailto:support@mempa.io',
+        },
+        {
+          title: 'Rate us',
+          link: 'itms-apps://itunes.apple.com/app/id429047995',
+        },
+      ],
+
+      // [ // section 4
+      //   {
+      //     title: 'About',
+      //   },
+      // ],
+    ];
+
+    const groupsSettings = {
+      title: 'Categories',
+      // XXX
+      items: [
+        groups.filter(g => (!g.isDefaultGroup()))
+          .map(g => ({
+            title: g.group,
+            items: [
+              [
+                {
+                  title: 'Name',
+                  rightTitle: g.group,
+                  input: {
+                    value: g.group,
+                    placeholder: g.group,
+                  },
+                  param: g,
+                  onInput: 'handleRenameGroup',
+                },
+                // {
+                //   title: 'Icon',
+                // },
+                {
+                  title: 'Master password security',
+                  param: g,
+                  select: {
+                    getValue: 'getGroupSecurityLevel',
+                    setValue: 'setGroupSecurityLevel',
+                    items: Utils.getGroupSecurityLevels(),
+                  }, // Master password security
+                },
+              ],
+              [
+                {
+                  title: 'Delete category',
+                  param: g,
+                  onPress: 'handleDeleteGroup',
+                },
+              ],
+            ],
+          })),
+        [
+          {
+            title: 'Add category',
+            input: {
+              placeholder: 'Category',
+            },
+            onInput: 'handleAddGroup',
+          },
+        ],
+      ],
+    };
+    const layout = settings;
+    const groupsSection = layout[1];
+
+    if (groupsSection.length === 0) {
+      groupsSection.push(groupsSettings);
+    } else {
+      groupsSection[1] = groupsSettings;
+    }
+
+    return layout;
   }
 
   constructor(props) {
@@ -164,7 +265,8 @@ class SettingsScreen extends React.Component {
 
     const navParams = this.props.navigation.state.params;
     this.state = {
-      layout: (navParams && navParams.settings) || settings,
+      layout: (navParams && navParams.settings) ? navParams.settings :
+        SettingsScreen.getLayout(this.props.groups),
       config: {
       },
       promptData: null,
@@ -173,15 +275,24 @@ class SettingsScreen extends React.Component {
     };
 
     this.closeScreen = this.closeScreen.bind(this);
+    this.getGroupSecurityLevel = this.getGroupSecurityLevel.bind(this);
+    this.setGroupSecurityLevel = this.setGroupSecurityLevel.bind(this);
     this.getDefaultGroupSecurityLevel = this.getDefaultGroupSecurityLevel.bind(this);
     this.setDefaultGroupSecurityLevel = this.setDefaultGroupSecurityLevel.bind(this);
-    this.setGroupSecurityLevel = this.setGroupSecurityLevel.bind(this);
+    this.handleAddGroup = this.handleAddGroup.bind(this);
+    this.handleDeleteGroup = this.handleDeleteGroup.bind(this);
+    this.handleRenameGroup = this.handleRenameGroup.bind(this);
     this.handleImport = this.handleImport.bind(this);
     this.handleExport = this.handleExport.bind(this);
     this.handlePromptSubmit = this.handlePromptSubmit.bind(this);
     this.handleErasePassphrases = this.handleErasePassphrases.bind(this);
     this.renderItem = this.renderItem.bind(this);
     this.renderSection = this.renderSection.bind(this);
+  }
+
+  /* eslint class-methods-use-this:off */
+  getGroupSecurityLevel(group) {
+    return group.getSecurityLevel();
   }
 
   setGroupSecurityLevel(group, index, callback) {
@@ -209,7 +320,7 @@ class SettingsScreen extends React.Component {
   }
 
   getDefaultGroupSecurityLevel() {
-    return SettingsScreen.getGroupSecurityLevel(this.props.groups[0]);
+    return this.getGroupSecurityLevel(this.props.groups[0]);
   }
 
   setDefaultGroupSecurityLevel(j, callback) {
@@ -240,6 +351,47 @@ class SettingsScreen extends React.Component {
         callback.call(this, index);
       }
     }
+  }
+
+  handleAddGroup(name) {
+    const newGroup = new Group({
+      group: name,
+    });
+    this.props.dispatch(addGroup(newGroup));
+    this.closeScreen();
+  }
+
+  handleRenameGroup(group, name) {
+    const newGroup = new Group({
+      ...group,
+      group: name,
+    });
+    this.props.dispatch(renameGroup(group.id, newGroup));
+    this.closeScreen();
+  }
+
+  handleDeleteGroup(group) {
+    const services = this.props.services || [];
+    const groupServices = services.filter(s => (s.group === group.id));
+
+    const message = groupServices.length === 1 ?
+      `Attention! This will also delete the site saved in ${group.group}.` :
+      `Attention! This will also delete the ${groupServices.length} sites saved in ${group.group}.`;
+
+    Alert.alert(
+      `Delete ${group.group}?`,
+      groupServices.length === 0 ? '' : message,
+      [
+        { text: 'Cancel' },
+        { text: 'OK',
+          style: 'destructive',
+          onPress: () => {
+            this.props.dispatch(deleteGroup(group));
+            this.closeScreen();
+          } },
+      ],
+      { cancelable: false },
+    );
   }
 
   handleExport() {
@@ -291,11 +443,17 @@ class SettingsScreen extends React.Component {
   renderItem(item, i) {
     let hideChevron = false;
     let rightIcon;
+    let rightTitle;
     let onPress = () => {};
 
     if (item.onPress) {
       hideChevron = true;
-      onPress = () => { this[item.onPress].call(); };
+      const param = item.param;
+      onPress = () => { this[item.onPress].call(this, param); };
+    }
+
+    if (item.rightTitle) {
+      rightTitle = item.rightTitle;
     }
 
     if (item.link) {
@@ -306,7 +464,7 @@ class SettingsScreen extends React.Component {
     if (item.items) {
       onPress = () => {
         this.props.navigation.navigate('Settings', {
-          title: item.label,
+          title: item.title,
           settings: item.items,
         });
       };
@@ -314,13 +472,26 @@ class SettingsScreen extends React.Component {
 
     if (item.select) {
       onPress = () => {
-        const selected = this[item.select.getValue].call();
+        const param = item.param;
+        const selected = this[item.select.getValue].call(this, param);
 
         this.props.navigation.navigate('Settings', {
-          title: item.label,
+          title: item.title,
           settings: item.select.items,
           selected,
-          onPress: this[item.select.setValue],
+          onPress: this[item.select.setValue].bind(this, param),
+        });
+      };
+    }
+
+    if (item.input) {
+      onPress = () => {
+        const param = item.param;
+
+        this.props.navigation.navigate('Settings', {
+          title: item.title,
+          input: item.input,
+          onChange: item.param ? this[item.onInput].bind(this, param) : this[item.onInput],
         });
       };
     }
@@ -328,9 +499,10 @@ class SettingsScreen extends React.Component {
     return (
       <ListItem
         key={i}
-        title={item.label}
+        title={item.title}
         hideChevron={hideChevron}
         rightIcon={rightIcon}
+        rightTitle={rightTitle}
         onPress={onPress}
       />
     );
@@ -346,14 +518,30 @@ class SettingsScreen extends React.Component {
 
   render() {
     const params = this.props.navigation.state.params;
+
     const selected = params && params.selected;
-    return selected !== undefined ? (
-      <SettingsSelectScreen
-        selected={selected}
-        settings={params && params.settings}
-        onPress={params && params.onPress}
-      />
-    ) : (
+    if (selected !== undefined) {
+      return (
+        <SettingsSelectScreen
+          selected={selected}
+          settings={params && params.settings}
+          onPress={params && params.onPress}
+        />
+      );
+    }
+
+    const input = params && params.input;
+    if (input !== undefined) {
+      return (
+        <SettingsInputScreen
+          initialValue={input.value || ''}
+          placeholder={input.placeholder || ''}
+          onChange={params && params.onChange}
+        />
+      );
+    }
+
+    return (
       <View>
         <Prompt
           title={this.state.promptTitle}

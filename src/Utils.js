@@ -1,6 +1,7 @@
 import yaml from 'js-yaml';
 import { DocumentPicker, FileSystem, SecureStore } from 'expo';
 
+import Config from './Config';
 import { Group, Service } from './Models';
 
 
@@ -146,6 +147,33 @@ const Utils = {
   /*
    * Group utils
    */
+
+  getGroupSecurityLevels() {
+    const optionsAll = [
+      {
+        title: 'Paranoic',
+        desc: [
+          'Never store the master password.',
+          "Type it every time to unlock - MemPa won't check if it's correct or not.",
+        ],
+      },
+      {
+        title: 'Armored',
+        desc: [
+          'Store the master password encrypted.',
+          'Type it every time to unlock.',
+        ],
+      },
+      {
+        title: 'Secure',
+        desc: [
+          'Store the master password in the device secure storage.',
+          'Use your fingerprint to unlock.',
+        ],
+      },
+    ];
+    return Config.DeviceSecurity ? optionsAll : optionsAll.slice(0, -1);
+  },
 
   updateGroup(group, passphrase, securityLevel) {
     switch (securityLevel) {

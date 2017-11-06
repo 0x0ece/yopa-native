@@ -64,31 +64,7 @@ class InitGroupScreen extends React.Component {
   }
 
   render() {
-    const optionsAll = [
-      {
-        title: 'Paranoic',
-        desc: [
-          'Never store the master password.',
-          "Type it every time to unlock - MemPa won't check if it's correct or not.",
-        ],
-      },
-      {
-        title: 'Armored',
-        desc: [
-          'Store the master password encrypted.',
-          'Type it every time to unlock.',
-        ],
-      },
-      {
-        title: 'Secure',
-        desc: [
-          'Store the master password in the device secure storage.',
-          'Use your fingerprint to unlock.',
-        ],
-      },
-    ];
-    const options = Config.DeviceSecurity ? optionsAll : optionsAll.slice(0, -1);
-
+    const options = Utils.getGroupSecurityLevels();
     return (
       <ScrollView
         style={[Style.defaultBg, Style.container]}
