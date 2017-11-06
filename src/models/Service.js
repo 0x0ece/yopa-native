@@ -11,6 +11,7 @@ class Service {
     this.counter = service.counter || 0;
     this.icon = service.icon || this.service;
     this.description = service.description || '';
+    this.copied = service.copied || false;
   }
 
   getIconUrl() {
@@ -40,9 +41,18 @@ class Service {
   }
 
   getSecret(group) {
-    const s = this;
-    const g = group || this.props.group;
-    return Crypto.computeSecret(s.username, g.inputPassphrase, s.counter, s.service, s.extra);
+    if (!group.isUnlocked()) {
+      return 'xxx-xxx-xxx-xxx';
+    }
+    return Crypto.computeSecret(this.username, group.inputPassphrase,
+      this.counter, this.service, this.extra);
+  }
+
+  getSecretPreview(group) {
+    if (this.copied) {
+      return 'copied';
+    }
+    return group.isUnlocked() ? 'XXX-...' : 'xxx-....';
   }
 }
 

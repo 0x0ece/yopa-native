@@ -3,6 +3,7 @@ import {
   ADD_SERVICE,
   DEL_SERVICE,
   UPDATE_SERVICE,
+  COPY_SERVICE_SECRET,
   CREATE_DEFAULT_GROUPS,
   ADD_GROUP,
   DELETE_GROUP,
@@ -46,6 +47,24 @@ function secrets(state = {}, action) {
           return item;
         }
         return action.service;
+      });
+
+      return persistAndReturn({
+        ...state,
+        services: newServicesList,
+      });
+    }
+    case COPY_SERVICE_SECRET: {
+      const newServicesList = state.services.map((item) => {
+        if (item.id === action.service.id) {
+          return action.service;
+        } else if (item.copied) {
+          return new Service({
+            ...item,
+            copied: false,
+          });
+        }
+        return item;
       });
 
       return persistAndReturn({

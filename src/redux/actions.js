@@ -5,6 +5,7 @@
 export const ADD_SERVICE = 'ADD_SERVICE';
 export const DEL_SERVICE = 'DEL_SERVICE';
 export const UPDATE_SERVICE = 'UPDATE_SERVICE';
+export const COPY_SERVICE_SECRET = 'COPY_SERVICE_SECRET';
 
 export const CREATE_DEFAULT_GROUPS = 'CREATE_DEFAULT_GROUPS';
 export const ADD_GROUP = 'ADD_GROUP';
@@ -30,6 +31,10 @@ export function delService(service) {
 
 export function updateService(service) {
   return { type: UPDATE_SERVICE, service };
+}
+
+export function copyServiceSecret(service) {
+  return { type: COPY_SERVICE_SECRET, service };
 }
 
 export function addGroup(group) {
