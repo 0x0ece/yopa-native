@@ -4,13 +4,16 @@ import {
   DEL_SERVICE,
   UPDATE_SERVICE,
   CREATE_DEFAULT_GROUPS,
+  ADD_GROUP,
+  DELETE_GROUP,
   INIT_GROUP,
+  RENAME_GROUP,
   UNLOCK_GROUP,
   RELOAD_ALL,
   ERASE_ALL,
 } from './actions';
 
-import Group from '../models/Group';
+import { Group, Service } from '../Models';
 import Utils from '../Utils';
 
 
@@ -61,6 +64,21 @@ function secrets(state = {}, action) {
         ],
       });
 
+    case ADD_GROUP:
+      return persistAndReturn({
+        ...state,
+        groups: [
+          ...state.groups,
+          // always add at the end, because groups[0] must be the default group
+          action.group,
+        ],
+      });
+    case DELETE_GROUP:
+      return persistAndReturn({
+        ...state,
+        groups: state.groups.filter(g => g.id !== action.group.id),
+        services: state.services.filter(s => s.group !== action.group.id),
+      });
     case INIT_GROUP:
       return persistAndReturn({
         ...state,
@@ -72,6 +90,28 @@ function secrets(state = {}, action) {
             });
           }
           return g;
+        }),
+      });
+    case RENAME_GROUP:
+      return persistAndReturn({
+        ...state,
+        groups: state.groups.map((g) => {
+          if (g.id === action.id) {
+            return new Group({
+              ...g,
+              ...action.group,
+            });
+          }
+          return g;
+        }),
+        services: state.services.map((s) => {
+          if (s.group === action.id) {
+            return new Service({
+              ...s,
+              group: action.group.id,
+            });
+          }
+          return s;
         }),
       });
     case UNLOCK_GROUP:
