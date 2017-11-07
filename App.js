@@ -35,8 +35,8 @@ const store = createStore(secretApp, {
     ],
     groups: [
       new Group({ storePassphrase: false, inputPassphrase: 'x' }),
-      new Group({ group: 'Important', icon: 'star', defaultSecurityLevel: 0 }),
-      new Group({ group: 'Financial', icon: 'account-balance', defaultSecurityLevel: 0 }),
+      new Group({ group: 'Important', icon: 'star', defaultSecurityLevel: 0, storePassphrase: false }),
+      new Group({ group: 'Financial', icon: 'account-balance', defaultSecurityLevel: 0, storePassphrase: false }),
     ],
   } : {
     services: [
