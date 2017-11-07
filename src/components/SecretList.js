@@ -46,6 +46,7 @@ class SecretList extends React.Component {
     this.handleGroupWillUnlock = this.handleGroupWillUnlock.bind(this);
     this.handleSearchChangeText = this.handleSearchChangeText.bind(this);
     this.handleSecretCopied = this.handleSecretCopied.bind(this);
+    this.filterServices = this.filterServices.bind(this);
     this.renderAddButton = this.renderAddButton.bind(this);
     this.renderGroups = this.renderGroups.bind(this);
     this.renderHeader = this.renderHeader.bind(this);
@@ -278,7 +279,7 @@ class SecretList extends React.Component {
         ListEmptyComponent={this.state.searchString ?
           <Text style={{ paddingLeft: 15 }}>Ops, nothing here</Text> : null}
         renderItem={({ item, index }) => this.renderItem(item, index, mainGroup)}
-        keyExtractor={(item, index) => index}
+        disableVirtualization
       />
     );
 
