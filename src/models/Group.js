@@ -128,7 +128,7 @@ class Group {
   }
 }
 
-Group.DEFAULT_GROUP = '_default_';
+Group.DEFAULT_GROUP = 'default';
 Group.DEFAULT_ICON = 'folder';
 
 Group.SEC_LEVEL_MEMORY = 0;
