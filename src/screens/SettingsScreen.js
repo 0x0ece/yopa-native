@@ -474,12 +474,13 @@ class SettingsScreen extends React.Component {
       onPress = () => {
         const param = item.param;
         const selected = this[item.select.getValue].call(this, param);
+        const callback = this[item.select.setValue];
 
         this.props.navigation.navigate('Settings', {
           title: item.title,
           settings: item.select.items,
           selected,
-          onPress: this[item.select.setValue].bind(this, param),
+          onPress: param ? callback.bind(this, param) : callback,
         });
       };
     }
@@ -487,11 +488,12 @@ class SettingsScreen extends React.Component {
     if (item.input) {
       onPress = () => {
         const param = item.param;
+        const callback = this[item.onInput];
 
         this.props.navigation.navigate('Settings', {
           title: item.title,
           input: item.input,
-          onChange: item.param ? this[item.onInput].bind(this, param) : this[item.onInput],
+          onChange: param ? callback.bind(this, param) : callback,
         });
       };
     }
