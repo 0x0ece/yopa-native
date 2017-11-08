@@ -116,6 +116,7 @@ class AddServiceScreen extends React.Component {
                 autoCorrect: false,
               },
               group: {
+                label: 'Category',
                 nullOption: false,
                 hidden: this.props.groups.length === 1,
               },
