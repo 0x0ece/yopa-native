@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, ActionSheetIOS, FlatList, Linking, View } from 'react-native';
+import { Alert, FlatList, Linking, View, Share } from 'react-native';
 import { List, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -399,11 +399,9 @@ class SettingsScreen extends React.Component {
       services: this.props.services,
       groups: this.props.groups,
     });
-
-    ActionSheetIOS.showShareActionSheetWithOptions({
-      subject: 'MemPa',
+    Share.share({
       message: content,
-    }, () => {}, () => {});
+    });
   }
 
   handleImport() {
