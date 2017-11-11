@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import t from 'tcomb-form-native';
 import {
-  ActionSheetIOS,
   Alert,
   Clipboard,
   Linking,
@@ -12,6 +11,10 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import {
+  ActionSheetProvider,
+  connectActionSheet,
+} from '@expo/react-native-action-sheet';
 import { Button, Icon } from 'react-native-elements';
 
 import RectButton from '../components/RectButton';
@@ -130,14 +133,30 @@ function linkTemplate(locals) {
 
 
 const Form = t.form.Form;
-class ServiceScreen extends React.Component {
+/* eslint react/no-multi-comp:off */
+@connectActionSheet class ServiceScreen extends React.Component {
+  static getActions(service) {
+    return service.counter > 0 ? [
+      'Generate new password',
+      'Revert previous password',
+      'Delete site',
+      'Cancel',
+    ] : [
+      'Generate new password',
+      'Delete site',
+      'Cancel',
+    ];
+  }
+
   constructor(props) {
     super(props);
 
     const params = props.navigation.state.params;
     const service = params.service;
     const group = params.group;
+
     this.state = {
+      actions: ServiceScreen.getActions(service),
       value: {
         service: service.service,
         username: service.username,
@@ -145,6 +164,7 @@ class ServiceScreen extends React.Component {
       },
     };
 
+    this.handleAction = this.handleAction.bind(this);
     this.handlePress = this.handlePress.bind(this);
     this.updateSecret = this.updateSecret.bind(this);
     this.deleteService = this.deleteService.bind(this);
@@ -170,6 +190,7 @@ class ServiceScreen extends React.Component {
     this.props.dispatch(updateService(newService));
     this.props.navigation.setParams({ service: newService });
     this.setState({
+      actions: ServiceScreen.getActions(newService),
       value: {
         ...this.state.value,
         secret: newService.getSecret(group),
@@ -198,38 +219,29 @@ class ServiceScreen extends React.Component {
     Clipboard.setString(this.state.value.secret);
   }
 
-  handlePress() {
-    const service = this.props.navigation.state.params.service;
+  handleAction(index) {
+    switch (index) {
+      case this.state.actions.length - 2:
+        this.deleteService();
+        break;
+      case 0:
+        this.updateSecret(1);
+        break;
+      case 1:
+        this.updateSecret(-1);
+        break;
+      default:
+        break;
+    }
+  }
 
-    const options = service.counter > 0 ? [
-      'Generate new password',
-      'Revert previous password',
-      'Delete site',
-      'Cancel',
-    ] : [
-      'Generate new password',
-      'Delete site',
-      'Cancel',
-    ];
-    ActionSheetIOS.showActionSheetWithOptions({
+  handlePress() {
+    const options = this.state.actions;
+    this.props.showActionSheetWithOptions({
       options,
       cancelButtonIndex: options.length - 1,
       destructiveButtonIndex: options.length - 2,
-    }, (index) => {
-      switch (index) {
-        case options.length - 2:
-          this.deleteService();
-          break;
-        case 0:
-          this.updateSecret(1);
-          break;
-        case 1:
-          this.updateSecret(-1);
-          break;
-        default:
-          break;
-      }
-    });
+    }, this.handleAction);
   }
 
   render() {
@@ -282,8 +294,23 @@ function mapStateToProps(state) {
 
 ServiceScreen.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  showActionSheetWithOptions: PropTypes.func,
   /* eslint react/forbid-prop-types:off */
   navigation: PropTypes.object.isRequired,
 };
 
-export default connect(mapStateToProps)(ServiceScreen);
+ServiceScreen.defaultProps = {
+  showActionSheetWithOptions: () => {},
+};
+
+class ServiceScreenWrapper extends React.Component {
+  render() {
+    return (
+      <ActionSheetProvider>
+        <ServiceScreen {...this.props} />
+      </ActionSheetProvider>
+    );
+  }
+}
+
+export default connect(mapStateToProps)(ServiceScreenWrapper);
