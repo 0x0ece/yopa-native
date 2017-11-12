@@ -1,4 +1,5 @@
 import React from 'react';
+import { Platform, StatusBar } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
@@ -16,6 +17,8 @@ const headerCommon = {
   headerStyle: {
     backgroundColor: Color.headerBg,
     borderBottomColor: Color.headerBorder,
+    marginTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight,
+    marginBottom: Platform.OS === 'ios' ? 0 : 5,
   },
   headerTintColor: Color.headerTitle,
 };
