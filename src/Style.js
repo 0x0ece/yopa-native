@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { PixelRatio, StyleSheet } from 'react-native';
 
 // const reactNativeElementColors {
 //   primary: '#9E9E9E',
@@ -26,12 +26,15 @@ const BACKGROUND = 'white';
 
 const Color = {
   primary: PRIMARY,
+  alert: 'red',
 
   appBg: BACKGROUND,
   headerBg: BACKGROUND,
   headerBorder: BACKGROUND,
   headerTitle: 'black',
   headerIcon: PRIMARY,
+
+  settingsBg: '#f0eff5',
 
   checkboxChecked: PRIMARY,
   checkboxBlank: '',
@@ -54,6 +57,9 @@ const Color = {
   // apple
   appleMusicPink: '#ff2d54',
   appleBlue: '#007aff',
+  appleSettingsBg: '#f0eff5',
+  appleSettingsBorder: '#c8c8ca',
+  appleSettingsBorderBottom: '#c8c7cc',
 };
 
 // tcomb
@@ -108,6 +114,32 @@ const Styles = StyleSheet.create({
     borderTopWidth: 0,
     paddingBottom: 20,
   },
+
+  // settings
+  settingsDivider: {
+    height: 1 / PixelRatio.get(),
+    marginLeft: 20,
+  },
+
+  settingsItem: {
+    height: 48,
+    justifyContent: 'center',
+    borderBottomWidth: 0,
+  },
+
+  settingsInputItem: {
+    marginTop: 4,
+    marginBottom: 4,
+    borderBottomWidth: 0,
+  },
+
+  settingsList: {
+    borderTopWidth: 1 / PixelRatio.get(),
+    borderTopColor: Color.appleSettingsBorder,
+    borderBottomWidth: 1 / PixelRatio.get(),
+    borderBottomColor: Color.appleSettingsBorderBottom,
+  },
+
 });
 
 export default Styles;

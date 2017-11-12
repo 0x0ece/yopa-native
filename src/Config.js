@@ -1,4 +1,4 @@
-import { Platform } from 'react-native';
+import { Platform, StatusBar } from 'react-native';
 
 const Config = {
 
@@ -13,6 +13,8 @@ const Config = {
 
   Android: (Platform.OS === 'android'),
   DeviceSecurity: undefined,
+  HeaderMarginTop: (Platform.OS === 'android') ? StatusBar.currentHeight : 0,
+  HeaderMarginBottom: (Platform.OS === 'android') ? 5 : 0,
 
 };
 

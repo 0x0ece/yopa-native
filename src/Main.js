@@ -1,5 +1,4 @@
 import React from 'react';
-import { Platform, StatusBar } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
@@ -17,8 +16,8 @@ const headerCommon = {
   headerStyle: {
     backgroundColor: Color.headerBg,
     borderBottomColor: Color.headerBorder,
-    marginTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight,
-    marginBottom: Platform.OS === 'ios' ? 0 : 5,
+    marginTop: Config.HeaderMarginTop,
+    marginBottom: Config.HeaderMarginBottom,
   },
   headerTintColor: Color.headerTitle,
 };
@@ -90,7 +89,12 @@ const SettingsNav = StackNavigator({
     path: 'settings/:settings',
     navigationOptions: ({ navigation, screenProps }) => ({
       title: (navigation.state.params && navigation.state.params.title) || 'Settings',
-      ...headerCommon,
+      headerStyle: {
+        backgroundColor: Color.headerBg,
+        marginTop: Config.HeaderMarginTop,
+        marginBottom: Config.HeaderMarginBottom,
+      },
+      headerTintColor: Color.headerTitle,
       headerRight: (
         <Ionicons
           name="ios-close"
@@ -103,7 +107,7 @@ const SettingsNav = StackNavigator({
   },
 }, {
   cardStyle: {
-    backgroundColor: Color.appBg,
+    backgroundColor: Color.settingsBg,
   },
 });
 
