@@ -12,9 +12,8 @@
       "package": "io.mempa.mempa"
     },
     "splash": {
-      "image": "./mempa.png",
-      "backgroundColor": "#4b3a4c",
-      "resizeMode": "center"
+      "image": "./splash.png",
+      "resizeMode": "cover"
     }
   }
 }
