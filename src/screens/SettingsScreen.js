@@ -1,10 +1,12 @@
 import React from 'react';
 import { Alert, FlatList, Linking, View, Share } from 'react-native';
-import { List, ListItem } from 'react-native-elements';
+import { Divider, List, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import Prompt from '../components/Prompt';
+import RectButton from '../components/RectButton';
+import Style, { Color } from '../Style';
 import Utils from '../Utils';
 import { Group, Service } from '../Models';
 import {
@@ -29,6 +31,7 @@ class SettingsSelectScreen extends React.Component {
     this.handleCompleted = this.handleCompleted.bind(this);
     this.handlePress = this.handlePress.bind(this);
     this.renderItem = this.renderItem.bind(this);
+    this.renderSection = this.renderSection.bind(this);
   }
 
   handleCompleted(newIndex) {
@@ -39,25 +42,37 @@ class SettingsSelectScreen extends React.Component {
     this.props.onPress(index, this.handleCompleted);
   }
 
-  renderItem({ item, index }) {
+  renderItem(item, index) {
     const selected = this.state.selected;
     return (
-      <ListItem
+      <RectButton
         key={index}
-        title={item.title}
-        rightIcon={index === selected ? { name: 'check' } : undefined}
-        hideChevron={index !== selected}
         onPress={index !== selected ? this.handlePress.bind(this, index) : () => {}}
-      />
+      >
+        { index > 0 ? <Divider style={Style.settingsDivider} /> : null }
+        <ListItem
+          title={item.title}
+          rightIcon={index === selected ? { name: 'check' } : undefined}
+          hideChevron={index !== selected}
+          containerStyle={Style.settingsItem}
+        />
+      </RectButton>
+    );
+  }
+
+  renderSection({ item }) {
+    return (
+      <List containerStyle={Style.settingsList}>
+        {item.map(this.renderItem)}
+      </List>
     );
   }
 
   render() {
     return (
       <FlatList
-        style={{}}
-        data={this.props.settings}
-        renderItem={this.renderItem}
+        data={[this.props.settings]}
+        renderItem={this.renderSection}
         keyExtractor={(item, index) => index}
       />
     );
@@ -91,27 +106,29 @@ class SettingsInputScreen extends React.Component {
 
   renderItem({ index }) {
     return (
-      <ListItem
-        key={index}
-        hideChevron
-        textInput
-        textInputAutoFocus
-        textInputPlaceholder={this.props.placeholder}
-        textInputValue={this.state.value}
-        textInputOnChangeText={(value) => { this.setState({ value }); }}
-        textInputOnBlur={this.handleChanged}
-        textInputReturnKeyType="done"
-        textInputContainerStyle={{ marginLeft: 15 }}
-        textInputStyle={{ textAlign: 'left' }}
-        wrapperStyle={{ flexDirection: 'row-reverse' }}
-      />
+      <List containerStyle={Style.settingsList}>
+        <ListItem
+          key={index}
+          hideChevron
+          textInput
+          textInputAutoFocus
+          textInputPlaceholder={this.props.placeholder}
+          textInputValue={this.state.value}
+          textInputOnChangeText={(value) => { this.setState({ value }); }}
+          textInputOnBlur={this.handleChanged}
+          textInputReturnKeyType="done"
+          textInputContainerStyle={{ marginLeft: 20 }}
+          textInputStyle={{ textAlign: 'left' }}
+          wrapperStyle={{ flexDirection: 'row-reverse' }}
+          containerStyle={Style.settingsInputItem}
+        />
+      </List>
     );
   }
 
   render() {
     return (
       <FlatList
-        style={{}}
         data={[{}]}
         renderItem={this.renderItem}
         keyExtractor={(item, index) => index}
@@ -133,6 +150,7 @@ class SettingsScreen extends React.Component {
       [ // section 1
         {
           title: 'Erase master passwords',
+          titleColor: Color.primary,
           onPress: 'handleErasePassphrases',
         },
         {
@@ -167,11 +185,7 @@ class SettingsScreen extends React.Component {
           }, // Master password security
         },
         // {
-        //   title: 'Groups',
-        // },
-        // {
         //   title: 'Vaults',
-        //   selected: true,
         // },
         // {
         //   title: 'Two-factor authentication',
@@ -181,10 +195,12 @@ class SettingsScreen extends React.Component {
       [ // section 3
         {
           title: 'Any issue?',
+          rightTitle: 'support@mempa.io',
           link: 'mailto:support@mempa.io',
         },
         {
           title: 'Rate us',
+          rightTitle: '☆☆☆☆☆',
           link: 'itms-apps://itunes.apple.com/app/id429047995',
         },
       ],
@@ -198,7 +214,6 @@ class SettingsScreen extends React.Component {
 
     const groupsSettings = {
       title: 'Categories',
-      // XXX
       items: [
         groups.filter(g => (!g.isDefaultGroup()))
           .map(g => ({
@@ -231,6 +246,7 @@ class SettingsScreen extends React.Component {
               [
                 {
                   title: 'Delete category',
+                  titleColor: Color.alert,
                   param: g,
                   onPress: 'handleDeleteGroup',
                 },
@@ -423,7 +439,15 @@ class SettingsScreen extends React.Component {
   handleErasePassphrases() {
     Alert.alert(
       'Confirm?',
-      '',
+      [
+        'Switch to paranoic mode: erase your master passwords from this device.',
+        'You can readd them anytime.',
+        '',
+        'This only affects master passwords,',
+        'all your sites will remain intact.',
+        '',
+        'Erase them anytime you feel unsafe.',
+      ].join('\n'),
       [
         { text: 'Cancel' },
         { text: 'OK',
@@ -438,11 +462,12 @@ class SettingsScreen extends React.Component {
     );
   }
 
-  renderItem(item, i) {
+  renderItem(item, index) {
     let hideChevron = false;
     let rightIcon;
     let rightTitle;
     let onPress = () => {};
+    let titleStyle = {};
 
     if (item.onPress) {
       hideChevron = true;
@@ -452,6 +477,10 @@ class SettingsScreen extends React.Component {
 
     if (item.rightTitle) {
       rightTitle = item.rightTitle;
+    }
+
+    if (item.titleColor) {
+      titleStyle = { color: item.titleColor };
     }
 
     if (item.link) {
@@ -497,20 +526,23 @@ class SettingsScreen extends React.Component {
     }
 
     return (
-      <ListItem
-        key={i}
-        title={item.title}
-        hideChevron={hideChevron}
-        rightIcon={rightIcon}
-        rightTitle={rightTitle}
-        onPress={onPress}
-      />
+      <RectButton key={index} onPress={onPress}>
+        { index > 0 ? <Divider style={Style.settingsDivider} /> : null }
+        <ListItem
+          title={item.title}
+          hideChevron={hideChevron}
+          rightIcon={rightIcon}
+          rightTitle={rightTitle}
+          titleStyle={titleStyle}
+          containerStyle={Style.settingsItem}
+        />
+      </RectButton>
     );
   }
 
   renderSection({ item }) {
     return (
-      <List containerStyle={{}}>
+      <List containerStyle={Style.settingsList}>
         {item.map(this.renderItem)}
       </List>
     );
@@ -555,7 +587,6 @@ class SettingsScreen extends React.Component {
           onSubmit={this.handlePromptSubmit}
         />
         <FlatList
-          style={{}}
           data={this.state.layout}
           renderItem={this.renderSection}
           keyExtractor={(item, index) => index}
