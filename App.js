@@ -1,6 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { AppState } from 'react-native';
+import { AppState, StatusBar, View } from 'react-native';
 import { createStore } from 'redux';
 import { AppLoading, Fingerprint } from 'expo';
 
@@ -124,9 +124,12 @@ export default class App extends React.Component {
 
     const Component = App.isFirstLaunch() ? SimplifiedNav : Main;
     return (
-      <Provider store={store}>
-        <Component />
-      </Provider>
+      <View style={{ flex: 1 }}>
+        <StatusBar barStyle="dark-content" />
+        <Provider store={store}>
+          <Component />
+        </Provider>
+      </View>
     );
   }
 }

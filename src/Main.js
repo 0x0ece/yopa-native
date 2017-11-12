@@ -39,7 +39,7 @@ const StackNav = StackNavigator({
         null : (
           <Ionicons
             name="ios-add"
-            size={28}
+            size={36}
             style={Style.headerIcon}
             onPress={() => {
               navigation.navigate('AddService');
@@ -66,7 +66,7 @@ const StackNav = StackNavigator({
         null : (
           <Ionicons
             name="ios-add"
-            size={28}
+            size={36}
             style={Style.headerIcon}
             onPress={() => {
               navigation.navigate('AddService', {
@@ -98,7 +98,7 @@ const SettingsNav = StackNavigator({
       headerRight: (
         <Ionicons
           name="ios-close"
-          size={28}
+          size={36}
           style={Style.headerIcon}
           onPress={() => { screenProps.rootNavigation.goBack(); }}
         />
@@ -148,7 +148,7 @@ const ModalNav = StackNavigator({
       headerRight: (
         <Ionicons
           name="ios-close"
-          size={28}
+          size={36}
           style={Style.headerIcon}
           onPress={() => { navigation.goBack(); }}
         />
