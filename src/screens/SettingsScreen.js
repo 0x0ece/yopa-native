@@ -440,8 +440,8 @@ class SettingsScreen extends React.Component {
     Alert.alert(
       'Confirm?',
       [
-        'Switch to paranoic mode: erase your master passwords from this device.',
-        'You can readd them anytime.',
+        'Switch to Paranoic mode: erase your master passwords from this device.',
+        '(You can readd them anytime.)',
         '',
         'This only affects master passwords,',
         'all your sites will remain intact.',
