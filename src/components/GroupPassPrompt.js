@@ -93,7 +93,11 @@ export default class GroupPassPrompt extends React.Component {
                 break;
               case 'user_cancel':
                 // onCancel will set visible=false
-                this.props.onCancel();
+                if (Config.Android) {
+                  this.setState({ passphrase: '' });
+                } else {
+                  this.props.onCancel();
+                }
                 break;
               case 'system_cancel':
               default:
