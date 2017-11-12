@@ -14,7 +14,7 @@ import { Group, Service } from './src/Models';
 
 
 const EXAMPLE_DATA = true;
-const PERSIST_DATA = false;
+const PERSIST_DATA = true;
 
 const store = createStore(secretApp, {
   /* eslint no-nested-ternary:off */
