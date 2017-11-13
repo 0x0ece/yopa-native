@@ -7,7 +7,8 @@
     "sdkVersion": "22.0.0",
     "orientation": "portrait",
     "ios": {
-      "bundleIdentifier": "io.mempa.mempa"
+      "bundleIdentifier": "io.mempa.mempa",
+      "supportsTablet": true
     },
     "android": {
       "package": "io.mempa.mempa"
