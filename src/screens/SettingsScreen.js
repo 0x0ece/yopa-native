@@ -201,7 +201,7 @@ class SettingsScreen extends React.Component {
         {
           title: 'Rate us',
           rightTitle: '☆☆☆☆☆',
-          link: 'itms-apps://itunes.apple.com/app/id429047995',
+          link: 'itms-apps://itunes.apple.com/app/id1312657167',
         },
       ],
 
