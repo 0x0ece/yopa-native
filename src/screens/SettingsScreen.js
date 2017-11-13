@@ -165,6 +165,7 @@ class SettingsScreen extends React.Component {
               {
                 title: 'Export',
                 onPress: 'handleExport',
+                disabled: 'isExportDisabled',
               },
               {
                 title: 'Import',
@@ -265,12 +266,15 @@ class SettingsScreen extends React.Component {
       ],
     };
     const layout = settings;
-    const groupsSection = layout[1];
 
-    if (groupsSection.length === 0) {
-      groupsSection.push(groupsSettings);
-    } else {
-      groupsSection[1] = groupsSettings;
+    if (groups.length > 1) {
+      const groupsSection = layout[1];
+
+      if (groupsSection.length === 0) {
+        groupsSection.push(groupsSettings);
+      } else {
+        groupsSection[1] = groupsSettings;
+      }
     }
 
     return layout;
@@ -302,6 +306,7 @@ class SettingsScreen extends React.Component {
     this.handleExport = this.handleExport.bind(this);
     this.handlePromptSubmit = this.handlePromptSubmit.bind(this);
     this.handleErasePassphrases = this.handleErasePassphrases.bind(this);
+    this.isExportDisabled = this.isExportDisabled.bind(this);
     this.renderItem = this.renderItem.bind(this);
     this.renderSection = this.renderSection.bind(this);
   }
@@ -462,12 +467,17 @@ class SettingsScreen extends React.Component {
     );
   }
 
+  isExportDisabled() {
+    return this.props.services.length < 1;
+  }
+
   renderItem(item, index) {
     let hideChevron = false;
     let rightIcon;
     let rightTitle;
     let onPress = () => {};
     let titleStyle = {};
+    let disabled;
 
     if (item.onPress) {
       hideChevron = true;
@@ -525,17 +535,31 @@ class SettingsScreen extends React.Component {
       };
     }
 
-    return (
-      <RectButton key={index} onPress={onPress}>
+    if (item.disabled) {
+      disabled = this[item.disabled].call(this);
+    }
+
+    const component = (
+      <ListItem
+        title={item.title}
+        hideChevron={hideChevron}
+        rightIcon={rightIcon}
+        rightTitle={rightTitle}
+        titleStyle={disabled ? { color: 'gray', fontStyle: 'italic' } : titleStyle}
+        containerStyle={Style.settingsItem}
+        disabled={disabled}
+      />
+    );
+
+    return disabled ? (
+      <View key={index}>
         { index > 0 ? <Divider style={Style.settingsDivider} /> : null }
-        <ListItem
-          title={item.title}
-          hideChevron={hideChevron}
-          rightIcon={rightIcon}
-          rightTitle={rightTitle}
-          titleStyle={titleStyle}
-          containerStyle={Style.settingsItem}
-        />
+        {component}
+      </View>
+    ) : (
+      <RectButton key={index} onPress={disabled ? null : onPress}>
+        { index > 0 ? <Divider style={Style.settingsDivider} /> : null }
+        {component}
       </RectButton>
     );
   }
