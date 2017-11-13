@@ -145,7 +145,7 @@ class SecretList extends React.Component {
         <View style={Style.container}>
           <Button
             buttonStyle={Style.primaryButton}
-            containerViewStyle={{ marginLeft: 0, marginRight: 0 }}
+            containerViewStyle={{ marginLeft: 0, marginRight: 0, marginBottom: 20 }}
             onPress={() => {
               this.props.navigation.navigate('AddService');
             }}
@@ -271,7 +271,7 @@ class SecretList extends React.Component {
         )}
         initialScrollIndex={this.showSearch() && services.length > 1 ? 1 : 0}
         ref={(ref) => { this.list = ref; }}
-        style={{}}
+        style={{ marginBottom: 40 }}
         data={services}
         keyboardShouldPersistTaps="handled"
         ItemSeparatorComponent={() => (<Divider style={{ marginLeft: 54 }} />)}
