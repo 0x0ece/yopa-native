@@ -2,13 +2,16 @@
   "expo": {
     "name": "MemPa",
     "icon": "./mempa.png",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "slug": "mempa",
+    "scheme": "mempa",
     "sdkVersion": "22.0.0",
-    "orientation": "portrait",
     "ios": {
       "bundleIdentifier": "io.mempa.mempa",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "UIRequiresFullScreen": false
+      }
     },
     "android": {
       "package": "io.mempa.mempa"
