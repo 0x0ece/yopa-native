@@ -45,8 +45,6 @@ class AddServiceScreen extends React.Component {
         ...this.props.groups.map(g => g.group),
       }),
     });
-
-    // this.onImport = this.onImport.bind(this);
   }
 
   handleChange(value) {

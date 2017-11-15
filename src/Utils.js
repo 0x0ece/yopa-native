@@ -95,17 +95,32 @@ const Utils = {
       FileSystem.readAsStringAsync(file)
         .then((txt) => {
           const data = yaml.safeLoad(txt);
-          const models = {
-            ...data,
-            services: (data.services || []).map(s => new Service(s)),
-            groups: (data.groups || []).map(g => new Group(g)),
-          };
-          resolve(models);
+          if (Utils.checkRestoredData(data)) {
+            const models = {
+              ...data,
+              services: (data.services || []).map(s => new Service(s)),
+              groups: (data.groups || []).map(g => new Group(g)),
+            };
+            resolve(models);
+          } else {
+            reject('The YAML file provided does not contain the required fields');
+          }
         })
         .catch((error) => {
           reject(error);
         });
     });
+  },
+
+
+  checkRestoredData(data) {
+    if (data.version && data.version === 1 &&
+      data.groups && data.groups.find(g => (new Group(g)).isDefaultGroup()) !== undefined &&
+      data.services && data.services.length > 0
+    ) {
+      return true;
+    }
+    return false;
   },
 
   async deleteDataFromStoreAsync() {
