@@ -163,13 +163,13 @@ class SettingsScreen extends React.Component {
             // ],
             [
               {
-                title: 'Export',
-                onPress: 'handleExport',
-                disabled: 'isExportDisabled',
+                title: 'Backup',
+                onPress: 'handleBackup',
+                disabled: 'isBackupDisabled',
               },
               {
-                title: 'Import',
-                onPress: 'handleImport',
+                title: 'Restore',
+                onPress: 'handleRestore',
               },
             ],
           ],
@@ -302,11 +302,11 @@ class SettingsScreen extends React.Component {
     this.handleAddGroup = this.handleAddGroup.bind(this);
     this.handleDeleteGroup = this.handleDeleteGroup.bind(this);
     this.handleRenameGroup = this.handleRenameGroup.bind(this);
-    this.handleImport = this.handleImport.bind(this);
-    this.handleExport = this.handleExport.bind(this);
+    this.handleRestore = this.handleRestore.bind(this);
+    this.handleBackup = this.handleBackup.bind(this);
     this.handlePromptSubmit = this.handlePromptSubmit.bind(this);
     this.handleErasePassphrases = this.handleErasePassphrases.bind(this);
-    this.isExportDisabled = this.isExportDisabled.bind(this);
+    this.isBackupDisabled = this.isBackupDisabled.bind(this);
     this.renderItem = this.renderItem.bind(this);
     this.renderSection = this.renderSection.bind(this);
   }
@@ -415,7 +415,7 @@ class SettingsScreen extends React.Component {
     );
   }
 
-  handleExport() {
+  handleBackup() {
     const content = Utils.serializeStore({
       services: this.props.services,
       groups: this.props.groups,
@@ -425,7 +425,7 @@ class SettingsScreen extends React.Component {
     });
   }
 
-  handleImport() {
+  handleRestore() {
     Utils.getRemoteDocumentAsync()
       .then(() => {
         Utils.deleteAllPassphrasesFromSecureStore(this.props.groups);
@@ -433,6 +433,11 @@ class SettingsScreen extends React.Component {
           .then((data) => {
             this.props.dispatch(reloadAll(data));
             this.closeScreen();
+          })
+          .catch((error) => {
+            Alert.alert('Restore failed: invalid settings file provided');
+            /* eslint no-console:off */
+            console.log(`Couldn't load configuration file: ${error}`);
           });
       })
       .catch((error) => {
@@ -467,7 +472,7 @@ class SettingsScreen extends React.Component {
     );
   }
 
-  isExportDisabled() {
+  isBackupDisabled() {
     return this.props.services.length < 1;
   }
 
