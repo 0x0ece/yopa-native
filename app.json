@@ -3,6 +3,7 @@
     "name": "MemPa",
     "icon": "./mempa.png",
     "version": "0.4.0",
+    "orientation": "portrait",
     "slug": "mempa",
     "scheme": "mempa",
     "sdkVersion": "22.0.0",
@@ -10,7 +11,12 @@
       "bundleIdentifier": "io.mempa.mempa",
       "supportsTablet": true,
       "infoPlist": {
-        "UIRequiresFullScreen": false
+        "UIRequiresFullScreen": false,
+        "UISupportedInterfaceOrientations~ipad": [
+          "UIInterfaceOrientationPortrait",
+          "UIInterfaceOrientationLandscapeLeft",
+          "UIInterfaceOrientationLandscapeRight"
+        ]
       }
     },
     "android": {
