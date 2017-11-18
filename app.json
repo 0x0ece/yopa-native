@@ -2,18 +2,20 @@
   "expo": {
     "name": "MemPa",
     "icon": "./mempa.png",
-    "version": "0.4.0",
     "orientation": "portrait",
+    "version": "0.6.0",
     "slug": "mempa",
     "scheme": "mempa",
-    "sdkVersion": "22.0.0",
+    "sdkVersion": "23.0.0",
     "ios": {
       "bundleIdentifier": "io.mempa.mempa",
+      "usesIcloudStorage": true,
       "supportsTablet": true,
       "infoPlist": {
         "UIRequiresFullScreen": false,
         "UISupportedInterfaceOrientations~ipad": [
           "UIInterfaceOrientationPortrait",
+          "UIInterfaceOrientationPortraitUpsideDown",
           "UIInterfaceOrientationLandscapeLeft",
           "UIInterfaceOrientationLandscapeRight"
         ]
