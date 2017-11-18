@@ -194,7 +194,7 @@ const ModalNav = StackNavigator({
   },
 });
 
-const SimplifiedNav = StackNavigator({
+const SimplifiedNav = BugFreePageStackNavigator({
   Home: { screen: HomeScreen,
     navigationOptions: {
       title: '👋  MemPa',
