@@ -1,4 +1,5 @@
 import React from 'react';
+import { Alert } from 'react-native';
 import { Fingerprint } from 'expo';
 import PropTypes from 'prop-types';
 
@@ -49,7 +50,14 @@ export default class GroupPassPrompt extends React.Component {
         this.savePassphraseIfNotSaved(group, value);
         this.props.onGroupDidUnlock.call(this, group, value);
       } else {
-        // TODO(ec): handle error
+        Alert.alert(
+          'Error',
+          `Wrong ${this.props.group.getPromptTitle()}`,
+          [
+            { text: 'OK' },
+          ],
+          { cancelable: false },
+        );
       }
     } else {
       // group without passphrase - always unlock

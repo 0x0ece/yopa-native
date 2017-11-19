@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableWithoutFeedback,
+  TouchableOpacity,
   View,
   ViewPropTypes,
 } from 'react-native';
@@ -52,10 +52,12 @@ const styles = StyleSheet.create({
   dialogFooter: {
     borderTopWidth: 1,
     flexDirection: 'row',
+    justifyContent: 'space-around',
   },
   dialogAction: {
+    justifyContent: 'space-around',
     flex: 1,
-    padding: 15,
+    padding: 22,
   },
   dialogActionText: {
     fontSize: 18,
@@ -138,20 +140,20 @@ class Prompt extends React.Component {
             />
           </View>
           <View style={[styles.dialogFooter, { borderColor }]}>
-            <TouchableWithoutFeedback onPress={this.onCancelPress}>
+            <TouchableOpacity onPress={this.onCancelPress}>
               <View style={[styles.dialogAction, buttonStyle, cancelButtonStyle]}>
                 <Text style={[styles.dialogActionText, buttonTextStyle, cancelButtonTextStyle]}>
                   {cancelText}
                 </Text>
               </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={this.onSubmitPress}>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.onSubmitPress}>
               <View style={[styles.dialogAction, buttonStyle, submitButtonStyle]}>
                 <Text style={[styles.dialogActionText, buttonTextStyle, submitButtonTextStyle]}>
                   {submitText}
                 </Text>
               </View>
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
