@@ -86,23 +86,16 @@ export default class GroupPassPrompt extends React.Component {
             this.props.onGroupDidUnlock.call(this, group, this.state.passphrase);
           } else {
             switch (res.error) {
-              case 'lockout':                // user failed and fingerprint is now disabled
-              case 'authentication_failed':  // user failed
-              case 'user_fallback':          // user failed once and tapped "enter password"
-                this.setState({ passphrase: '' });
-                break;
-              case 'user_cancel':
-                // onCancel will set visible=false
-                if (Config.Android) {
-                  this.setState({ passphrase: '' });
-                } else {
-                  this.props.onCancel();
-                }
-                break;
               case 'system_cancel':
-              default:
                 // do nothing
                 break;
+              // case 'not_available':          // fingerprint is not available
+              // case 'lockout':                // user failed and fingerprint is now disabled
+              // case 'authentication_failed':  // user failed
+              // case 'user_fallback':          // user failed once and tapped "enter password"
+              // case 'user_cancel':            // user tapped "cancel"
+              default:
+                this.setState({ passphrase: '' });
             }
           }
         })
