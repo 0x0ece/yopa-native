@@ -10,7 +10,7 @@ const GROUP_USER_ENC_UNLOCKED = { group: 'MyGroup', passphrase: '_enc_x', inputP
 const GROUP_USER_DEV = { group: 'MyGroup', passphrase: '_enc_x', deviceSecurity: true };
 const GROUP_USER_DEV_UNLOCKED = { group: 'MyGroup', passphrase: '_enc_x', deviceSecurity: true, inputPassphrase: 'x' };
 
-const GROUP_ERASED = GROUP_USER_MEM; // erase === paranoic locked
+const GROUP_ERASED = GROUP_USER_MEM; // erase === paranoid locked
 
 const GROUPS_USER_INIT = [
   GROUP_USER_MEM,
@@ -159,7 +159,7 @@ it('Groups can be erased', () => {
   }
 });
 
-it('Groups can be updated to paranoic', () => {
+it('Groups can be updated to paranoid', () => {
   const expected = new Group(GROUP_USER_MEM); // always locked
   for (const g of GROUPS_USER) {
     const model = new Group(g);
