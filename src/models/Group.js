@@ -92,7 +92,7 @@ class Group {
   }
 
   updateSecurityLevelMemory(passphrase = '') {
-    // when we transition to paranoic, we always want to lock the group,
+    // when we transition to paranoid, we always want to lock the group,
     // i.e. inputPassphrase = ''
     // the only exception is when the group is inizialized, where we
     // immediately store the passphrase

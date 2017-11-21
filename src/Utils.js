@@ -166,7 +166,7 @@ const Utils = {
   getGroupSecurityLevels() {
     const optionsAll = [
       {
-        title: 'Paranoic',
+        title: 'Paranoid',
         desc: [
           'Never store the master password.',
           "Type it every time to unlock - MemPa won't check if it's correct or not.",
