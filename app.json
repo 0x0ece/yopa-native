@@ -22,7 +22,10 @@
       }
     },
     "android": {
-      "package": "io.mempa.mempa"
+      "package": "io.mempa.mempa",
+      "permissions": [
+        "USE_FINGERPRINT"
+      ]
     },
     "splash": {
       "image": "./splash.png",
