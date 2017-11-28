@@ -1,5 +1,4 @@
 import React from 'react';
-import { Alert } from 'react-native';
 import { Fingerprint } from 'expo';
 import PropTypes from 'prop-types';
 
@@ -18,9 +17,12 @@ export default class GroupPassPrompt extends React.Component {
     this.state = {
       isReady: !group.deviceSecurity,  // only needed when group.deviceSecurity === true
       passphrase: undefined,
+      errorMessage: '',
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
+    this.handleChangeText = this.handleChangeText.bind(this);
     this.savePassphraseIfNotSaved = this.savePassphraseIfNotSaved.bind(this);
     this.shouldShowFingerprint = this.shouldShowFingerprint.bind(this);
   }
@@ -38,11 +40,23 @@ export default class GroupPassPrompt extends React.Component {
     }
   }
 
+  handleCancel() {
+    if (this.state.errorMessage) {
+      this.setState({ errorMessage: '' });
+    }
+    this.props.onCancel();
+  }
+
+  handleChangeText() {
+    if (this.state.errorMessage) {
+      this.setState({ errorMessage: '' });
+    }
+  }
+
   handleSubmit(value) {
     if (!this.props.onGroupDidUnlock) {
       return;
     }
-
     const group = this.props.group;
     if (group.passphrase) {
       // group with passphrase - verify then unlock
@@ -50,14 +64,7 @@ export default class GroupPassPrompt extends React.Component {
         this.savePassphraseIfNotSaved(group, value);
         this.props.onGroupDidUnlock.call(this, group, value);
       } else {
-        Alert.alert(
-          'Error',
-          `Wrong ${this.props.group.getPromptTitle()}`,
-          [
-            { text: 'OK' },
-          ],
-          { cancelable: false },
-        );
+        this.setState({ errorMessage: `Wrong ${this.props.group.getPromptTitle()}` });
       }
     } else {
       // group without passphrase - always unlock
@@ -118,8 +125,10 @@ export default class GroupPassPrompt extends React.Component {
         textInputProps={{
           secureTextEntry: true,
         }}
-        onCancel={this.props.onCancel}
+        onCancel={this.handleCancel}
         onSubmit={this.handleSubmit}
+        onChangeText={this.handleChangeText}
+        errorMessage={this.state.errorMessage}
       />
     );
   }

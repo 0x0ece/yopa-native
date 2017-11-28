@@ -42,6 +42,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
   },
+  dialogErrorText: {
+    fontSize: 14,
+    color: 'red',
+    fontWeight: 'bold',
+    textAlignVertical: 'center',
+    height: 30,
+  },
   dialogBody: {
     paddingHorizontal: 10,
   },
@@ -138,6 +145,12 @@ class Prompt extends React.Component {
               underlineColorAndroid="white"
               {...this.props.textInputProps}
             />
+            { (this.props.errorMessage) ?
+              <Text style={[styles.dialogErrorText]}>
+                {this.props.errorMessage}
+              </Text> :
+              null
+            }
           </View>
           <View style={[styles.dialogFooter, { borderColor }]}>
             <TouchableOpacity onPress={this.onCancelPress}>
@@ -191,6 +204,7 @@ Prompt.propTypes = {
   inputStyle: ViewPropTypes.style,
   /* eslint react/forbid-prop-types:off */
   textInputProps: PropTypes.object,
+  errorMessage: PropTypes.string,
 };
 
 Prompt.defaultProps = {
@@ -211,6 +225,7 @@ Prompt.defaultProps = {
   cancelButtonTextStyle: {},
   inputStyle: {},
   onChangeText: () => {},
+  errorMessage: '',
 };
 
 export default Prompt;
