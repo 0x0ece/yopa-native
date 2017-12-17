@@ -18,6 +18,7 @@ const Analytics = {
   initialize() {
     if (Analytics.ENABLED) {
       Amplitude.initialize(Config.AMPLITUDE_API_KEY);
+      Amplitude.logEvent('app_open');
     }
   },
 
