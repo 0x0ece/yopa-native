@@ -143,6 +143,8 @@ class Prompt extends React.Component {
               placeholder={placeholder}
               autoFocus
               underlineColorAndroid="white"
+              autoCapitalize="none"
+              autoCorrect={false}
               {...this.props.textInputProps}
             />
             { (this.props.errorMessage) ?
