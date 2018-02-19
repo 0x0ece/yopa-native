@@ -6,7 +6,7 @@
     "version": "0.9.0",
     "slug": "mempa",
     "scheme": "mempa",
-    "sdkVersion": "24.0.0",
+    "sdkVersion": "25.0.0",
     "ios": {
       "bundleIdentifier": "io.mempa.mempa",
       "usesIcloudStorage": true,
