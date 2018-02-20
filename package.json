@@ -42,7 +42,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",
     "react-native-action-button": "^2.8.1",
     "react-native-elements": "^0.18.5",
-    "react-native-gesture-handler": "^1.0.0-alpha.29",
+    "react-native-gesture-handler": "^1.0.0-alpha.32",
     "react-native-vector-icons": "^4.4.2",
     "react-navigation": "^1.0.0-beta.27",
     "react-redux": "^5.0.6",
