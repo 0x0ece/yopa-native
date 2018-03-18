@@ -14,6 +14,9 @@ import { addService } from '../redux/actions';
 
 
 const Form = t.form.Form;
+const MIN_PWD_LENGTH = 8;
+const MAX_PWD_LENGTH = 64;
+const DEFAULT_PWD_LENGTH = 12;
 
 
 class AddServiceScreen extends React.Component {
@@ -30,12 +33,18 @@ class AddServiceScreen extends React.Component {
 
     this.state = {
       group: groupName,
-      value: { group: groupId },
+      value: { group: groupId, custom: false, length: DEFAULT_PWD_LENGTH },
       canAddService: false,
+      custom: false,
     };
 
     this.handlePress = this.handlePress.bind(this);
     this.handleChange = this.handleChange.bind(this);
+
+    const PwdLength = t.subtype(t.Integer, length =>
+      length >= MIN_PWD_LENGTH && length <= MAX_PWD_LENGTH,
+    );
+
 
     // here we are: define your domain model
     this.InputService = t.struct({
@@ -44,6 +53,8 @@ class AddServiceScreen extends React.Component {
       group: t.enums({
         ...this.props.groups.map(g => g.group),
       }),
+      custom: t.Boolean,
+      length: PwdLength,
     });
   }
 
@@ -51,6 +62,10 @@ class AddServiceScreen extends React.Component {
     const newState = { value };
     if (value.service !== undefined && value.username !== undefined) {
       newState.canAddService = true;
+    }
+    newState.custom = value.custom;
+    if (!value.custom) {
+      newState.value.length = DEFAULT_PWD_LENGTH;
     }
     this.setState(newState);
   }
@@ -61,6 +76,7 @@ class AddServiceScreen extends React.Component {
     if (formData) { // if validation fails, value will be null
       const service = formData.service;
       const username = formData.username;
+      const length = formData.length;
 
       // auto description for google, facebook, ...
       let description = '';
@@ -75,6 +91,7 @@ class AddServiceScreen extends React.Component {
         username,
         description,
         group: this.props.groups[formData.group].group,
+        length,
       });
 
       if (this.props.services.find(s => s.id === model.id) !== undefined) {
@@ -117,6 +134,14 @@ class AddServiceScreen extends React.Component {
                 label: 'Category',
                 nullOption: false,
                 hidden: this.props.groups.length === 1,
+              },
+              custom: {
+                label: 'Advanced',
+              },
+              length: {
+                label: 'Password length',
+                error: `Length should be between ${MIN_PWD_LENGTH} and ${MAX_PWD_LENGTH}`,
+                hidden: !this.state.custom,
               },
             },
           }}

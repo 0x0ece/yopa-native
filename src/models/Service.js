@@ -12,6 +12,7 @@ class Service {
     this.icon = service.icon || this.service;
     this.description = service.description || '';
     this.copied = service.copied || false;
+    this.length = service.length || false;
   }
 
   getIconUrl() {
@@ -23,6 +24,7 @@ class Service {
       service: this.service,
       username: this.username,
       counter: this.counter,
+      length: this.length,
     };
 
     if (this.group !== Group.DEFAULT_GROUP) {
@@ -45,7 +47,7 @@ class Service {
       return 'xxx-xxx-xxx-xxx';
     }
     return Crypto.computeSecret(this.username, group.inputPassphrase,
-      this.counter, this.service, this.extra);
+      this.counter, this.service, this.extra, this.length);
   }
 
   getSecretPreview(group) {
