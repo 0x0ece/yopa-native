@@ -27,7 +27,7 @@ const Crypto = {
     return encValue === encArr[1];
   },
 
-  computeSecret(username, passphrase, counter, service, extra) {
+  computeSecret(username, passphrase, counter, service, length, extra) {
     /*
       CryptoJS.SHA256("user:passphrase:0:example.com").toString(CryptoJS.enc.Base64)
         .match(/[a-zA-Z0-9]{3}/g).slice(0,4).join("-")
@@ -39,7 +39,7 @@ const Crypto = {
     return CryptoJS.SHA256(base)
       .toString(CryptoJS.enc.Base64)
       .replace(/[^0-9A-Za-z]/g, '')
-      .substring(0, 12)
+      .substring(0, length)
       .match(/.{3}/g)
       .join(separator);
   },
