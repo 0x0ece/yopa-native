@@ -4,6 +4,7 @@
     "rules": {
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
         "react/prefer-stateless-function": 0,
+        "react/jsx-no-bind": 0,
         "no-restricted-syntax": 0
     },
     "env": {

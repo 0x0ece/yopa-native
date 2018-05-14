@@ -1,9 +1,9 @@
 import React from 'react';
-import { Fingerprint } from 'expo';
 import PropTypes from 'prop-types';
 
 import Config from '../Config';
 import Crypto from '../Crypto';
+import Fingerprint from './Fingerprint';
 import Prompt from './Prompt';
 import Utils from '../Utils';
 import { Group } from '../Models';
