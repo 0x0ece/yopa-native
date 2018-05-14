@@ -62,9 +62,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   dialogAction: {
-    justifyContent: 'space-around',
-    flex: 1,
-    padding: 22,
+    // justifyContent: 'space-around',
+    // flex: 1,
+    padding: 10,
   },
   dialogActionText: {
     fontSize: 18,

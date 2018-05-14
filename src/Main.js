@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavigationActions, StackNavigator } from 'react-navigation';
+import { StackNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 
@@ -12,38 +12,6 @@ import Style, { Color } from './Style';
 import Config from './Config';
 
 
-const navigatePageOnce = getStateForAction => (action, state) => {
-  const { type, routeName } = action;
-  return (
-    state &&
-    type === NavigationActions.NAVIGATE &&
-    routeName === state.routes[state.routes.length - 1].routeName
-  ) ? null : getStateForAction(action, state);
-};
-
-const navigateSettingsOnce = getStateForAction => (action, state) => {
-  const { type, params } = action;
-  return (
-    state &&
-    type === NavigationActions.NAVIGATE &&
-    !params
-  ) ? null : getStateForAction(action, state);
-};
-
-function BugFreePageStackNavigator() {
-  /* eslint prefer-rest-params:off */
-  const navigator = StackNavigator(...arguments);
-  navigator.router.getStateForAction = navigatePageOnce(navigator.router.getStateForAction);
-  return navigator;
-}
-
-function BugFreeSettingsStackNavigator() {
-  /* eslint prefer-rest-params:off */
-  const navigator = StackNavigator(...arguments);
-  navigator.router.getStateForAction = navigateSettingsOnce(navigator.router.getStateForAction);
-  return navigator;
-}
-
 const headerCommon = {
   headerStyle: {
     backgroundColor: Color.headerBg,
@@ -54,7 +22,7 @@ const headerCommon = {
   headerTintColor: Color.headerTitle,
 };
 
-const StackNav = BugFreePageStackNavigator({
+const StackNav = StackNavigator({
   Home: { screen: HomeScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'MemPa',
@@ -115,7 +83,7 @@ const StackNav = BugFreePageStackNavigator({
   },
 });
 
-const SettingsNav = BugFreeSettingsStackNavigator({
+const SettingsNav = StackNavigator({
   Settings: {
     screen: SettingsScreen,
     path: 'settings/:settings',
@@ -194,7 +162,7 @@ const ModalNav = StackNavigator({
   },
 });
 
-const SimplifiedNav = BugFreePageStackNavigator({
+const SimplifiedNav = StackNavigator({
   Home: { screen: HomeScreen,
     navigationOptions: {
       title: '👋  MemPa',

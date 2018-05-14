@@ -4,8 +4,8 @@ import Crypto from '../src/Crypto';
 
 
 it('computeSecret returns the secret', () => {
-  const secret = Crypto.computeSecret('user', 'passphrase', '0', 'example.com', 12);
-  const secretLong = Crypto.computeSecret('user', 'passphrase', '0', 'example.com', 24);
+  const secret = Crypto.computeSecret('user', 'passphrase', '0', 'example.com');
+  const secretLong = Crypto.computeSecret('user', 'passphrase', '0', 'example.com', { length: 24 });
   const expected = 'uBP-8Pe-5xM-mBe';
   const expectedLong = `${expected}-eOp-LEA-sGP-pkP`;
 
@@ -15,7 +15,7 @@ it('computeSecret returns the secret', () => {
 
 it('computeSecret implements the specs', () => {
   const secret = Crypto.computeSecret('user', 'passphrase', '0', 'example.com', 12);
-  const secretLong = Crypto.computeSecret('user', 'passphrase', '0', 'example.com', 24);
+  const secretLong = Crypto.computeSecret('user', 'passphrase', '0', 'example.com', { length: 24 });
 
   // sha256
   const sha256 = CryptoJS.SHA256('user:passphrase:0:example.com');

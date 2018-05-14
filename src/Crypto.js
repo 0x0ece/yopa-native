@@ -3,6 +3,8 @@ import CryptoJS from 'crypto-js';
 
 const Crypto = {
 
+  DEFAULT_LENGTH: 12,
+
   encryptPassphrase(value) {
     /*
       salt = CryptoJS.lib.WordArray.random(128/8);
@@ -27,7 +29,7 @@ const Crypto = {
     return encValue === encArr[1];
   },
 
-  computeSecret(username, passphrase, counter, service, length, extra) {
+  computeSecret(username, passphrase, counter, service, extra) {
     /*
       CryptoJS.SHA256("user:passphrase:0:example.com").toString(CryptoJS.enc.Base64)
         .match(/[a-zA-Z0-9]{3}/g).slice(0,4).join("-")
@@ -35,11 +37,12 @@ const Crypto = {
     */
     const base = [username, passphrase, counter, service].join(':');
     const params = extra || {};
+    const paramLenght = params.length || Crypto.DEFAULT_LENGTH;
     const separator = params.separator || '-';
     return CryptoJS.SHA256(base)
       .toString(CryptoJS.enc.Base64)
       .replace(/[^0-9A-Za-z]/g, '')
-      .substring(0, length)
+      .substring(0, paramLenght)
       .match(/.{3}/g)
       .join(separator);
   },
