@@ -73,7 +73,7 @@ class SettingsSelectScreen extends React.Component {
       <FlatList
         data={[this.props.settings]}
         renderItem={this.renderSection}
-        keyExtractor={(item, index) => '' + index}
+        keyExtractor={(item, index) => index.toString()}
       />
     );
   }
@@ -131,7 +131,7 @@ class SettingsInputScreen extends React.Component {
       <FlatList
         data={[{}]}
         renderItem={this.renderItem}
-        keyExtractor={(item, index) => '' + index}
+        keyExtractor={(item, index) => index.toString()}
       />
     );
   }
@@ -618,7 +618,7 @@ class SettingsScreen extends React.Component {
         <FlatList
           data={this.state.layout}
           renderItem={this.renderSection}
-          keyExtractor={(item, index) => '' + index}
+          keyExtractor={(item, index) => index.toString()}
         />
       </View>
     );

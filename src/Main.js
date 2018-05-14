@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavigationActions, StackNavigator } from 'react-navigation';
+import { StackNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 
@@ -11,24 +11,6 @@ import SettingsScreen from './screens/SettingsScreen';
 import Style, { Color } from './Style';
 import Config from './Config';
 
-
-const navigatePageOnce = getStateForAction => (action, state) => {
-  const { type, routeName } = action;
-  return (
-    state &&
-    type === NavigationActions.NAVIGATE &&
-    routeName === state.routes[state.routes.length - 1].routeName
-  ) ? null : getStateForAction(action, state);
-};
-
-const navigateSettingsOnce = getStateForAction => (action, state) => {
-  const { type, params } = action;
-  return (
-    state &&
-    type === NavigationActions.NAVIGATE &&
-    !params
-  ) ? null : getStateForAction(action, state);
-};
 
 const headerCommon = {
   headerStyle: {

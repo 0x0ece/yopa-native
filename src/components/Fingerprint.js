@@ -15,7 +15,6 @@ class FingerprintWithAndroidModal {
     }
     return this.promise;
   }
-
 }
 
 export default new FingerprintWithAndroidModal();
